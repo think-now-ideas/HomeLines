@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.5";
+const HL_VERSION = "0.8.6";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
 const HL_LOGO = `<svg class="hllogo" viewBox="14 22 924 742" aria-hidden="true"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/></svg>`;
 
@@ -78,12 +78,13 @@ ha-card{padding:16px;overflow:hidden;position:relative}
 .line.na{opacity:.6;border-style:dashed}
 .line .tag{position:absolute;top:8px;right:10px;font-size:11px;padding:1px 7px;border-radius:8px;color:var(--hl-ok);border:1px solid var(--hl-ok)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 2px}
-.hlovw{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin:12px 0 4px}
+.hlovw{display:grid;grid-template-columns:repeat(auto-fill,minmax(max(220px,calc(50% - 4px)),1fr));gap:8px;margin:12px 0 4px}
 .hlov{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--divider-color);border-radius:12px;cursor:pointer;min-width:0}
 .hlov .hlov-i{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;background:color-mix(in srgb,var(--secondary-text-color) 12%,transparent);color:var(--secondary-text-color)}
 .hlov .hlov-t{min-width:0;flex:1}.hlov .hlov-n{font-weight:500;font-size:14px}.hlov .hlov-s{font-size:13px;color:var(--secondary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hlov.warn{border-color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 10%,transparent)}.hlov.warn .hlov-i{color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 18%,transparent)}.hlov.warn .hlov-s{color:var(--hl-warn)}
 .hlov.err{border-color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 8%,transparent)}.hlov.err .hlov-i{color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 16%,transparent)}.hlov.err .hlov-s{color:var(--hl-err)}
+.hlovx{min-width:0;display:block}.hlovx>*{display:block;height:100%}
 .hlov .hlov-c{color:var(--secondary-text-color);--mdc-icon-size:20px}
 .chip{font-size:12px;padding:3px 9px;border-radius:8px;border:1px solid var(--divider-color);color:var(--secondary-text-color)}
 .dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
@@ -215,7 +216,7 @@ function hlStatusBox(f) {
 }
 
 class HomeLinesCard extends HTMLElement {
-  setConfig(config) { this._config = config || {}; this._infos = {}; this._unsubInfos(); }
+  setConfig(config) { this._config = config || {}; this._infos = {}; this._unsubInfos(); this._tileEls = []; }
   static getStubConfig() { return {}; }
 
   _unsubInfos() {
@@ -238,6 +239,7 @@ class HomeLinesCard extends HTMLElement {
   set hass(hass) {
     this._hass = hass;
     if (this._detail && this._detail.open) this._detail.setHass(hass);
+    (this._tileEls || []).forEach(t => { if (t) t.hass = hass; });
     if (this._s && this._main && this._config.overview !== false) {
       const key = hlOverviewEntities(this._s).map(e => hass.states[e] && hass.states[e].state).join("|");
       if (key !== this._ovKey) { this._ovKey = key; this._render(); }
@@ -400,9 +402,9 @@ class HomeLinesCard extends HTMLElement {
       this._main.innerHTML = `
       <div class="hd"><div class="t">${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
       <span class="badge ${badgeCls}">${tr[mode]}</span></div>
-      ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}${this._config.overview !== false ? hlOverview(s, this._hass) : ""}
+      ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}${this._ov(s)}
       ${s.router_type !== "none" && this._config.show_devices !== false ? `<div class="btns" style="margin:10px 0 0">${btns.join("")}</div>` : ""}`;
-      this._updateTimer();
+      this._updateTimer(); this._mountTiles();
       if (this._view.dialog === "devices") this._renderDeviceList();
       return;
     }
@@ -413,9 +415,33 @@ class HomeLinesCard extends HTMLElement {
       ${status}${btns.length ? `<div class="btns">${btns.join("")}</div>` : ""}
       ${be}${metrics}
       <div class="sec" style="margin:-6px 0 8px;justify-content:flex-end"><span class="link" data-a="ask-reset">${tr.reset}</span></div>
-      ${chain}${compact ? chips : mon}${this._config.overview !== false ? hlOverview(s, this._hass) : ""}`;
-    this._updateTimer();
+      ${chain}${compact ? chips : mon}${this._ov(s)}`;
+    this._updateTimer(); this._mountTiles();
     if (this._view.dialog === "devices") this._renderDeviceList();
+  }
+
+  _ov(s) {
+    const n = (this._config.tiles || []).length;
+    if (this._config.overview === false) return n ? hlOverview(s, this._hass, n, null) : "";
+    return hlOverview(s, this._hass, n, this._config.overview_hide || {});
+  }
+
+  /* Eigene Kacheln (ab 0.8.6): „tiles:“ – homelines-tile-Einträge im selben Raster wie die Übersicht */
+  _mountTiles() {
+    const list = this._config.tiles || [];
+    if (!list.length || !this._root) return;
+    this._tileEls = this._tileEls || [];
+    this._root.querySelectorAll(".hlovx").forEach(ph => {
+      const i = Number(ph.dataset.ti), cfg = list[i]; if (!cfg) return;
+      let el = this._tileEls[i];
+      if (!el) {
+        el = document.createElement("homelines-tile"); el._embedded = true;
+        try { el.setConfig(cfg); } catch (err) { ph.textContent = String(err.message || err); return; }
+        this._tileEls[i] = el;
+      }
+      if (this._hass) el.hass = this._hass;
+      ph.appendChild(el);
+    });
   }
 
   _openDetail(kind, wid) {
@@ -612,7 +638,11 @@ ha-card.err{border-color:var(--hl-err);background:color-mix(in srgb,var(--hl-err
 .n{font-size:14px;font-weight:500;color:var(--primary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .s{font-size:12px;color:var(--secondary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .warn .s{color:color-mix(in srgb,var(--hl-warn) 75%,var(--primary-text-color))}.err .s{color:var(--hl-err)}
-.ch{color:var(--secondary-text-color);--mdc-icon-size:20px}`;
+.ch{color:var(--secondary-text-color);--mdc-icon-size:20px}
+ha-card.emb{box-shadow:none;border:1px solid var(--divider-color);border-radius:12px;background:none}
+ha-card.emb.warn{border-color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 10%,transparent)}
+ha-card.emb.err{border-color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 8%,transparent)}
+.emb .s{font-size:13px}`;
 
 class HomeLinesTile extends HTMLElement {
   setConfig(c) {
@@ -686,7 +716,7 @@ class HomeLinesTile extends HTMLElement {
     if (calc && this._c.error == null && calc.err) err = true;
     if (calc && !err && this._c.warning == null && calc.warn) warn = true;
     const card = this.shadowRoot.querySelector("ha-card");
-    card.className = err ? "err" : warn ? "warn" : "";
+    card.className = [this._embedded ? "emb" : "", err ? "err" : warn ? "warn" : ""].filter(Boolean).join(" ");
     this.shadowRoot.querySelector(".ic ha-icon").setAttribute("icon", err || warn ? (this._c.warning_icon || "mdi:alert-outline") : (this._c.icon || "mdi:information-outline"));
     this.shadowRoot.querySelector(".n").textContent = this._c.name;
     const txt = this._c.text != null ? this._v.text : (calc ? calc.text : null);
@@ -758,10 +788,12 @@ function hlFmt(hass, e) {
   if (e.startsWith("button.")) return null;
   return st.state;
 }
-function hlOverview(s, hass) {
+function hlOverview(s, hass, extra = 0, hide = {}) {
+  // hide === null: nur die eigenen Kacheln (Übersicht aus)
+  if (hide === null) hide = new Proxy({}, { get: () => true });
   const d = s.details || {}, rows = [], mode = s.mode, ph = s.phone || {}, u = s.usage || {}, mo = s.monitor || {};
   const backup = (s.wans || []).find(w => w.backup);
-  if (backup) {
+  if (backup && !hide.backup) {
     let t, cls = "";
     if (mode !== "normal") { t = `Notbetrieb · ${mb(u.mb)} · ${eur(u.cost)}`; cls = "warn"; }
     else if (ph.configured) { t = ph.reporting ? `Handy bereit${ph.battery != null ? " · " + Math.round(ph.battery) + " %" : ""}` : "Handy meldet sich nicht"; if (!ph.reporting) cls = "err"; }
@@ -769,24 +801,24 @@ function hlOverview(s, hass) {
     (d.backup || []).slice(0, 1).forEach(e => { const v = hlFmt(hass, e); if (v) t += ` · ${v}`; });
     rows.push({ k: "line", id: backup.id, icon: "mdi:cellphone-link", n: "Notfall-Strecke", t, cls });
   }
-  (s.wans || []).filter(w => !w.backup && ((d.lines || {})[w.id] || {}).entities && d.lines[w.id].entities.length).forEach(w => {
+  (s.wans || []).filter(w => !w.backup && !hide[w.id] && ((d.lines || {})[w.id] || {}).entities && d.lines[w.id].entities.length).forEach(w => {
     const vals = d.lines[w.id].entities.map(e => hlFmt(hass, e)).filter(Boolean).slice(0, 2);
     rows.push({ k: "line", id: w.id, icon: "mdi:router-network", n: w.name || w.id, t: vals.join(" · ") || "–",
       cls: w.state === "offline" && w.primary ? "err" : "" });
   });
   const sp = d.speed || {};
-  if (sp.download) {
+  if (sp.download && !hide.speed) {
     const r0 = e => { const st = e && hass.states[e], v = st ? parseFloat(st.state) : NaN; return isNaN(v) ? null : `${Math.round(v).toLocaleString("de-DE")} ${st.attributes.unit_of_measurement || ""}`.trim(); };
     const dn = r0(sp.download), up = r0(sp.upload);
     rows.push({ k: "speed", icon: "mdi:speedometer", n: "Geschwindigkeit", t: [dn && "↓ " + dn, up && "↑ " + up].filter(Boolean).join(" · ") || "–" });
   }
   const av = mo.availability_7d != null ? mo.availability_7d.toLocaleString("de-DE", { maximumFractionDigits: 2 }) + " %" : "–";
-  rows.push({ k: "outages", icon: "mdi:lan-disconnect", n: "Ausfälle und Verlauf",
+  if (!hide.outages) rows.push({ k: "outages", icon: "mdi:lan-disconnect", n: "Ausfälle und Verlauf",
     t: `${mo.outages_24h ?? 0} / ${mo.outages_7d ?? 0} / ${mo.outages_30d ?? 0} · ${av}`,
     cls: mo.internet === false ? "err" : (mo.outages_24h || 0) > 0 ? "warn" : "" });
   return `<div class="hlovw">${rows.map(r => `<div class="hlov ${r.cls || ""}" data-a="detail" data-k="${r.k}"${r.id ? ` data-id="${esc(r.id)}"` : ""}>
     <div class="hlov-i"><ha-icon icon="${r.cls ? (r.cls === "err" ? "mdi:alert-circle-outline" : "mdi:alert-outline") : r.icon}"></ha-icon></div>
-    <div class="hlov-t"><div class="hlov-n">${esc(r.n)}</div><div class="hlov-s">${esc(r.t)}</div></div><ha-icon class="hlov-c" icon="mdi:chevron-right"></ha-icon></div>`).join("")}</div>`;
+    <div class="hlov-t"><div class="hlov-n">${esc(r.n)}</div><div class="hlov-s">${esc(r.t)}</div></div><ha-icon class="hlov-c" icon="mdi:chevron-right"></ha-icon></div>`).join("")}${Array.from({ length: extra }, (_, i) => `<div class="hlovx" data-ti="${i}"></div>`).join("")}</div>`;
 }
 function hlOverviewEntities(s) {
   const d = (s && s.details) || {};
@@ -872,6 +904,16 @@ function hlMoreInfo(entityId) {
 
 /* Kurze Namen: was alle Namen eines Bausteins vorne oder hinten gemeinsam haben, fällt weg
    („Modem DSL Sync Download“, „Modem DSL Rauschabstand Download“ → „Sync Download“, „Rauschabstand Download“) */
+/* Technische Zusätze aus Gerätenamen entfernen (ab 0.8.6):
+   „Gerät (Adresse / Netz) Gerät Status“ → „Gerät Status“ */
+function hlCleanName(n) {
+  let x = String(n || "").replace(/\s*\((?=[^)]*(?:\s\/\s|\d+\.\d+\.\d+))[^)]*\)/g, "").replace(/\s+/g, " ").trim();
+  const w = x.split(" ");
+  for (let k = Math.floor(w.length / 2); k >= 1; k--) {
+    if (w.slice(0, k).join(" ") === w.slice(k, 2 * k).join(" ")) { x = w.slice(k).join(" "); break; }
+  }
+  return x || String(n || "");
+}
 function hlShortNames(names) {
   if (names.length < 2) return names;
   const w = names.map(n => String(n).split(/\s+/));
@@ -928,7 +970,7 @@ class HomeLinesDetail extends HTMLElement {
     if (key !== this._key) { this._key = key; this._paint(); }
   }
   _ents() { return ((this._spec || {}).blocks || []).flatMap(b => b.entities || []); }
-  _name(e) { const st = this._hass && this._hass.states[e]; return (st && st.attributes.friendly_name) || e; }
+  _name(e) { const st = this._hass && this._hass.states[e]; return hlCleanName((st && st.attributes.friendly_name) || e); }
   _names(list) { return hlShortNames(list.map(e => this._name(e))); }
   _val(e) {
     const h = this._hass, st = h && h.states[e];
@@ -1505,6 +1547,7 @@ function hlLineIds(hass, config) {
   return ids.map(id => ({ id, name: names[id] }));
 }
 
+const HL_TILE_SLOTS = ["t1", "t2", "t3", "t4"];
 class HomeLinesCardEditor extends HomeLinesEditorBase {
   constructor() { super(); this._defaults = { overview: true }; }
   _formData() {
@@ -1512,13 +1555,34 @@ class HomeLinesCardEditor extends HomeLinesEditorBase {
     // ha-form erwartet für verschachtelte Abschnitte ein Objekt, auch wenn noch nichts eingestellt ist
     const lines = { ...(this._config.lines || {}) };
     hlLineIds(this._hass, this._config).forEach(l => { lines[l.id] = { ...(lines[l.id] || {}) }; });
-    return { ...base, lines };
+    const tiles_ed = {};
+    HL_TILE_SLOTS.forEach((k, i) => { tiles_ed[k] = { ...((this._config.tiles || [])[i] || {}) }; });
+    return { ...base, lines, overview_hide: { ...(this._config.overview_hide || {}) }, tiles_ed };
+  }
+  _changed(v) {
+    // Plätze 1–4 im Formular ↔ Liste „tiles:“ in der Karte
+    const v2 = { ...(v || {}) }, ed = v2.tiles_ed || {}; delete v2.tiles_ed;
+    if (v2.overview_hide) v2.overview_hide = Object.fromEntries(Object.entries(v2.overview_hide).filter(([, x]) => x === true));
+    const keep = (this._config.tiles || []).slice(HL_TILE_SLOTS.length);
+    const tiles = [...HL_TILE_SLOTS.map(k => hlClean({ ...(ed[k] || {}) })).filter(Boolean), ...keep];
+    this._config = { ...this._config, tiles: tiles.length ? tiles : undefined };
+    super._changed(v2);
   }
   _schema() {
     return [
       { name: "title", selector: { text: {} } },
       { name: "compact", selector: { boolean: {} } },
       { name: "overview", selector: { boolean: {} } },
+      { type: "expandable", name: "overview_hide", title: "Übersicht: Zeilen ausblenden", icon: "mdi:eye-off-outline",
+        schema: [{ name: "backup", title: "Notfall-Strecke", selector: { boolean: {} } },
+          ...hlLineIds(this._hass, this._config).map(l => ({ name: l.id, title: l.name && l.name !== l.id ? `${l.name} (${l.id})` : l.id, selector: { boolean: {} } })),
+          { name: "speed", title: "Geschwindigkeit", selector: { boolean: {} } },
+          { name: "outages", title: "Ausfälle und Verlauf", selector: { boolean: {} } }] },
+      { type: "expandable", name: "tiles_ed", title: "Eigene Kacheln in der Karte", icon: "mdi:view-grid-plus-outline",
+        schema: HL_TILE_SLOTS.map((k, i) => {
+          const t = (this._config.tiles || [])[i];
+          return { type: "expandable", name: k, title: t && t.name ? `Kachel ${i + 1} · ${t.name}` : `Kachel ${i + 1}`, schema: hlTileSchema() };
+        }) },
       { type: "expandable", name: "lines", title: "Leitungen in dieser Karte", icon: "mdi:wan",
         schema: hlLineIds(this._hass, this._config).map(l => ({
           type: "expandable", name: l.id, title: l.name && l.name !== l.id ? `${l.id} · ${l.name}` : l.id, schema: [
@@ -1532,7 +1596,9 @@ class HomeLinesCardEditor extends HomeLinesEditorBase {
 }
 
 class HomeLinesTileEditor extends HomeLinesEditorBase {
-  _schema() {
+  _schema() { return hlTileSchema(); }
+}
+function hlTileSchema() {
     return [
       { name: "name", required: true, selector: { text: {} } },
       { name: "icon", selector: { icon: {} } },
@@ -1558,7 +1624,6 @@ class HomeLinesTileEditor extends HomeLinesEditorBase {
         { name: "error", selector: { template: {} } },
       ] },
     ];
-  }
 }
 
 [["homelines-card-editor", HomeLinesCardEditor], ["homelines-mini-editor", HomeLinesMiniEditor],

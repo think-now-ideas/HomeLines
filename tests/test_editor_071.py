@@ -113,3 +113,19 @@ async def test_options_offer_line_names(hass, unifi, ping):
     assert {"line_name_wan1", "line_name_wan2", "line_name_wan3", "line_name_wan4"} <= keys
     strings = json.loads((CARD.parent.parent / "translations" / "de.json").read_text(encoding="utf-8"))
     assert strings["options"]["step"]["lines"]["data"]["line_name_wan2"] == "Name für WAN2"
+
+
+def test_card_editor_tiles_and_hidden_rows(page):
+    """0.8.6: Kacheln in der Karte und ausgeblendete Übersichtszeilen im visuellen Editor."""
+    tiles = [{"name": "Strom", "entities": ["sensor.p1", "sensor.p2"]}, {"name": "Telefon", "navigation_path": "#telefon"}]
+    cfg = {"type": "custom:homelines-card", "compact": True, "tiles": tiles}
+    r = page.evaluate("([t, c]) => edit(t, c)", ["homelines-card", cfg])
+    assert {"overview_hide.backup", "overview_hide.WAN2", "overview_hide.speed", "overview_hide.outages",
+            "tiles_ed.t1.name", "tiles_ed.t1.entities", "tiles_ed.t4.navigation_path", "tiles_ed.t2.text"} <= set(r["keys"])
+    assert r["data"]["tiles_ed"]["t1"] == tiles[0] and r["data"]["tiles_ed"]["t3"] == {}
+    out = page.evaluate("(v) => change(v)", {
+        "overview_hide": {"speed": True, "backup": False},
+        "tiles_ed": {"t1": {**tiles[0], "warn_unavailable": True}, "t2": {"name": ""}, "t3": {"name": "Neu", "icon": "mdi:star"}, "t4": {}}})
+    assert out["overview_hide"] == {"speed": True}
+    assert out["tiles"] == [{**tiles[0], "warn_unavailable": True}, {"name": "Neu", "icon": "mdi:star"}]
+    assert "tiles_ed" not in out and out["compact"] is True

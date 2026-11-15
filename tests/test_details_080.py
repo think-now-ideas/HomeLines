@@ -267,3 +267,66 @@ async def test_tile_without_templates(hass, unifi, ping):
     finally:
         await browser.close()
         await p.stop()
+
+
+async def test_card_tiles_in_overview(hass, unifi, ping):
+    """0.8.6: eigene Kacheln im Raster der Übersicht, zwei Spalten, kurze Namen."""
+    _, hub = await _setup(hass, options=DETAILS)
+    p, browser, page, errors = await _page(hass, hub)
+    try:
+        await page.evaluate("""Object.assign(HASS.states, {
+          "sensor.p1": { state: "12.5", attributes: { unit_of_measurement: "W", friendly_name: "Router" } },
+          "sensor.p2": { state: "20.6", attributes: { unit_of_measurement: "W", friendly_name: "Modem" } } })""")
+        await page.evaluate("""add('homelines-card', { compact: true, tiles: [
+          { name: 'Strom', icon: 'mdi:lightning-bolt', entities: ['sensor.p1', 'sensor.p2'] },
+          { name: 'Telefon', entities: ['sensor.p1'], combine: 'single' }] })""")
+        root = "document.querySelector('homelines-card').shadowRoot"
+        await page.wait_for_function(f"{root}.querySelectorAll('.hlovx homelines-tile').length === 2")
+        t0 = f"{root}.querySelectorAll('.hlovx homelines-tile')[0].shadowRoot"
+        assert await page.evaluate(f"{t0}.querySelector('.s').textContent") == "33,1 W gesamt"
+        assert "emb" in await page.evaluate(f"{t0}.querySelector('ha-card').className")
+        cols = await page.evaluate(f"getComputedStyle({root}.querySelector('.hlovw')).gridTemplateColumns.split(' ').length")
+        assert cols == 2
+        # neu zeichnen behält die Kacheln
+        await page.evaluate("(() => { const c = document.querySelector('homelines-card'); c._render(); })()")
+        assert await page.evaluate(f"{root}.querySelectorAll('.hlovx homelines-tile').length") == 2
+        await page.evaluate(f"{t0}.querySelector('ha-card').click()")
+        await page.wait_for_function("document.querySelector('.hl-pop homelines-detail .hld-v')")
+        names = await page.evaluate("hlCleanName('Router WAN (Leitung A / default) Router WAN Status')")
+        assert names == "Router WAN Status"
+        assert await page.evaluate("hlCleanName('Thermostat (DECT)')") == "Thermostat (DECT)"
+        assert not errors, errors
+    finally:
+        await browser.close()
+        await p.stop()
+
+
+async def test_overview_hide_rows(hass, unifi, ping):
+    """0.8.6: Übersichtszeilen einzeln ausblenden."""
+    _, hub = await _setup(hass, options=DETAILS)
+    p, browser, page, errors = await _page(hass, hub)
+    try:
+        await page.evaluate("add('homelines-card', { compact: true, overview_hide: { speed: true, outages: true } })")
+        root = "document.querySelector('homelines-card').shadowRoot"
+        await page.wait_for_function(f"{root}.querySelector('.hlov')")
+        ks = await page.evaluate(f"[...{root}.querySelectorAll('.hlov')].map(r => r.dataset.k)")
+        assert "speed" not in ks and "outages" not in ks and "line" in ks
+        assert not errors, errors
+    finally:
+        await browser.close()
+        await p.stop()
+
+
+async def test_tiles_without_overview(hass, unifi, ping):
+    """0.8.6: Übersicht aus – eigene Kacheln bleiben sichtbar."""
+    _, hub = await _setup(hass, options=DETAILS)
+    p, browser, page, errors = await _page(hass, hub)
+    try:
+        await page.evaluate("add('homelines-card', { compact: true, overview: false, tiles: [{ name: 'Telefon', text: 'ok' }] })")
+        root = "document.querySelector('homelines-card').shadowRoot"
+        await page.wait_for_function(f"{root}.querySelector('.hlovx homelines-tile')")
+        assert await page.evaluate(f"{root}.querySelectorAll('.hlov').length") == 0
+        assert not errors, errors
+    finally:
+        await browser.close()
+        await p.stop()

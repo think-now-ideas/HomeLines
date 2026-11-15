@@ -239,6 +239,25 @@ warning: "{{ states('sensor.x') | float(0) < 20 }}"   # gelb
 error: "{{ is_state('sensor.y', 'not registered') }}"  # rot
 ```
 
+**Eigene Kacheln in der großen Karte** (ab 0.8.6): `tiles:` nimmt Kacheln wie oben auf. Sie stehen im selben Raster
+wie die Übersicht (Notfall-Strecke, Leitungen, Geschwindigkeit, Ausfälle) – zwei pro Zeile, auf schmalen Bildschirmen
+eine. Im visuellen Editor der Karte unter „Eigene Kacheln in der Karte“ (vier Plätze); einzelne Übersichtszeilen
+blendest du unter „Übersicht: Zeilen ausblenden“ aus (`overview_hide: {speed: true}`):
+
+```yaml
+type: custom:homelines-card
+compact: true
+tiles:
+  - name: Strom
+    icon: mdi:lightning-bolt
+    entities: [sensor.router_leistung, sensor.modem_leistung]
+    warn_unavailable: true
+  - name: Telefon
+    icon: mdi:phone-classic
+    navigation_path: "#telefon"
+    text: "{{ states('sensor.telefon_status') }}"
+```
+
 Optional: `title: Internet`, `entry_id: …` (bei mehreren HomeLines-Einträgen).
 
 ## Entitäten

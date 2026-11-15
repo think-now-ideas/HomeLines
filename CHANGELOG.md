@@ -1,5 +1,17 @@
 # Änderungen
 
+## 0.8.6 – Übersicht in zwei Spalten, eigene Kacheln in der Karte
+- **Übersicht in zwei Spalten:** Notfall-Strecke, Leitungen, Geschwindigkeit und Ausfälle stehen je zur halben
+  Breite nebeneinander (auf schmalen Bildschirmen untereinander) statt zu dritt.
+- **Eigene Kacheln in der großen Karte:** neue Option `tiles:` mit Kacheln wie bei `custom:homelines-tile`
+  (z. B. Strom, Telefon). Sie stehen im selben Raster wie die Übersicht, mit gleichem Rahmen und Warnfarben.
+- **Alles im visuellen Editor der Karte:** neuer Abschnitt „Eigene Kacheln in der Karte“ mit vier Plätzen
+  (dieselben Felder wie bei der einzelnen Kachel) und „Übersicht: Zeilen ausblenden“ mit je einem Schalter für
+  Notfall-Strecke, jede Leitung, Geschwindigkeit und Ausfälle (`overview_hide`). Ist die Übersicht ganz aus,
+  bleiben die eigenen Kacheln sichtbar.
+- **Kürzere Namen im Detailfenster:** Technische Zusätze in Klammern (Adresse, Netz) und doppelte Gerätenamen
+  am Anfang werden weggelassen, z. B. „Router WAN (… / …) Router WAN Status“ → „Router WAN Status“.
+
 ## 0.8.5 – Detailfenster wie ein gut gebautes Dashboard
 - **Verläufe zusammengefasst:** Werte mit gleicher Einheit stehen in einem Diagramm mit Legende (Name und aktueller
   Wert, Tipp öffnet das HA-Detailfenster), z. B. Sync und Erreichbar, Rauschabstand Download und Upload, Speedtest
