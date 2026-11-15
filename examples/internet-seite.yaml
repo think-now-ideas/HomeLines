@@ -1,0 +1,32 @@
+# Eine Dashboard-Seite (Abschnitts-Ansicht). Wohin: Rohkonfigurations-Editor, nur diesen Seitenblock einsetzen.
+- title: Internet
+  path: internet
+  icon: mdi:web
+  type: sections
+  max_columns: 3
+  sections:
+    - type: grid
+      column_span: 3
+      cards:
+        # Leitungen, Übersicht (Notfall-Strecke, Leitungen, Geschwindigkeit, Ausfälle) und alle Detailfenster.
+        # Die Werte kommen aus HomeLines → Konfigurieren (oder der Aktion in detailansichten-aktion.yaml).
+        - type: custom:homelines-card
+          compact: true
+          grid_options:
+            columns: full
+    - type: grid
+      column_span: 3
+      cards:
+        # Kachel ohne Vorlagen: Summe mehrerer Leistungsmesser, gelb wenn einer nicht erreichbar ist.
+        # Ein Tipp öffnet ein Fenster mit allen Werten und dem Verlauf der letzten 24 Stunden.
+        - type: custom:homelines-tile
+          name: Strom
+          icon: mdi:lightning-bolt
+          entities:
+            - sensor.router_leistung
+            - sensor.modem_leistung
+            - sensor.notfall_router_leistung
+          combine: sum
+          warn_unavailable: true
+          hours: 24
+          grid_options: { columns: 12, rows: 1 }

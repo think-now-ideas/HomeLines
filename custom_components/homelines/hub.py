@@ -514,7 +514,17 @@ class HomeLinesHub:
         """Hauptleitung (z. B. WAN2): aus der UniFi-Zuordnung, sonst aus dem Status-Sensor."""
         rec = (self.data.get("ids") or {}).get("wan") or {}
         wid = _wan_id(rec.get("group")) if rec.get("group") else None
-        return wid or _wan_id(self.opt(CONF_PRIMARY_STATUS_ENTITY))
+        wid = wid or _wan_id(self.opt(CONF_PRIMARY_STATUS_ENTITY))
+        if wid:
+            return wid
+        # Ohne UniFi-Zuordnung und Status-Sensor: die erste Leitung mit Status-Sensor, die nicht Backup ist
+        backup = self.backup_wan()
+        for ent in self.opt(CONF_WAN_STATUS_ENTITIES, []):
+            st = self.hass.states.get(ent)
+            cand = _wan_id(ent) or _wan_id(st.name if st else None)
+            if cand and cand != backup:
+                return cand
+        return None
 
     def details(self) -> dict:
         """Was die Detailfenster der Karte zeigen (nur Entitäts-IDs, die Werte holt die Karte selbst)."""

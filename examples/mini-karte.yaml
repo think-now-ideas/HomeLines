@@ -1,0 +1,8 @@
+# Mini-Karte für die Startseite. Wohin: Karte hinzufügen → manuell (oder Code-Editor der Karte).
+# Geschwindigkeit und Leitungsnamen kommen aus HomeLines → Konfigurieren; ein Tipp öffnet die große Karte.
+type: custom:homelines-mini
+layout: tile
+name: Internet
+throughput_hours: 168
+grid_options:
+  columns: 12

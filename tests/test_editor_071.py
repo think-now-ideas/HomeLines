@@ -80,7 +80,8 @@ def test_card_editor_lines_from_integration(page):
 
 def test_tile_editor(page):
     r = page.evaluate("([t, c]) => edit(t, c)", ["homelines-tile", {"type": "custom:homelines-tile", "name": "Telefon"}])
-    assert r["keys"] == ["name", "icon", "text", "warning", "error", "navigation_path", "entity"]
+    assert r["keys"] == ["name", "icon", "entities", "combine", "warn_unavailable", "warn_below", "warn_above",
+                         "error_below", "error_above", "hours", "navigation_path", "text", "warning", "error"]
     out = page.evaluate("(v) => change(v)", {"text": "{{ states('sensor.telefon_status') }}", "icon": "mdi:phone"})
     assert out == {"type": "custom:homelines-tile", "name": "Telefon", "icon": "mdi:phone",
                    "text": "{{ states('sensor.telefon_status') }}"}

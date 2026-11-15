@@ -163,6 +163,7 @@ data:
 ``` Für eigene Vorlagen steht der Name der aktiven Leitung
 im Attribut `name` von `sensor.homelines_active_wan`.
 
+Fertige Beispiele (Seite, Mini-Karte, Aktion für die Detailansichten) liegen in [`examples/`](examples/).
 Die YAML-Beispiele unten zeigen alle Einstellungen:
 
 ```yaml
@@ -211,7 +212,21 @@ card:                       # optional: Einstellungen der großen Karte im Popup
 
 Alle HomeLines-Karten teilen sich eine Datenverbindung. Nach einem Neustart von Home Assistant zeigen sie „Verbinde mit HomeLines …“ und versuchen es alle paar Sekunden erneut, bis die Integration geladen ist.
 
-**Kachel mit Warnfarben** `custom:homelines-tile` – für Übersichten mit eigenen Vorlagen:
+**Kachel** `custom:homelines-tile` (ab 0.8.4 ohne Vorlagen) – Werte gewählter Entitäten als Summe, Einzelwert,
+Liste, Durchschnitt, Minimum oder Maximum, mit Warnfarben; ein Tipp öffnet ein Fenster mit Werten und Verlauf:
+
+```yaml
+type: custom:homelines-tile
+name: Strom
+icon: mdi:lightning-bolt
+entities: [sensor.router_leistung, sensor.modem_leistung]
+combine: sum              # sum | single | list | avg | min | max
+warn_unavailable: true    # gelb, wenn eine Entität nicht erreichbar ist
+warn_above: 40            # außerdem: warn_below, error_below, error_above
+hours: 24                 # Verlauf im Fenster
+```
+
+Mit eigenen Vorlagen (haben Vorrang vor `entities`):
 
 ```yaml
 type: custom:homelines-tile

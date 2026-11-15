@@ -1,0 +1,26 @@
+# HomeLines ≥ 0.8.3: Leitungsnamen und Detailansichten in einem Schritt setzen
+# Wohin: Entwicklerwerkzeuge → Aktionen → „In YAML-Modus wechseln“ → einfügen → „Aktion ausführen“
+action: homelines.set_details
+data:
+  line_names:
+    WAN1: Glasfaser
+    WAN2: DSL
+    WAN3: 5G Backup
+  lines:
+    WAN2:
+      values:
+        - sensor.modem_dsl_status
+        - sensor.modem_dsl_sync_download
+        - sensor.modem_dsl_sync_upload
+        - sensor.modem_dsl_rauschabstand_download
+        - sensor.modem_dsl_rauschabstand_upload
+      history:
+        - sensor.modem_dsl_sync_download
+        - sensor.modem_dsl_rauschabstand_download
+  speed_download: sensor.router_speedtest_download
+  speed_upload: sensor.router_speedtest_upload
+  speed_extra:
+    - sensor.router_speedtest_ping
+    - button.router_speedtest_starten
+  backup_extra:
+    - sensor.notfall_router_leistung

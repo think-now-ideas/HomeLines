@@ -35,7 +35,8 @@ window.loadCardHelpers = async () => ({ createCardElement: (cfg) => {
 window.SNAP = %SNAP%;
 window.HIST = [];
 window.HASS = {
-  states: { "sensor.speed_down": { state: "231.4", attributes: { unit_of_measurement: "Mbit/s" } },
+  states: { "sensor.modem_dsl_sync": { state: "62.4", attributes: { unit_of_measurement: "Mbit/s", friendly_name: "DSL Sync" } },
+            "sensor.speed_down": { state: "231.4", attributes: { unit_of_measurement: "Mbit/s" } },
             "sensor.speed_up": { state: "38.9", attributes: { unit_of_measurement: "Mbit/s" } } },
   callWS: async (m) => { HIST.push(m.entity_ids); return {}; }, callService: async () => {},
   connection: {
@@ -43,9 +44,12 @@ window.HASS = {
     subscribeMessage: async (cb, msg) => { if (msg.type === "homelines/subscribe") setTimeout(() => cb(SNAP), 0); return () => {}; },
     sendMessagePromise: async () => ({}) } };
 window.add = (type, cfg) => { const el = document.createElement(type); el.setConfig(cfg); document.body.appendChild(el); el.hass = HASS; return el; };
-window.pops = () => [...document.querySelectorAll("body > .hl-pop")].map(p => ({
-  title: (p.querySelector(".pt") || {}).textContent || null, shown: p.style.display !== "none",
-  cards: [...p.querySelectorAll(".stub")].map(s => JSON.parse(s.dataset.cfg)) }));
+window.pops = () => [...document.querySelectorAll("body > .hl-pop")].map(p => {
+  const d = p.querySelector("homelines-detail"), sp = (d && d._spec) || {};
+  return { title: (p.querySelector(".pt") || {}).textContent || null, shown: p.style.display !== "none",
+    values: sp.values || [], charts: sp.charts || [], controls: sp.controls || [],
+    shownValues: d ? [...d.querySelectorAll(".hld-v")].map(v => [v.dataset.e, v.querySelector(".hld-x").textContent]) : [],
+    cards: [...p.querySelectorAll(".stub")].map(s => JSON.parse(s.dataset.cfg)) }; });
 </script></body></html>"""
 
 
@@ -101,43 +105,50 @@ async def test_card_detail_windows(hass, unifi, ping):
         txt = await page.evaluate(f"{root}.getElementById('main').innerText")
         assert "↓ 231 · ↑ 39 Mbit/s" in txt and "DSL" in txt
 
-        # Hauptleitung: Werte, Verlauf, Neueinwahl
+        # Hauptleitung: Werte, Verlauf, Neueinwahl – von HomeLines selbst gezeichnet
         await page.evaluate(f"{root}.querySelector('.line[data-id=WAN2]').click()")
-        await page.wait_for_function("document.querySelectorAll('.hl-pop .stub').length >= 4")
+        await page.wait_for_function("document.querySelector('.hl-pop homelines-detail .hld-v')")
         w2 = (await page.evaluate("pops()"))[-1]
         assert w2["title"] == "DSL (WAN2)"
-        types = [c["type"] for c in w2["cards"]]
-        assert types[:3] == ["tile", "tile", "tile"] and "history-graph" in types and "entities" in types
-        assert {"entity": "sensor.modem_dsl_snr", "type": "tile"} in w2["cards"]
-        rec = next(c for c in w2["cards"] if c["type"] == "entities")
-        assert "button.homelines_reconnect_now" in rec["entities"] and "switch.homelines_daily_reconnect" in rec["entities"]
+        assert w2["values"][1:] == ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"]
+        assert ["sensor.modem_dsl_sync", "62,4 Mbit/s"] in w2["shownValues"]
+        assert w2["charts"] == ["sensor.modem_dsl_sync"]
+        assert "button.homelines_reconnect_now" in w2["controls"] and "switch.homelines_daily_reconnect" in w2["controls"]
+        assert w2["cards"] == [{"type": "entities", "entities": w2["controls"]}]
+        await page.wait_for_function("HIST.some(h => h && h.includes('sensor.modem_dsl_sync'))")
         await page.evaluate("history.back()")
         await page.wait_for_function("!document.querySelector('.hl-pop')")
 
         # Backup-Leitung: Notfall-Strecke mit HomeLines-Werten, Handy und weiteren Werten
         await page.evaluate(f"{root}.querySelector('.line[data-id=WAN3]').click()")
-        await page.wait_for_function("document.querySelectorAll('.hl-pop .stub').length > 5")
-        ents = [c.get("entity") for c in (await page.evaluate("pops()"))[-1]["cards"]]
+        await page.wait_for_function("document.querySelector('.hl-pop homelines-detail')")
+        w3 = (await page.evaluate("pops()"))[-1]
         assert {"sensor.homelines_status", "binary_sensor.homelines_phone", "sensor.homelines_cost",
-                "sensor.notfall_handy_battery", "sensor.notfall_router_leistung"} <= set(ents)
-        assert not any(c.get("type") == "entities" for c in (await page.evaluate("pops()"))[-1]["cards"])
+                "sensor.notfall_handy_battery", "sensor.notfall_router_leistung"} <= set(w3["values"])
+        assert not w3["controls"]
         await page.evaluate("history.back()")
         await page.wait_for_function("!document.querySelector('.hl-pop')")
 
+        # Übersicht in der Karte: Zeilen öffnen dieselben Fenster
+        rows = await page.evaluate(f"[...{root}.querySelectorAll('.hlov')].map(r => [r.dataset.k, r.innerText.replace(/\\s+/g, ' ').trim()])")
+        assert [r[0] for r in rows] == ["line", "line", "speed", "outages"]
+        assert rows[0][1].startswith("Notfall-Strecke")
+        assert rows[1][1].startswith("DSL 62,4 Mbit/s")
+        assert "↓ 231 Mbit/s · ↑ 39 Mbit/s" in rows[2][1]
+
         # Kennzahlen → Ausfälle, Geschwindigkeit
-        await page.evaluate(f"{root}.querySelector('[data-k=outages]').click()")
-        await page.wait_for_function("document.querySelectorAll('.hl-pop .stub').length > 0")
+        await page.evaluate(f"{root}.querySelector('.chip[data-k=outages]').click()")
+        await page.wait_for_function("document.querySelector('.hl-pop homelines-detail')")
         out = (await page.evaluate("pops()"))[-1]
         assert out["title"] == "Ausfälle und Verlauf"
-        assert {"type": "tile", "entity": "sensor.homelines_availability_7d"} in out["cards"]
+        assert "sensor.homelines_availability_7d" in out["values"] and "binary_sensor.homelines_internet" in out["charts"]
         await page.evaluate("history.back()")
-        await page.evaluate(f"{root}.querySelector('[data-k=speed]').click()")
-        await page.wait_for_function("document.querySelectorAll('.hl-pop .stub').length > 0")
+        await page.wait_for_function("!document.querySelector('.hl-pop')")
+        await page.evaluate(f"{root}.querySelector('.chip[data-k=speed]').click()")
+        await page.wait_for_function("document.querySelector('.hl-pop homelines-detail')")
         sp = (await page.evaluate("pops()"))[-1]
         assert sp["title"] == "Geschwindigkeit"
-        assert {"type": "tile", "entity": "button.speedtest_starten"} in sp["cards"]
-        assert sp["cards"][-1] == {"type": "history-graph", "title": "Verlauf", "hours_to_show": 168,
-                                   "entities": ["sensor.speed_down", "sensor.speed_up"]}
+        assert sp["controls"] == ["button.speedtest_starten"] and sp["charts"] == ["sensor.speed_down", "sensor.speed_up"]
         assert not errors, errors
     finally:
         await browser.close()
@@ -215,3 +226,38 @@ async def test_set_details_action(hass, unifi, ping):
     import voluptuous as _vol
     with _pt.raises(_vol.Invalid):
         await hass.services.async_call("homelines", "set_details", {"line_names": {"WAN7": "x"}}, blocking=True)
+
+
+async def test_tile_without_templates(hass, unifi, ping):
+    """0.8.4: Kachel aus Entitäten – Summe, Warnfarben per Formular, Tipp öffnet Fenster mit Werten und Verlauf."""
+    _, hub = await _setup(hass, options=DETAILS)
+    p, browser, page, errors = await _page(hass, hub)
+    try:
+        await page.evaluate("""Object.assign(HASS.states, {
+          "sensor.p1": { state: "12.5", attributes: { unit_of_measurement: "W", friendly_name: "Router" } },
+          "sensor.p2": { state: "20.6", attributes: { unit_of_measurement: "W", friendly_name: "Modem" } },
+          "sensor.p3": { state: "unavailable", attributes: { unit_of_measurement: "W", friendly_name: "Notfall-Router" } } })""")
+        await page.evaluate("""add('homelines-tile', { name: 'Strom', entities: ['sensor.p1', 'sensor.p2'], warn_above: 40, hours: 24 })""")
+        tile = "document.querySelector('homelines-tile').shadowRoot"
+        await page.wait_for_function(f"{tile}.querySelector('.s').textContent.length > 0")
+        assert await page.evaluate(f"{tile}.querySelector('.s').textContent") == "33,1 W gesamt"
+        assert await page.evaluate(f"{tile}.querySelector('ha-card').className") == ""
+
+        # dritte Entität nicht erreichbar → gelb mit Hinweis; über 40 W → gelb
+        await page.evaluate("""(() => { const t = document.querySelector('homelines-tile');
+          t.setConfig({ name: 'Strom', entities: ['sensor.p1', 'sensor.p2', 'sensor.p3'], warn_unavailable: true }); t.hass = { ...HASS }; })()""")
+        assert await page.evaluate(f"{tile}.querySelector('.s').textContent") == "33,1 W gesamt · 1 nicht erreichbar"
+        assert await page.evaluate(f"{tile}.querySelector('ha-card').className") == "warn"
+        await page.evaluate("""(() => { const t = document.querySelector('homelines-tile');
+          t.setConfig({ name: 'Strom', entities: ['sensor.p1', 'sensor.p2'], error_above: 30 }); t.hass = { ...HASS }; })()""")
+        assert await page.evaluate(f"{tile}.querySelector('ha-card').className") == "err"
+
+        await page.evaluate(f"{tile}.querySelector('ha-card').click()")
+        await page.wait_for_function("document.querySelector('.hl-pop homelines-detail .hld-v')")
+        w = (await page.evaluate("pops()"))[-1]
+        assert w["title"] == "Strom" and w["values"] == ["sensor.p1", "sensor.p2"] and w["charts"] == ["sensor.p1", "sensor.p2"]
+        assert ["sensor.p1", "12,5 W"] in w["shownValues"]
+        assert not errors, errors
+    finally:
+        await browser.close()
+        await p.stop()

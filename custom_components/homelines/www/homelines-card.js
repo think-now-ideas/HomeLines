@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.3.1";
+const HL_VERSION = "0.8.4";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
 const HL_LOGO = `<svg class="hllogo" viewBox="14 22 924 742" aria-hidden="true"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/></svg>`;
 
@@ -78,6 +78,13 @@ ha-card{padding:16px;overflow:hidden;position:relative}
 .line.na{opacity:.6;border-style:dashed}
 .line .tag{position:absolute;top:8px;right:10px;font-size:11px;padding:1px 7px;border-radius:8px;color:var(--hl-ok);border:1px solid var(--hl-ok)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 2px}
+.hlovw{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin:12px 0 4px}
+.hlov{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--divider-color);border-radius:12px;cursor:pointer;min-width:0}
+.hlov .hlov-i{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;background:color-mix(in srgb,var(--secondary-text-color) 12%,transparent);color:var(--secondary-text-color)}
+.hlov .hlov-t{min-width:0;flex:1}.hlov .hlov-n{font-weight:500;font-size:14px}.hlov .hlov-s{font-size:13px;color:var(--secondary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hlov.warn{border-color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 10%,transparent)}.hlov.warn .hlov-i{color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 18%,transparent)}.hlov.warn .hlov-s{color:var(--hl-warn)}
+.hlov.err{border-color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 8%,transparent)}.hlov.err .hlov-i{color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 16%,transparent)}.hlov.err .hlov-s{color:var(--hl-err)}
+.hlov .hlov-c{color:var(--secondary-text-color);--mdc-icon-size:20px}
 .chip{font-size:12px;padding:3px 9px;border-radius:8px;border:1px solid var(--divider-color);color:var(--secondary-text-color)}
 .dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
 .box{border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:12px;line-height:1.5}
@@ -231,6 +238,10 @@ class HomeLinesCard extends HTMLElement {
   set hass(hass) {
     this._hass = hass;
     if (this._detail && this._detail.open) this._detail.setHass(hass);
+    if (this._s && this._main && this._config.overview !== false) {
+      const key = hlOverviewEntities(this._s).map(e => hass.states[e] && hass.states[e].state).join("|");
+      if (key !== this._ovKey) { this._ovKey = key; this._render(); }
+    }
     if (!this._root) this._build();
     if (!this._feed && this.isConnected) this._subscribe();
     if (!this._infoSubs || !this._infoSubs.length) this._subscribeInfos();
@@ -380,7 +391,7 @@ class HomeLinesCard extends HTMLElement {
       this._main.innerHTML = `
       <div class="hd"><div class="t">${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
       <span class="badge ${badgeCls}">${tr[mode]}</span></div>
-      ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}
+      ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}${this._config.overview !== false ? hlOverview(s, this._hass) : ""}
       ${s.router_type !== "none" && this._config.show_devices !== false ? `<div class="btns" style="margin:10px 0 0">${btns.join("")}</div>` : ""}`;
       this._updateTimer();
       if (this._view.dialog === "devices") this._renderDeviceList();
@@ -393,15 +404,16 @@ class HomeLinesCard extends HTMLElement {
       ${status}${btns.length ? `<div class="btns">${btns.join("")}</div>` : ""}
       ${be}${metrics}
       <div class="sec" style="margin:-6px 0 8px;justify-content:flex-end"><span class="link" data-a="ask-reset">${tr.reset}</span></div>
-      ${chain}${compact ? chips : mon}`;
+      ${chain}${compact ? chips : mon}${this._config.overview !== false ? hlOverview(s, this._hass) : ""}`;
     this._updateTimer();
     if (this._view.dialog === "devices") this._renderDeviceList();
   }
 
   _openDetail(kind, wid) {
     if (!this._s) return;
-    const { title, cards } = hlDetail(this._s, kind, wid);
-    this._detail = hlOpenPopup(this._hass, null, null, { showCard: false, cards, title, columns: 2 });
+    const spec = hlDetail(this._s, kind, wid);
+    const el = document.createElement("homelines-detail"); el.spec = spec;
+    this._detail = hlOpenPopup(this._hass, null, null, { showCard: false, content: el, title: spec.title });
   }
 
   _assist(s, title, hint, ret = false) {
@@ -599,17 +611,50 @@ class HomeLinesTile extends HTMLElement {
     this._c = c; this._v = {}; this._unsub();
     if (this._hass) this._sub();
   }
-  static getStubConfig() { return { name: "Bereich", icon: "mdi:information-outline", text: "{{ now().strftime('%H:%M') }}" }; }
+  static getStubConfig() { return { name: "Bereich", icon: "mdi:information-outline" }; }
   getCardSize() { return 1; }
   getGridOptions() { return { columns: 6, rows: 1, min_columns: 4 }; }
-  set hass(h) { const first = !this._hass; this._hass = h; if (!this.shadowRoot) this._build(); if (first) this._sub(); }
+  set hass(h) {
+    const first = !this._hass; this._hass = h; if (!this.shadowRoot) this._build(); if (first) this._sub();
+    if (this._pop && this._pop.open) this._pop.setHass(h);
+    const key = (this._c.entities || []).map(e => h.states[e] && h.states[e].state).join("|");
+    if (key !== this._key) { this._key = key; this._paint(); }
+  }
   connectedCallback() { if (this._hass && !(this._subs || []).length) this._sub(); }
+  /* Ohne Vorlagen (ab 0.8.4): Text und Farbe aus den gewählten Entitäten */
+  _calc() {
+    const c = this._c, h = this._hass, ents = c.entities || [];
+    if (!ents.length || !h) return null;
+    const sts = ents.map(e => h.states[e]);
+    const bad = sts.filter(st => !st || ["unavailable", "unknown"].includes(st.state)).length;
+    const nums = sts.map(st => st ? parseFloat(st.state) : NaN).filter(v => !isNaN(v));
+    const unit = c.unit ?? ((sts.find(st => st && st.attributes.unit_of_measurement) || { attributes: {} }).attributes.unit_of_measurement || "");
+    const f = v => v.toLocaleString("de-DE", { maximumFractionDigits: c.decimals ?? (Math.abs(v) >= 100 ? 0 : 1) });
+    const mode = c.combine || (ents.length > 1 ? "sum" : "single");
+    let val = null, text;
+    if (mode === "list") text = ents.map(e => hlFmt(h, e) ?? "–").join(" · ");
+    else if (mode === "single") { const st = sts[0]; const v = st ? parseFloat(st.state) : NaN; val = isNaN(v) ? null : v; text = !isNaN(v) ? `${f(v)}${unit ? " " + unit : ""}` : (st ? st.state : "–"); }
+    else if (nums.length) {
+      val = mode === "min" ? Math.min(...nums) : mode === "max" ? Math.max(...nums) : mode === "avg" ? nums.reduce((a, b) => a + b, 0) / nums.length : nums.reduce((a, b) => a + b, 0);
+      text = `${f(val)}${unit ? " " + unit : ""}${mode === "sum" && ents.length > 1 ? " gesamt" : ""}`;
+    } else text = "–";
+    if (bad && c.warn_unavailable) text += ` · ${bad} nicht erreichbar`;
+    const num = x => (x === undefined || x === null || x === "" ? null : Number(x));
+    const out = (lo, hi) => val != null && ((num(lo) != null && val < num(lo)) || (num(hi) != null && val > num(hi)));
+    const err = out(c.error_below, c.error_above), warn = !err && ((bad > 0 && c.warn_unavailable) || out(c.warn_below, c.warn_above));
+    return { text, err, warn };
+  }
   disconnectedCallback() { this._unsub(); }
   _build() {
     this.attachShadow({ mode: "open" }).innerHTML = `<style>${tileCss}</style><ha-card><div class="ic"><ha-icon></ha-icon></div><div class="tx"><div class="n"></div><div class="s"></div></div><ha-icon class="ch" icon="mdi:chevron-right"></ha-icon></ha-card>`;
     this.shadowRoot.querySelector("ha-card").addEventListener("click", () => {
       const c = this._c, ta = c.tap_action || {};
       if (c.navigation_path || ta.navigation_path) hlNavigate(c.navigation_path || ta.navigation_path);
+      else if ((c.entities || []).length) {
+        const el = document.createElement("homelines-detail");
+        el.spec = hlDetail({}, "entities", { title: c.name, entities: c.entities, hours: Number(c.hours) || 24 });
+        this._pop = hlOpenPopup(this._hass, null, null, { showCard: false, content: el, title: c.name });
+      }
       else if (c.entity) this.dispatchEvent(new CustomEvent("hass-more-info", { bubbles: true, composed: true, detail: { entityId: c.entity } }));
     });
     this._paint();
@@ -627,13 +672,17 @@ class HomeLinesTile extends HTMLElement {
   _paint() {
     if (!this.shadowRoot || !this._c) return;
     const truthy = v => v === true || ["true", "on", "1", "yes", "ja"].includes(String(v ?? "").trim().toLowerCase());
-    const err = truthy(this._v.error), warn = !err && truthy(this._v.warning);
+    const calc = this._calc();
+    let err = truthy(this._v.error), warn = !err && truthy(this._v.warning);
+    if (calc && this._c.error == null && calc.err) err = true;
+    if (calc && !err && this._c.warning == null && calc.warn) warn = true;
     const card = this.shadowRoot.querySelector("ha-card");
     card.className = err ? "err" : warn ? "warn" : "";
     this.shadowRoot.querySelector(".ic ha-icon").setAttribute("icon", err || warn ? (this._c.warning_icon || "mdi:alert-outline") : (this._c.icon || "mdi:information-outline"));
     this.shadowRoot.querySelector(".n").textContent = this._c.name;
-    this.shadowRoot.querySelector(".s").textContent = this._v.text == null ? "" : String(this._v.text);
-    this.shadowRoot.querySelector(".ch").style.display = (this._c.navigation_path || (this._c.tap_action || {}).navigation_path) ? "" : "none";
+    const txt = this._c.text != null ? this._v.text : (calc ? calc.text : null);
+    this.shadowRoot.querySelector(".s").textContent = txt == null ? "" : String(txt);
+    this.shadowRoot.querySelector(".ch").style.display = (this._c.navigation_path || (this._c.tap_action || {}).navigation_path || (this._c.entities || []).length) ? "" : "none";
   }
 }
 
@@ -678,50 +727,219 @@ ha-card.warn{border-color:var(--hl-warn)}ha-card.err{border-color:var(--hl-err)}
 .t svg.sp{display:block;width:100%;height:28px;margin-top:auto}
 `;
 const popCss = `
-.hl-pop{position:fixed;inset:0;z-index:9;display:flex;align-items:flex-start;justify-content:center;background:rgba(0,0,0,.5);overflow:auto;padding:5vh 12px 24px;box-sizing:border-box;animation:lgf .15s ease-out}
+.hl-pop{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-start;justify-content:center;background:rgba(0,0,0,.5);overflow:auto;padding:5vh 12px 24px;box-sizing:border-box;animation:lgf .15s ease-out}
 .hl-pop .in{width:min(620px,100%);position:relative}
 .hl-pop .in.wide{width:min(1000px,100%)}
 .hl-pop .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;margin-top:8px}
 .hl-pop .grid>:first-child{margin-top:0}
 .hl-pop .err{background:var(--card-background-color,#fff);color:var(--error-color,#db4437);padding:10px;border-radius:12px;grid-column:1/-1}
-.hl-pop .x{position:absolute;right:6px;top:-44px;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;background:var(--card-background-color,#fff);color:var(--primary-text-color);font-size:20px;line-height:38px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.hl-pop .hl-x{position:absolute;right:6px;top:-44px;width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;background:var(--card-background-color,#fff);color:var(--primary-text-color);font-size:20px;line-height:38px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 @media (max-width:600px){.hl-pop{padding:56px 8px 16px;align-items:flex-start}.hl-pop .in{width:100%}}
 @media (max-width:600px){.hl-pop .grid>*{grid-column:1 / -1 !important}}
 @keyframes lgf{from{opacity:0}to{opacity:1}}
 .hl-pop .pt{margin:4px 40px 10px 4px;font-size:18px;font-weight:500;color:var(--primary-text-color)}
+.hl-pop .in.panel{background:var(--primary-background-color,#fafafa);border-radius:16px;padding:14px 14px 16px;box-sizing:border-box}
 `;
+/* Übersicht (ab 0.8.4): je eine Zeile für Notfall-Strecke, Leitungen mit Detailwerten, Geschwindigkeit
+   und Ausfälle – Werte auf einen Blick, Tipp öffnet das passende Detailfenster */
+function hlFmt(hass, e) {
+  const st = e && hass.states[e]; if (!st || ["unavailable", "unknown"].includes(st.state)) return null;
+  const v = parseFloat(st.state), u = st.attributes.unit_of_measurement || "";
+  if (!isNaN(v) && /^-?[\d.]+$/.test(st.state)) return `${v.toLocaleString("de-DE", { maximumFractionDigits: Math.abs(v) >= 100 ? 0 : 1 })}${u ? " " + u : ""}`;
+  if (e.startsWith("button.")) return null;
+  return st.state;
+}
+function hlOverview(s, hass) {
+  const d = s.details || {}, rows = [], mode = s.mode, ph = s.phone || {}, u = s.usage || {}, mo = s.monitor || {};
+  const backup = (s.wans || []).find(w => w.backup);
+  if (backup) {
+    let t, cls = "";
+    if (mode !== "normal") { t = `Notbetrieb · ${mb(u.mb)} · ${eur(u.cost)}`; cls = "warn"; }
+    else if (ph.configured) { t = ph.reporting ? `Handy bereit${ph.battery != null ? " · " + Math.round(ph.battery) + " %" : ""}` : "Handy meldet sich nicht"; if (!ph.reporting) cls = "err"; }
+    else t = backup.state === "online" ? "Backup online" : "Backup in Bereitschaft";
+    (d.backup || []).slice(0, 1).forEach(e => { const v = hlFmt(hass, e); if (v) t += ` · ${v}`; });
+    rows.push({ k: "line", id: backup.id, icon: "mdi:cellphone-link", n: "Notfall-Strecke", t, cls });
+  }
+  (s.wans || []).filter(w => !w.backup && ((d.lines || {})[w.id] || {}).entities && d.lines[w.id].entities.length).forEach(w => {
+    const vals = d.lines[w.id].entities.map(e => hlFmt(hass, e)).filter(Boolean).slice(0, 3);
+    rows.push({ k: "line", id: w.id, icon: "mdi:router-network", n: w.name || w.id, t: vals.join(" · ") || "–",
+      cls: w.state === "offline" && w.primary ? "err" : "" });
+  });
+  const sp = d.speed || {};
+  if (sp.download) {
+    const r0 = e => { const st = e && hass.states[e], v = st ? parseFloat(st.state) : NaN; return isNaN(v) ? null : `${Math.round(v).toLocaleString("de-DE")} ${st.attributes.unit_of_measurement || ""}`.trim(); };
+    const dn = r0(sp.download), up = r0(sp.upload);
+    rows.push({ k: "speed", icon: "mdi:speedometer", n: "Geschwindigkeit", t: [dn && "↓ " + dn, up && "↑ " + up].filter(Boolean).join(" · ") || "–" });
+  }
+  const av = mo.availability_7d != null ? mo.availability_7d.toLocaleString("de-DE", { maximumFractionDigits: 2 }) + " %" : "–";
+  rows.push({ k: "outages", icon: "mdi:lan-disconnect", n: "Ausfälle und Verlauf",
+    t: `${mo.outages_24h ?? 0} / ${mo.outages_7d ?? 0} / ${mo.outages_30d ?? 0} · ${av}`,
+    cls: mo.internet === false ? "err" : (mo.outages_24h || 0) > 0 ? "warn" : "" });
+  return `<div class="hlovw">${rows.map(r => `<div class="hlov ${r.cls || ""}" data-a="detail" data-k="${r.k}"${r.id ? ` data-id="${esc(r.id)}"` : ""}>
+    <div class="hlov-i"><ha-icon icon="${r.cls ? (r.cls === "err" ? "mdi:alert-circle-outline" : "mdi:alert-outline") : r.icon}"></ha-icon></div>
+    <div class="hlov-t"><div class="hlov-n">${esc(r.n)}</div><div class="hlov-s">${esc(r.t)}</div></div><ha-icon class="hlov-c" icon="mdi:chevron-right"></ha-icon></div>`).join("")}</div>`;
+}
+function hlOverviewEntities(s) {
+  const d = (s && s.details) || {};
+  return [...Object.values(d.lines || {}).flatMap(l => l.entities || []), (d.speed || {}).download, (d.speed || {}).upload, ...(d.backup || [])].filter(Boolean);
+}
+
 /* Eingebaute Detailfenster (ab 0.8.0): aus den HomeLines-Optionen, ohne eigene Dashboard-Seite */
 function hlDetail(s, kind, wid) {
-  const d = s.details || {}, own = d.own || {}, cards = [];
-  const tile = e => e && cards.push({ type: "tile", entity: e });
-  const tiles = list => (list || []).forEach(tile);
-  const graph = (ents, title) => { ents = (ents || []).filter(Boolean); if (ents.length) cards.push({ type: "history-graph", title, hours_to_show: 168, entities: ents }); };
+  // Werte (Kacheln), Verläufe und Bedienelemente; gezeichnet von <homelines-detail>
+  const d = s.details || {}, own = d.own || {}, values = [], charts = [], controls = [];
+  const add = (list, arr) => (arr || []).filter(Boolean).forEach(e => { if (!list.includes(e)) list.push(e); });
+  const isCtl = e => /^(button|switch|input_[a-z]+|time|select|number)\./.test(e);
+  const sort = arr => (arr || []).filter(Boolean).forEach(e => { const L = isCtl(e) ? controls : values; if (!L.includes(e)) L.push(e); });
   if (kind === "line") {
     const w = (s.wans || []).find(x => x.id === wid) || { id: wid, name: wid };
     const ld = (d.lines || {})[wid] || {};
-    if (w.entity_id) tile(w.entity_id);
-    tiles(ld.entities);
-    graph(ld.history, "Verlauf");
-    if (w.primary && s.reconnect && s.reconnect.configured) {
-      const rows = ["daily_reconnect", "reconnect_time", "last_reconnect", "reconnect_result", "wan_ip", "reconnect_now"].map(k => own[k]).filter(Boolean);
-      if (rows.length) cards.push({ type: "entities", title: "Neueinwahl", entities: rows });
-    }
-    if (w.backup) {
-      ["status", "phone", "devices_online", "usage", "cost", "balance"].forEach(k => tile(own[k]));
-      tiles(d.phone); tiles(d.backup);
-    }
-    return { title: w.name && w.name !== w.id ? `${w.name} (${w.id})` : w.id, cards };
+    if (w.entity_id) add(values, [w.entity_id]);
+    sort(ld.entities); add(charts, ld.history);
+    if (w.primary && s.reconnect && s.reconnect.configured)
+      add(controls, ["daily_reconnect", "reconnect_time", "last_reconnect", "reconnect_result", "wan_ip", "reconnect_now"].map(k => own[k]));
+    if (w.backup) { add(values, ["status", "phone", "devices_online", "usage", "cost", "balance"].map(k => own[k])); sort(d.phone); sort(d.backup); }
+    return { title: w.name && w.name !== w.id ? `${w.name} (${w.id})` : w.id, values, charts, controls, hours: 168,
+      controlsTitle: w.primary && s.reconnect && s.reconnect.configured ? "Neueinwahl" : "Bedienung" };
   }
   if (kind === "speed") {
-    tiles([d.speed && d.speed.download, d.speed && d.speed.upload]);
-    tiles(d.speed && d.speed.extra);
-    graph([d.speed && d.speed.download, d.speed && d.speed.upload], "Verlauf");
-    return { title: "Geschwindigkeit", cards };
+    const sp = d.speed || {};
+    add(values, [sp.download, sp.upload]); sort(sp.extra); add(charts, [sp.download, sp.upload]);
+    return { title: "Geschwindigkeit", values, charts, controls, hours: 168 };
   }
-  ["outages_24h", "outages_7d", "outages_30d", "downtime_7d", "availability_7d", "availability_30d", "latency", "packet_loss"].forEach(k => tile(own[k]));
-  graph([own.internet], "Internet in den letzten 7 Tagen");
-  return { title: "Ausfälle und Verlauf", cards };
+  if (kind === "entities") return { title: wid.title, values: wid.entities, charts: wid.entities, controls: [], hours: wid.hours || 24 };
+  add(values, ["outages_24h", "outages_7d", "outages_30d", "downtime_7d", "availability_7d", "availability_30d", "latency", "packet_loss"].map(k => own[k]));
+  add(charts, [own.internet, own.latency]);
+  return { title: "Ausfälle und Verlauf", values, charts, controls, hours: 168 };
 }
+
+function hlMoreInfo(entityId) {
+  // Das HA-Detailfenster hört auf <home-assistant>; unsere Fenster hängen direkt am <body> und lägen
+  // darüber. Deshalb treten sie zur Seite, bis das HA-Fenster wieder zu ist.
+  const ha = document.querySelector("home-assistant");
+  if (!ha) return;
+  const pops = [...document.querySelectorAll("body > .hl-pop")];
+  pops.forEach(p => { p.style.visibility = "hidden"; });
+  ha.dispatchEvent(new CustomEvent("hass-more-info", { bubbles: true, composed: true, detail: { entityId } }));
+  const dlg = () => ha.shadowRoot && ha.shadowRoot.querySelector("ha-more-info-dialog");
+  let seen = false;
+  const t = setInterval(() => {
+    const d = dlg(), open = !!(d && (d.open || d._open || (d.shadowRoot && d.shadowRoot.querySelector("[open]"))) && d.isConnected);
+    if (open) seen = true;
+    if ((seen && !open) || (!seen && Date.now() - t0 > 4000)) {
+      clearInterval(t); pops.forEach(p => { p.style.visibility = ""; });
+    }
+  }, 250), t0 = Date.now();
+}
+
+const detailCss = `
+.hld{display:block;color:var(--primary-text-color);font-family:var(--paper-font-body1_-_font-family,inherit)}
+.hld .hld-vals{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.hld .hld-v{background:var(--card-background-color,#fff);border:1px solid var(--divider-color);border-radius:12px;padding:10px 12px;cursor:pointer;min-width:0}
+.hld .hld-v .hld-n{font-size:13px;color:var(--secondary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hld .hld-v .hld-x{font-size:18px;font-weight:500;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hld .hld-v.na .hld-x{color:var(--secondary-text-color);font-weight:400}
+.hld .hld-sec{margin:16px 2px 8px;font-size:14px;font-weight:500;color:var(--secondary-text-color)}
+.hld .hld-c{background:var(--card-background-color,#fff);border:1px solid var(--divider-color);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.hld .hld-c .hld-h{display:flex;justify-content:space-between;gap:8px;font-size:13px}.hld .hld-c .hld-h b{font-weight:500}
+.hld .hld-c svg{width:100%;height:70px;display:block;margin-top:6px}
+.hld .hld-c .hld-ax{display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color)}
+.hld .hld-ctl{margin-top:4px}
+.hld .hld-empty{color:var(--secondary-text-color);font-size:13px;padding:4px 2px}`;
+
+class HomeLinesDetail extends HTMLElement {
+  set spec(v) { this._spec = v; this._series = null; this._key = null; this._paint(); this._load(); }
+  set hass(h) {
+    const first = !this._hass; this._hass = h;
+    if (this._ctl) this._ctl.hass = h;
+    if (first) this._load();
+    const sp = this._spec || {}, key = [...(sp.values || []), ...(sp.charts || [])].map(e => h.states[e] && h.states[e].state).join("|");
+    if (key !== this._key) { this._key = key; this._paint(); }
+  }
+  _name(e) { const st = this._hass && this._hass.states[e]; return (st && st.attributes.friendly_name) || e; }
+  _val(e) {
+    const h = this._hass, st = h && h.states[e];
+    if (!st) return null;
+    if (["unavailable", "unknown"].includes(st.state)) return null;
+    try { if (h.formatEntityState) return h.formatEntityState(st); } catch (err) { /* ältere HA */ }
+    return hlFmt(h, e) ?? st.state;
+  }
+  async _load() {
+    const sp = this._spec, h = this._hass;
+    if (!sp || !h || !(sp.charts || []).length || !h.callWS) return;
+    const hrs = sp.hours || 168;
+    try {
+      const r = await h.callWS({ type: "history/history_during_period", entity_ids: sp.charts,
+        start_time: new Date(Date.now() - hrs * 3600000).toISOString(), minimal_response: true, no_attributes: true,
+        significant_changes_only: false });
+      this._series = {};
+      sp.charts.forEach(e => { this._series[e] = ((r && r[e]) || []).map(x => [(x.lu || x.lc || 0) * 1000, x.s]); });
+    } catch (err) { this._series = {}; }
+    this._paint();
+  }
+  _chart(e) {
+    const sp = this._spec, hrs = sp.hours || 168, t1 = Date.now();
+    const pts = ((this._series || {})[e] || []).filter(p => p[0] <= t1);
+    // Gibt es noch keinen vollen Zeitraum, beginnt die Achse beim ersten Wert
+    const t0 = Math.min(t1 - 600000, Math.max(t1 - hrs * 3600000, pts.length ? pts[0][0] : t1 - hrs * 3600000));
+    const st = this._hass.states[e];
+    if (st) pts.push([t1, st.state]);
+    const X = t => Math.max(0, Math.min(100, (t - t0) / (t1 - t0) * 100));
+    let svg = "", range = "";
+    if (e.startsWith("binary_sensor.")) {
+      // Streifen: grün = an, rot = aus, grau = unbekannt
+      svg = pts.map((p, i) => { const a = X(Math.max(p[0], t0)), b = X(i + 1 < pts.length ? pts[i + 1][0] : t1); if (b <= a) return "";
+        const c = p[1] === "on" ? "var(--hl-ok,#2e7d32)" : p[1] === "off" ? "var(--hl-err,#db4437)" : "var(--divider-color)";
+        return `<rect x="${a.toFixed(2)}" y="8" width="${(b - a).toFixed(2)}" height="14" fill="${c}"/>`; }).join("");
+      svg = `<svg viewBox="0 0 100 30" preserveAspectRatio="none" style="height:30px">${svg}</svg>`;
+    } else {
+      const num = pts.map(p => [p[0], parseFloat(p[1])]).filter(p => !isNaN(p[1]));
+      if (num.length < 2) return `<div class="hld-c" data-e="${esc(e)}"><div class="hld-h"><b>${esc(this._name(e))}</b><span>${esc(this._val(e) ?? "–")}</span></div><div class="hld-empty">Noch kein Verlauf</div></div>`;
+      let lo = Math.min(...num.map(p => p[1])), hi = Math.max(...num.map(p => p[1]));
+      if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
+      const Y = v => 58 - (v - lo) / (hi - lo) * 52;
+      // Stufen: jeder Wert gilt bis zum nächsten
+      let d = ""; num.forEach((p, i) => { const x = X(Math.max(p[0], t0)); d += (i ? ` L${x.toFixed(2)},${Y(num[i - 1][1]).toFixed(2)}` : `M${x.toFixed(2)},${Y(p[1]).toFixed(2)}`) + ` L${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; });
+      const u = (st && st.attributes.unit_of_measurement) || "";
+      const f = v => v.toLocaleString("de-DE", { maximumFractionDigits: Math.abs(v) >= 100 ? 0 : 1 });
+      range = `${f(lo)} – ${f(hi)}${u ? " " + u : ""}`;
+      svg = `<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="var(--hl-acc,var(--primary-color,#03a9f4))" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
+    }
+    const span = (t1 - t0) / 3600000;
+    const ago = span >= hrs - 0.5 ? (hrs >= 48 ? `vor ${Math.round(hrs / 24)} Tagen` : `vor ${hrs} Stunden`) : `seit ${when(new Date(t0).toISOString())}`;
+    return `<div class="hld-c" data-e="${esc(e)}"><div class="hld-h"><b>${esc(this._name(e))}</b><span>${esc(this._val(e) ?? "–")}</span></div>${svg}
+      <div class="hld-ax"><span>${ago}</span><span>${esc(range)}</span><span>jetzt</span></div></div>`;
+  }
+  async _controls() {
+    const sp = this._spec;
+    if (!(sp.controls || []).length || this._ctl) return;
+    let helpers = null;
+    try { helpers = window.loadCardHelpers ? await window.loadCardHelpers() : null; } catch (err) { helpers = null; }
+    if (!helpers) return;
+    this._ctl = helpers.createCardElement({ type: "entities", entities: sp.controls });
+    this._ctl.hass = this._hass;
+    const box = this.querySelector(".hld-ctl"); if (box) box.appendChild(this._ctl);
+  }
+  _paint() {
+    const sp = this._spec, h = this._hass;
+    if (!sp || !h) return;
+    if (!this._box) {
+      this.innerHTML = `<style>${detailCss}</style><div class="hld"><div class="hld-vals"></div><div class="hld-charts"></div><div class="hld-ctl"></div></div>`;
+      this._box = this.querySelector(".hld");
+      this.addEventListener("click", ev => { const t = ev.target.closest("[data-e]"); if (t) hlMoreInfo(t.dataset.e); });
+      this._controls();
+    }
+    this.querySelector(".hld-vals").innerHTML = (sp.values || []).map(e => {
+      const v = this._val(e);
+      return `<div class="hld-v${v == null ? " na" : ""}" data-e="${esc(e)}"><div class="hld-n">${esc(this._name(e))}</div><div class="hld-x">${esc(v ?? "nicht verfügbar")}</div></div>`;
+    }).join("") || "";
+    const charts = (sp.charts || []).filter(e => h.states[e]);
+    this.querySelector(".hld-charts").innerHTML = charts.length ? `<div class="hld-sec">Verlauf</div>${charts.map(e => this._chart(e)).join("")}` : "";
+    const ctl = this.querySelector(".hld-ctl");
+    if ((sp.controls || []).length && !ctl.querySelector(".hld-sec")) ctl.insertAdjacentHTML("afterbegin", `<div class="hld-sec">${sp.controlsTitle || "Bedienung"}</div>`);
+  }
+}
+if (!customElements.get("homelines-detail")) customElements.define("homelines-detail", HomeLinesDetail);
 
 /* Karten einer vorhandenen Dashboard-Seite holen, z. B. "/dashboard-beispiel/internet" */
 async function hlViewCards(hass, path) {
@@ -761,7 +979,7 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
   const myId = (window.__hlPopSeq = (window.__hlPopSeq || 0) + 1);
   const ov = document.createElement("div");
   ov.className = "hl-pop";
-  ov.innerHTML = `<div class="in"><button class="x" aria-label="Schließen">✕</button>${opts.title ? `<p class="pt">${esc(opts.title)}</p>` : ""}</div>`;
+  ov.innerHTML = `<div class="in"><button class="hl-x" aria-label="Schließen">✕</button>${opts.title ? `<p class="pt">${esc(opts.title)}</p>` : ""}</div>`;
   const inner = ov.firstChild, els = [], hashes = new Set();
   let card = null;
   if (opts.showCard !== false) {
@@ -769,6 +987,7 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
     card.setConfig({ compact: true, ...(cardCfg || {}), ...(entryId ? { entry_id: entryId } : {}) });
     card.hass = hass; inner.appendChild(card); els.push(card);
   }
+  if (opts.content) { inner.classList.add("panel"); inner.appendChild(opts.content); opts.content.hass = hass; els.push(opts.content); }
   // Weitere Karten: eine vorhandene Dashboard-Seite (view) oder eine eigene Liste (cards)
   if (opts.view || (opts.cards || []).length) {
     if (opts.view) inner.classList.add("wide");
@@ -811,7 +1030,8 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
   const mine = () => history.state && history.state.hlPop === myId;
   const shut = () => { if (mine()) history.back(); else close(); };
   const top = () => { const all = document.querySelectorAll("body > .hl-pop"); return all[all.length - 1] === ov; };
-  const key = e => { if (e.key === "Escape" && ov.style.display !== "none" && top()) shut(); };
+  // Esc gehört dem obersten sichtbaren Fenster – nicht, solange ein HA-Detailfenster darüber liegt
+  const key = e => { if (e.key === "Escape" && ov.style.display !== "none" && ov.style.visibility !== "hidden" && top()) shut(); };
   // Zurück-Taste: zurück auf unseren Eintrag = wieder zeigen, Eintrag eines höheren Fensters = nichts tun,
   // weiter zurück = schließen
   const pop = () => {
@@ -833,7 +1053,7 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
       if (!mine()) history.replaceState({ ...(history.state || {}), hlPop: myId }, "");
     }
   };
-  ov.addEventListener("click", e => { if (e.target === ov || e.target.classList.contains("x")) shut(); });
+  ov.addEventListener("click", e => { if (e.target === ov || e.target.classList.contains("hl-x")) shut(); });
   document.addEventListener("keydown", key);
   history.pushState({ hlPop: myId }, ""); window.addEventListener("popstate", pop);
   window.addEventListener("location-changed", loc); window.addEventListener("hashchange", loc);
@@ -1029,17 +1249,21 @@ class HomeLinesMini extends HTMLElement {
    Schlüssel, die der Editor nicht kennt (z. B. popup_cards), bleiben unverändert erhalten.        */
 const ED_LABEL = {
   layout: "Darstellung", name: "Name", title: "Titel", compact: "Kompakt (im Normalbetrieb nur Kopf, Leitungen und Kennzahlen)",
-  show_devices: "Geräte-Knopf zeigen", throughput_entity: "Sensor Download (Verlauf)", upload_entity: "Sensor Upload (zweite Linie)",
+  show_devices: "Geräte-Knopf zeigen", overview: "Übersicht zeigen (Notfall-Strecke, Leitungen, Geschwindigkeit, Ausfälle)", throughput_entity: "Sensor Download (Verlauf)", upload_entity: "Sensor Upload (zweite Linie)",
   throughput_hours: "Verlauf über Stunden", info: "Eigene zweite Zeile (Vorlage)", navigation_path: "Beim Antippen öffnen (Pfad oder #popup)",
   popup_view: "Dashboard-Seite als Popup (Pfad)", popup_columns: "Spalten im Popup", popup_show_card: "HomeLines-Karte im Popup zeigen",
   icon: "Symbol", text: "Text (Vorlage)", warning: "Gelb, wenn (Vorlage)", error: "Rot, wenn (Vorlage)", entity: "Entität (Details beim Antippen)",
-  tap: "Beim Antippen öffnen (Pfad oder #popup)", hide: "In der Mini-Karte ausblenden", na_text: "Text, wenn nicht angeschlossen",
+  tap: "Beim Antippen öffnen (Pfad oder #popup)", entities: "Entitäten", combine: "Anzeige",
+  warn_unavailable: "Gelb, wenn eine Entität nicht erreichbar ist", warn_below: "Gelb unter", warn_above: "Gelb über",
+  error_below: "Rot unter", error_above: "Rot über", hours: "Verlauf im Fenster (Stunden)", hide: "In der Mini-Karte ausblenden", na_text: "Text, wenn nicht angeschlossen",
 };
 const ED_HELP = {
   name: "", info: "Leer: aktive Leitung, Download und Latenz. Beispiel: {{ state_attr('sensor.homelines_active_wan', 'name') }}",
   navigation_path: "Leer: die große HomeLines-Karte öffnet sich als Popup.",
   popup_view: "Teil der Adresse ab dem ersten „/“, z. B. /dashboard-beispiel/internet. Weitere Karten fürs Popup (popup_cards) im Code-Editor.",
   warning: "Ergebnis true/on/ja färbt die Kachel gelb.", error: "Ergebnis true/on/ja färbt die Kachel rot.",
+  entities: "Die Werte dieser Entitäten zeigt die Kachel an. Ein Tipp öffnet ein Fenster mit allen Werten und ihrem Verlauf.",
+  text: "Nur wenn die Auswahl oben nicht reicht. Hat Vorrang vor „Anzeige“.",
   tap: "Leer: eingebautes Detailfenster der Leitung (Werte unter HomeLines → Konfigurieren → Detailansichten).",
   throughput_entity: "Leer: Geschwindigkeit aus HomeLines → Konfigurieren → Detailansichten.",
 };
@@ -1081,6 +1305,7 @@ class HomeLinesEditorBase extends HTMLElement {
   _changed(v) {
     const out = { ...this._config };
     hlSchemaKeys(this._schema()).forEach(k => { if (v && k in v) out[k] = v[k]; else delete out[k]; });
+    Object.entries(this._defaults || {}).forEach(([k, d]) => { if (out[k] === d) delete out[k]; });
     const cfg = { type: this._config.type, ...(hlClean({ ...out, type: undefined }) || {}) };
     if (!cfg.type) delete cfg.type;
     this._config = cfg;
@@ -1124,16 +1349,19 @@ function hlLineIds(hass, config) {
 }
 
 class HomeLinesCardEditor extends HomeLinesEditorBase {
+  constructor() { super(); this._defaults = { overview: true }; }
   _formData() {
+    const base = { overview: true, ...this._config };
     // ha-form erwartet für verschachtelte Abschnitte ein Objekt, auch wenn noch nichts eingestellt ist
     const lines = { ...(this._config.lines || {}) };
     hlLineIds(this._hass, this._config).forEach(l => { lines[l.id] = { ...(lines[l.id] || {}) }; });
-    return { ...this._config, lines };
+    return { ...base, lines };
   }
   _schema() {
     return [
       { name: "title", selector: { text: {} } },
       { name: "compact", selector: { boolean: {} } },
+      { name: "overview", selector: { boolean: {} } },
       { type: "expandable", name: "lines", title: "Leitungen in dieser Karte", icon: "mdi:wan",
         schema: hlLineIds(this._hass, this._config).map(l => ({
           type: "expandable", name: l.id, title: l.name && l.name !== l.id ? `${l.id} · ${l.name}` : l.id, schema: [
@@ -1151,11 +1379,27 @@ class HomeLinesTileEditor extends HomeLinesEditorBase {
     return [
       { name: "name", required: true, selector: { text: {} } },
       { name: "icon", selector: { icon: {} } },
-      { name: "text", selector: { template: {} } },
-      { name: "warning", selector: { template: {} } },
-      { name: "error", selector: { template: {} } },
-      { name: "navigation_path", selector: { text: {} } },
-      { name: "entity", selector: { entity: {} } },
+      { name: "entities", selector: { entity: { multiple: true } } },
+      { name: "combine", selector: { select: { mode: "dropdown", options: [
+        { value: "sum", label: "Summe" }, { value: "single", label: "Einzelwert (erste Entität)" },
+        { value: "list", label: "Alle Werte nebeneinander" }, { value: "avg", label: "Durchschnitt" },
+        { value: "min", label: "Kleinster Wert" }, { value: "max", label: "Größter Wert" }] } } },
+      { type: "expandable", flatten: true, title: "Warnfarben", icon: "mdi:alert-outline", schema: [
+        { name: "warn_unavailable", selector: { boolean: {} } },
+        { name: "warn_below", selector: { number: { mode: "box", step: "any" } } },
+        { name: "warn_above", selector: { number: { mode: "box", step: "any" } } },
+        { name: "error_below", selector: { number: { mode: "box", step: "any" } } },
+        { name: "error_above", selector: { number: { mode: "box", step: "any" } } },
+      ] },
+      { type: "expandable", flatten: true, title: "Beim Antippen", icon: "mdi:gesture-tap", schema: [
+        { name: "hours", selector: { number: { min: 1, max: 720, step: 1, mode: "box", unit_of_measurement: "h" } } },
+        { name: "navigation_path", selector: { text: {} }, helper: "Leer: Fenster mit den Werten und dem Verlauf der Entitäten." },
+      ] },
+      { type: "expandable", flatten: true, title: "Erweitert: Vorlagen", icon: "mdi:code-braces", schema: [
+        { name: "text", selector: { template: {} } },
+        { name: "warning", selector: { template: {} } },
+        { name: "error", selector: { template: {} } },
+      ] },
     ];
   }
 }

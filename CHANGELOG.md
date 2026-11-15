@@ -1,5 +1,24 @@
 # Änderungen
 
+## 0.8.4 – Übersicht zurück, Detailfenster mit echten Werten, Kachel ohne Code
+- **Übersicht in der großen Karte:** unter den Kennzahlen je eine Zeile für Notfall-Strecke (Handy, Akku, weitere
+  Werte), jede Leitung mit Detailwerten (z. B. „DSL – SHOWTIME · 250 Mbit/s · 46 Mbit/s“), Geschwindigkeit und
+  Ausfälle, mit Gelb/Rot bei Problemen. Ein Tipp öffnet das passende Fenster. Abschaltbar im Editor
+  („Übersicht zeigen“, `overview: false`).
+- **Detailfenster zeichnet HomeLines jetzt selbst:** Werte als Felder mit Namen und Wert, Verläufe als Linien (bzw.
+  An/Aus-Streifen), Schalter und Buttons als Bedienliste (z. B. Neueinwahl, „Speedtest starten“). In 0.8.0–0.8.3.1
+  zeigten die eingebetteten HA-Kacheln in echten Installationen keine Werte und der Verlauf blieb leer.
+  Ein Tipp auf einen Wert öffnet das normale HA-Detailfenster der Entität; das HomeLines-Fenster tritt solange zur Seite.
+- **Kachel ohne Vorlagen:** `homelines-tile` zeigt jetzt Werte gewählter Entitäten (`entities`) als Summe, Einzelwert,
+  Liste, Durchschnitt, Minimum oder Maximum (`combine`). Warnfarben per Formular: gelb bei nicht erreichbarer Entität
+  (`warn_unavailable`), gelb/rot unter/über einem Wert (`warn_below`, `warn_above`, `error_below`, `error_above`).
+  Ein Tipp öffnet ein Fenster mit allen Werten und dem Verlauf (`hours`, Standard 24). Vorlagen (`text`, `warning`,
+  `error`) gibt es weiter unter „Erweitert“ und haben Vorrang.
+- Hauptleitung wird auch ohne UniFi erkannt (erste Leitung mit Status-Sensor, die nicht Backup ist).
+- Fenster liegen über der HA-Kopfleiste; Esc schließt kein HomeLines-Fenster, solange ein HA-Detailfenster offen ist.
+- Neu im Repo: `examples/` mit Beispiel-Seite, Mini-Karte und Aktion für die Detailansichten.
+- Geprüft gegen ein echtes Home Assistant mit Frontend (Seite, Fenster, HA-Detailfenster, Kachel-Editor).
+
 ## 0.8.3.1 – Korrektur Übersetzung
 - Hilfetext der Aktion `homelines.set_details` ohne geschweifte Klammern (Home Assistant hielt das Beispiel für einen
   Platzhalter; die Prüfung hassfest schlug fehl). Neuer Test prüft alle Übersetzungen darauf.
