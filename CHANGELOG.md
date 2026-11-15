@@ -1,5 +1,23 @@
 # Änderungen
 
+## 0.7.1 – Karten ohne YAML einrichten
+- **Grafische Editoren für alle drei Karten:** Große Karte, Mini-Karte und Kachel lassen sich jetzt im Dashboard-Editor
+  per Formular einstellen (Sensoren aus Listen, Vorlagen mit Prüfung, Symbolauswahl). Vorhandenes YAML bleibt gültig;
+  Einstellungen, die der Editor nicht kennt (z. B. `popup_cards`, `grid_options`), bleiben erhalten und lassen sich
+  weiter im Code-Editor bearbeiten. Geleerte Felder werden aus der Konfiguration entfernt.
+  - Mini-Karte: Darstellung (Kachel oder Leiste), Name, Download-/Upload-Sensor und Zeitraum für den Verlauf, eigene
+    zweite Zeile, Ziel beim Antippen (Pfad, Dashboard-Seite als Popup, Spalten, HomeLines-Karte im Popup).
+  - Große Karte: Titel, kompakt, je Leitung Name nur für diese Karte, Ziel beim Antippen, Zusatzzeile, in der
+    Mini-Karte ausblenden. Die Leitungen kommen aus HomeLines.
+  - Kachel: Name, Symbol, Text, Bedingungen für Gelb und Rot, Ziel beim Antippen, Entität.
+- **Leitungsnamen zentral:** In *HomeLines → Konfigurieren → Leitungen* gibt es „Name für WAN1“ bis „WAN4“. Diese
+  Namen gelten in allen HomeLines-Karten; der `lines:`-Block mit `name:` in jeder Karte ist nicht mehr nötig (bleibt aber
+  als Vorrang für eine einzelne Karte möglich). Leer: Name aus dem Router.
+- Sensor „Aktive Leitung“ hat das neue Attribut `name` (Anzeigename der aktiven Leitung), z. B. für eigene Vorlagen:
+  `{{ state_attr('sensor.homelines_active_wan', 'name') }}`.
+- Neue Mini-Karte im Kartenauswahl-Dialog startet als Kachel mit Namen „Internet“.
+- Tests: `test_editor_071.py` (Editoren in Chromium mit nachgebautem `ha-form`, zentrale Leitungsnamen, Optionen).
+
 ## 0.7.0 – HomeLines: erste Veröffentlichung, neue UniFi-IDs werden erkannt
 - **Neuer Name: HomeLines** (vorher LineGuard, nicht öffentlich). Technisch heißt die Integration jetzt `homelines`:
   Entitäten `sensor.homelines_*`, Ereignisse `homelines_*`, Dienste `homelines.*`, Karten `custom:homelines-card`,

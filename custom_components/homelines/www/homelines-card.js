@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.7.0";
+const HL_VERSION = "0.7.1";
 
 const T = {
   de: {
@@ -787,7 +787,7 @@ class HomeLinesMini extends HTMLElement {
     this._info = null; this._series = null; this._last = null;
     if (this._hass && this.isConnected) this._start();
   }
-  static getStubConfig() { return { layout: "bar" }; }
+  static getStubConfig() { return { layout: "tile", name: "Internet" }; }
   getCardSize() { return this._c && this._c.layout === "tile" ? 2 : 1; }
   getGridOptions() { return this._c && this._c.layout === "tile" ? { columns: 6, rows: 2, min_columns: 3 } : { columns: 12, rows: 1, min_columns: 6 }; }
 
@@ -946,6 +946,146 @@ class HomeLinesMini extends HTMLElement {
     }
   }
 }
+
+/* ------------------------------------------------------------------ Grafische Editoren
+   Alle drei Karten bekommen einen Editor mit ha-form. Er schreibt dieselben Schlüssel wie YAML;
+   Schlüssel, die der Editor nicht kennt (z. B. popup_cards), bleiben unverändert erhalten.        */
+const ED_LABEL = {
+  layout: "Darstellung", name: "Name", title: "Titel", compact: "Kompakt (im Normalbetrieb nur Kopf, Leitungen und Kennzahlen)",
+  show_devices: "Geräte-Knopf zeigen", throughput_entity: "Sensor Download (Verlauf)", upload_entity: "Sensor Upload (zweite Linie)",
+  throughput_hours: "Verlauf über Stunden", info: "Eigene zweite Zeile (Vorlage)", navigation_path: "Beim Antippen öffnen (Pfad oder #popup)",
+  popup_view: "Dashboard-Seite als Popup (Pfad)", popup_columns: "Spalten im Popup", popup_show_card: "HomeLines-Karte im Popup zeigen",
+  icon: "Symbol", text: "Text (Vorlage)", warning: "Gelb, wenn (Vorlage)", error: "Rot, wenn (Vorlage)", entity: "Entität (Details beim Antippen)",
+  tap: "Beim Antippen öffnen (Pfad oder #popup)", hide: "In der Mini-Karte ausblenden", na_text: "Text, wenn nicht angeschlossen",
+};
+const ED_HELP = {
+  name: "", info: "Leer: aktive Leitung, Download und Latenz. Beispiel: {{ state_attr('sensor.homelines_active_wan', 'name') }}",
+  navigation_path: "Leer: die große HomeLines-Karte öffnet sich als Popup.",
+  popup_view: "Teil der Adresse ab dem ersten „/“, z. B. /dashboard-beispiel/internet. Weitere Karten fürs Popup (popup_cards) im Code-Editor.",
+  warning: "Ergebnis true/on/ja färbt die Kachel gelb.", error: "Ergebnis true/on/ja färbt die Kachel rot.",
+};
+const ED_LINE_HELP = "Nur für diese Karte. Den Namen für alle Karten stellst du in HomeLines → Konfigurieren → Leitungen ein.";
+
+function hlClean(v) {
+  if (Array.isArray(v)) return v;
+  if (v && typeof v === "object") {
+    const out = {};
+    Object.entries(v).forEach(([k, x]) => { const c = hlClean(x); if (c !== undefined) out[k] = c; });
+    return Object.keys(out).length ? out : undefined;
+  }
+  return v === "" || v === null || v === undefined ? undefined : v;
+}
+function hlSchemaKeys(schema) {
+  const keys = [];
+  (schema || []).forEach(s => { if (s.type === "expandable" && s.flatten) keys.push(...hlSchemaKeys(s.schema)); else if (s.name) keys.push(s.name); });
+  return keys;
+}
+
+class HomeLinesEditorBase extends HTMLElement {
+  setConfig(c) { this._config = { ...(c || {}) }; this._render(); }
+  set hass(h) { this._hass = h; this._render(); }
+  _schema() { return []; }
+  _render() {
+    if (!this._hass || !this._config) return;
+    if (!this._form) {
+      this._form = document.createElement("ha-form");
+      this._form.computeLabel = s => s.title || ED_LABEL[s.name] || s.name;
+      this._form.computeHelper = s => s.helper || ED_HELP[s.name] || "";
+      this._form.addEventListener("value-changed", e => { e.stopPropagation(); this._changed(e.detail.value); });
+      this.appendChild(this._form);
+    }
+    this._form.hass = this._hass;
+    this._form.schema = this._schema();
+    this._form.data = this._formData();
+  }
+  _formData() { return this._config; }
+  _changed(v) {
+    const out = { ...this._config };
+    hlSchemaKeys(this._schema()).forEach(k => { if (v && k in v) out[k] = v[k]; else delete out[k]; });
+    const cfg = { type: this._config.type, ...(hlClean({ ...out, type: undefined }) || {}) };
+    if (!cfg.type) delete cfg.type;
+    this._config = cfg;
+    this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: cfg }, bubbles: true, composed: true }));
+  }
+}
+
+class HomeLinesMiniEditor extends HomeLinesEditorBase {
+  _schema() {
+    return [
+      { name: "layout", selector: { select: { mode: "dropdown", options: [
+        { value: "tile", label: "Kachel" }, { value: "bar", label: "Leiste (volle Breite)" }] } } },
+      { name: "name", selector: { text: {} } },
+      { type: "expandable", flatten: true, title: "Verlauf", icon: "mdi:chart-line", schema: [
+        { name: "throughput_entity", selector: { entity: { domain: "sensor" } } },
+        { name: "upload_entity", selector: { entity: { domain: "sensor" } } },
+        { name: "throughput_hours", selector: { number: { min: 1, max: 168, step: 1, mode: "box", unit_of_measurement: "h" } } },
+      ] },
+      { name: "info", selector: { template: {} } },
+      { type: "expandable", flatten: true, title: "Beim Antippen", icon: "mdi:gesture-tap", schema: [
+        { name: "navigation_path", selector: { text: {} } },
+        { name: "popup_view", selector: { text: {} } },
+        { name: "popup_columns", selector: { number: { min: 1, max: 4, step: 1, mode: "box" } } },
+        { name: "popup_show_card", selector: { boolean: {} } },
+      ] },
+    ];
+  }
+  _render() {
+    if (this._config && this._config.layout === undefined) this._config = { ...this._config, layout: "bar" };
+    super._render();
+  }
+}
+
+function hlLineIds(hass, config) {
+  const st = hass && hass.states && hass.states["sensor.homelines_active_wan"];
+  const ids = ((st && st.attributes && st.attributes.lines) || []).map(l => l.id);
+  const names = Object.fromEntries(((st && st.attributes && st.attributes.lines) || []).map(l => [l.id, l.name]));
+  Object.keys((config && config.lines) || {}).forEach(id => { if (!ids.includes(id)) ids.push(id); });
+  if (!ids.length) ids.push("WAN1", "WAN2", "WAN3");
+  return ids.map(id => ({ id, name: names[id] }));
+}
+
+class HomeLinesCardEditor extends HomeLinesEditorBase {
+  _formData() {
+    // ha-form erwartet für verschachtelte Abschnitte ein Objekt, auch wenn noch nichts eingestellt ist
+    const lines = { ...(this._config.lines || {}) };
+    hlLineIds(this._hass, this._config).forEach(l => { lines[l.id] = { ...(lines[l.id] || {}) }; });
+    return { ...this._config, lines };
+  }
+  _schema() {
+    return [
+      { name: "title", selector: { text: {} } },
+      { name: "compact", selector: { boolean: {} } },
+      { type: "expandable", name: "lines", title: "Leitungen in dieser Karte", icon: "mdi:wan",
+        schema: hlLineIds(this._hass, this._config).map(l => ({
+          type: "expandable", name: l.id, title: l.name && l.name !== l.id ? `${l.id} · ${l.name}` : l.id, schema: [
+            { name: "name", selector: { text: {} }, helper: ED_LINE_HELP },
+            { name: "tap", selector: { text: {} } },
+            { name: "info", selector: { template: {} }, helper: "Zusätzliche Zeile in der Leitungskachel." },
+            { name: "hide", selector: { boolean: {} } },
+          ] })) },
+    ];
+  }
+}
+
+class HomeLinesTileEditor extends HomeLinesEditorBase {
+  _schema() {
+    return [
+      { name: "name", required: true, selector: { text: {} } },
+      { name: "icon", selector: { icon: {} } },
+      { name: "text", selector: { template: {} } },
+      { name: "warning", selector: { template: {} } },
+      { name: "error", selector: { template: {} } },
+      { name: "navigation_path", selector: { text: {} } },
+      { name: "entity", selector: { entity: {} } },
+    ];
+  }
+}
+
+[["homelines-card-editor", HomeLinesCardEditor], ["homelines-mini-editor", HomeLinesMiniEditor],
+ ["homelines-tile-editor", HomeLinesTileEditor]].forEach(([n, c]) => { if (!customElements.get(n)) customElements.define(n, c); });
+HomeLinesCard.getConfigElement = () => document.createElement("homelines-card-editor");
+HomeLinesMini.getConfigElement = () => document.createElement("homelines-mini-editor");
+HomeLinesTile.getConfigElement = () => document.createElement("homelines-tile-editor");
 
 if (!customElements.get("homelines-mini")) {
   customElements.define("homelines-mini", HomeLinesMini);

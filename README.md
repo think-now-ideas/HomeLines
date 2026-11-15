@@ -130,27 +130,33 @@ Zuordnen geht für einzelne Geräte und (bei UniFi) für ganze Netze, am bequems
 
 ## Karte
 
+Dashboard bearbeiten → *Karte hinzufügen* → **HomeLines**, **HomeLines Mini** oder **HomeLines Kachel**. Alle drei
+Karten haben einen grafischen Editor; YAML ist nur für Sonderfälle nötig (z. B. weitere Karten im Popup). Die Karten
+werden automatisch geladen, eine Ressource musst du nicht anlegen.
+
+**Leitungsnamen** wie „Glasfaser“, „DSL“ oder „5G Backup“ stellst du einmal unter *HomeLines → Konfigurieren →
+Leitungen* ein („Name für WAN1“ …). Sie gelten in allen Karten. Für eigene Vorlagen steht der Name der aktiven Leitung
+im Attribut `name` von `sensor.homelines_active_wan`.
+
+Die YAML-Beispiele unten zeigen alle Einstellungen:
+
 ```yaml
 type: custom:homelines-card
 ```
-
-Die Karte wird automatisch geladen, eine Ressource musst du nicht anlegen.
 
 **Kompakt und mit Leitungskacheln** (ab 0.4.0):
 
 ```yaml
 type: custom:homelines-card
 compact: true          # im Normalbetrieb nur Kopf, Leitungen und Kennzahlen
-lines:
+lines:                 # optional, je Leitung nur für diese Karte
   WAN1:
-    name: Glasfaser
     tap: "#glasfaser"  # Klickziel: Unterseite (/dashboard/seite) oder Bubble-Card-Popup (#hash)
   WAN2:
-    name: DSL
     tap: "#dsl"
     info: "↓ {{ states('sensor.modem_dsl_downstream') | int }} Mbit/s"   # Vorlage
   WAN3:
-    name: 5G Backup
+    name: Notfall      # überschreibt den Namen aus den Optionen nur in dieser Karte
     tap: "#notfall"    # ohne info zeigt die Backup-Leitung den Zustand des Notfall-Handys
 ```
 
@@ -176,7 +182,6 @@ popup_cards:                # optional (ab 0.6.0): weitere Karten im Popup, z. B
 popup_columns: 2
 card:                       # optional: Einstellungen der großen Karte im Popup
   compact: true
-  lines: { WAN2: { name: DSL } }
 ```
 
 Alle HomeLines-Karten teilen sich eine Datenverbindung. Nach einem Neustart von Home Assistant zeigen sie „Verbinde mit HomeLines …“ und versuchen es alle paar Sekunden erneut, bis die Integration geladen ist.

@@ -22,8 +22,11 @@ LINES = {
     "speedtest_switch": t("Schalter für automatischen Speedtest", "Automatic speedtest switch"),
     "primary_wan_network": t("Hauptleitung für die Sperrregel", "Primary line for the block rule"),
     "default_group": t("Gruppe für neue Geräte", "Group for new devices"),
+    **{f"line_name_wan{i}": t(f"Name für WAN{i}", f"Name for WAN{i}") for i in range(1, 5)},
 }
 LINES_DESC = {
+    **{f"line_name_wan{i}": t("Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+                              "Optional. Shown in all HomeLines cards. Empty: name from the router.") for i in range(1, 5)},
     "standby": t("Warm: Backup ist ständig verbunden, der Router schaltet selbst um. Kalt: Backup ist aus und wird im Ausfall von Hand eingeschaltet – HomeLines führt dich mit einem Assistenten durch die Schritte.",
                  "Warm: backup always connected, router fails over itself. Cold: backup off, switched on by hand with a guided assistant."),
     "detection": t("Warme Bereitschaft mit UniFi: „Aktive Leitung“. Kalte Bereitschaft (der Router kann nicht selbst umschalten) und FRITZ!Box: „Status der Hauptleitung“, z. B. „UniFi WAN2 Internet“ oder der FRITZ!Box-Sensor „Verbindung“. Ohne passenden Sensor: „Eigene Pings“.",

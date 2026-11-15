@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "homelines"
 NAME = "HomeLines"
-VERSION = "0.7.0"
+VERSION = "0.7.1"
 
 PLATFORMS = ["binary_sensor", "button", "sensor", "switch", "time"]
 
@@ -33,6 +33,8 @@ CONF_ACTIVE_WAN_ENTITY = "active_wan_entity"
 CONF_BACKUP_WAN = "backup_wan"
 CONF_WAN_STATUS_ENTITIES = "wan_status_entities"
 CONF_SPEEDTEST_SWITCH = "speedtest_switch"
+# Eigene Anzeigenamen der Leitungen, gelten für alle Karten (Schlüssel line_name_wan1 … wan4)
+LINE_NAME_KEYS = {f"line_name_wan{i}": f"WAN{i}" for i in range(1, 5)}
 
 # Erkennung der Hauptleitung (routerneutral)
 CONF_DETECTION = "detection"

@@ -61,9 +61,17 @@
           "wan_status_entities": "Status-Sensoren der Leitungen",
           "speedtest_switch": "Schalter für automatischen Speedtest",
           "primary_wan_network": "Hauptleitung für die Sperrregel",
-          "default_group": "Gruppe für neue Geräte"
+          "default_group": "Gruppe für neue Geräte",
+          "line_name_wan1": "Name für WAN1",
+          "line_name_wan2": "Name für WAN2",
+          "line_name_wan3": "Name für WAN3",
+          "line_name_wan4": "Name für WAN4"
         },
         "data_description": {
+          "line_name_wan1": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+          "line_name_wan2": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+          "line_name_wan3": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+          "line_name_wan4": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
           "standby": "Warm: Backup ist ständig verbunden, der Router schaltet selbst um. Kalt: Backup ist aus und wird im Ausfall von Hand eingeschaltet – HomeLines führt dich mit einem Assistenten durch die Schritte.",
           "detection": "Warme Bereitschaft mit UniFi: „Aktive Leitung“. Kalte Bereitschaft (der Router kann nicht selbst umschalten) und FRITZ!Box: „Status der Hauptleitung“, z. B. „UniFi WAN2 Internet“ oder der FRITZ!Box-Sensor „Verbindung“. Ohne passenden Sensor: „Eigene Pings“.",
           "primary_status_entity": "An = Hauptleitung verbunden. Wird bei „Aktive Leitung“ zusätzlich genutzt, falls gesetzt.",
@@ -142,9 +150,17 @@
           "wan_status_entities": "Status-Sensoren der Leitungen",
           "speedtest_switch": "Schalter für automatischen Speedtest",
           "primary_wan_network": "Hauptleitung für die Sperrregel",
-          "default_group": "Gruppe für neue Geräte"
+          "default_group": "Gruppe für neue Geräte",
+          "line_name_wan1": "Name für WAN1",
+          "line_name_wan2": "Name für WAN2",
+          "line_name_wan3": "Name für WAN3",
+          "line_name_wan4": "Name für WAN4"
         },
         "data_description": {
+          "line_name_wan1": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+          "line_name_wan2": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+          "line_name_wan3": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
+          "line_name_wan4": "Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
           "standby": "Warm: Backup ist ständig verbunden, der Router schaltet selbst um. Kalt: Backup ist aus und wird im Ausfall von Hand eingeschaltet – HomeLines führt dich mit einem Assistenten durch die Schritte.",
           "detection": "Warme Bereitschaft mit UniFi: „Aktive Leitung“. Kalte Bereitschaft (der Router kann nicht selbst umschalten) und FRITZ!Box: „Status der Hauptleitung“, z. B. „UniFi WAN2 Internet“ oder der FRITZ!Box-Sensor „Verbindung“. Ohne passenden Sensor: „Eigene Pings“.",
           "primary_status_entity": "An = Hauptleitung verbunden. Wird bei „Aktive Leitung“ zusätzlich genutzt, falls gesetzt.",

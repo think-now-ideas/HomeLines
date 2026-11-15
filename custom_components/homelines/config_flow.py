@@ -107,6 +107,7 @@ from .const import (
     METHOD_PPPD_HUP,
     METHODS,
     LEGACY_DOMAIN,
+    LINE_NAME_KEYS,
     NAME,
     ROUTER_NONE,
     ROUTER_SCRIPTS,
@@ -184,6 +185,7 @@ def lines_schema(cur: dict, wans: list[dict] | None) -> vol.Schema:
         _opt(CONF_SPEEDTEST_SWITCH, cur): ENTITY(sel.EntitySelectorConfig(domain="switch")),
         vol.Required(CONF_DEFAULT_GROUP, default=cur.get(CONF_DEFAULT_GROUP, DEFAULT_GROUP)):
             _select(GROUPS, "group"),
+        **{_opt(key, cur): TEXT for key in LINE_NAME_KEYS},
     }
     if wans:
         opts = [sel.SelectOptionDict(value=w["id"], label=f"{w['name']} ({w.get('group') or '?'})") for w in wans]

@@ -61,9 +61,17 @@
           "wan_status_entities": "Line status sensors",
           "speedtest_switch": "Automatic speedtest switch",
           "primary_wan_network": "Primary line for the block rule",
-          "default_group": "Group for new devices"
+          "default_group": "Group for new devices",
+          "line_name_wan1": "Name for WAN1",
+          "line_name_wan2": "Name for WAN2",
+          "line_name_wan3": "Name for WAN3",
+          "line_name_wan4": "Name for WAN4"
         },
         "data_description": {
+          "line_name_wan1": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
+          "line_name_wan2": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
+          "line_name_wan3": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
+          "line_name_wan4": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
           "standby": "Warm: backup always connected, router fails over itself. Cold: backup off, switched on by hand with a guided assistant.",
           "detection": "UniFi: active line. FRITZ!Box: main line status. Without a sensor: own pings.",
           "primary_status_entity": "On = main line connected.",
@@ -142,9 +150,17 @@
           "wan_status_entities": "Line status sensors",
           "speedtest_switch": "Automatic speedtest switch",
           "primary_wan_network": "Primary line for the block rule",
-          "default_group": "Group for new devices"
+          "default_group": "Group for new devices",
+          "line_name_wan1": "Name for WAN1",
+          "line_name_wan2": "Name for WAN2",
+          "line_name_wan3": "Name for WAN3",
+          "line_name_wan4": "Name for WAN4"
         },
         "data_description": {
+          "line_name_wan1": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
+          "line_name_wan2": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
+          "line_name_wan3": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
+          "line_name_wan4": "Optional. Shown in all HomeLines cards. Empty: name from the router.",
           "standby": "Warm: backup always connected, router fails over itself. Cold: backup off, switched on by hand with a guided assistant.",
           "detection": "UniFi: active line. FRITZ!Box: main line status. Without a sensor: own pings.",
           "primary_status_entity": "On = main line connected.",

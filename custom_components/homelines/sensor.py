@@ -40,7 +40,7 @@ SENSORS: list[HLSensor] = [
                               "backup_wan": h.backup_wan(), "planned": h._planned(),
                               "router_error": h.router_error}),
     HLSensor(key="active_wan", icon="mdi:wan", value=lambda h: h.active_wan(),
-             attrs=lambda h: {"lines": h.wan_lines()}),
+             attrs=lambda h: {"name": h.line_name(h.active_wan()), "lines": h.wan_lines()}),
     HLSensor(key="restore_at", device_class=SensorDeviceClass.TIMESTAMP, icon="mdi:timer-sand",
              value=lambda h: _ts(h.data["mode"].get("restore_at"))),
     HLSensor(key="dayflat_end", device_class=SensorDeviceClass.TIMESTAMP, icon="mdi:calendar-clock",

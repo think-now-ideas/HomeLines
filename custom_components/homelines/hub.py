@@ -128,6 +128,7 @@ from .const import (
     EVENT_OUTAGE_STARTED,
     EVENT_RECONNECTED,
     ISSUE_LEGACY,
+    LINE_NAME_KEYS,
     ISSUE_WAN,
     LEGACY_DOMAIN,
     LEGACY_ROUTE_DESCRIPTION,
@@ -479,6 +480,7 @@ class HomeLinesHub:
     def wan_lines(self) -> list[dict]:
         active = self.active_wan()
         names = {(_wan_id(w.wan_group) or w.wan_group): w.name for w in self.inventory.wans if w.wan_group}
+        custom = self.line_names()
         lines: dict[str, dict] = {}
         for ent in self.opt(CONF_WAN_STATUS_ENTITIES, []):
             st = self.hass.states.get(ent)
@@ -489,12 +491,26 @@ class HomeLinesHub:
                           "entity_id": ent}
         for wid, name in names.items():
             lines.setdefault(wid, {"id": wid, "name": name, "state": "unknown", "entity_id": None})
+        for wid, name in custom.items():
+            lines.setdefault(wid, {"id": wid, "name": name, "state": "unknown", "entity_id": None})
         for line in lines.values():
+            if line["id"] in custom:
+                line["name"] = custom[line["id"]]
             line["active"] = line["id"] == active
             line["backup"] = line["id"] == self.backup_wan()
             if line["active"] and line["state"] == "unknown":
                 line["state"] = "online"
         return sorted(lines.values(), key=lambda l: l["id"])
+
+    def line_names(self) -> dict[str, str]:
+        """Eigene Namen aus den Optionen, z. B. {"WAN2": "DSL"}."""
+        return {wid: str(self.opt(key)).strip() for key, wid in LINE_NAME_KEYS.items()
+                if str(self.opt(key) or "").strip()}
+
+    def line_name(self, wid: str | None) -> str | None:
+        if not wid:
+            return None
+        return next((l["name"] for l in self.wan_lines() if l["id"] == wid), wid)
 
     def active_wan(self) -> str | None:
         st = self.hass.states.get(self.opt(CONF_ACTIVE_WAN_ENTITY) or "")
