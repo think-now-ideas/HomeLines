@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.8.8 – Schalter und Zeitpunkte im Detailfenster wieder sichtbar
+- **Fehler behoben:** Im Detailfenster der Leitung (Abschnitt „Neueinwahl“) fehlten seit neueren Home-Assistant-Versionen der Schalter „Tägliche Neueinwahl“ und die Uhrzeit bei „Letzte Neueinwahl“. Die HA-Liste holt sich diese Angaben inzwischen aus der HA-Oberfläche, und das HomeLines-Fenster liegt außerhalb davon.
+- HomeLines zeichnet die Bedienzeilen jetzt selbst – Schalter, „Drücken“, Uhrzeit, Auswahl, Zahl und Zeitpunkte („heute 22:42 (vor 3 Minuten)“) – wie seit 0.8.5 schon Werte und Verläufe. Antippen von Symbol oder Name öffnet weiter das HA-Detailfenster.
+
 ## 0.8.7 – Router-Fingerabdruck für die SSH-Neueinwahl
 - **Sicherheit:** HomeLines merkt sich beim ersten SSH-Verbinden den Fingerabdruck (Hostschlüssel) des Routers und schickt das Passwort danach nur noch an genau dieses Gerät. Bisher wurde der Fingerabdruck nicht geprüft; ein fremdes Gerät im Heimnetz hätte sich als Router ausgeben und das Passwort mitlesen können.
 - Meldet sich ein Gerät mit anderem Fingerabdruck, wird die Neueinwahl gesperrt, das Passwort nicht gesendet und unter *Einstellungen → Reparaturen* ein Hinweis angezeigt. Nach einem Zurücksetzen oder Austausch des Routers dort „Neuen Router-Fingerabdruck übernehmen“ bestätigen.

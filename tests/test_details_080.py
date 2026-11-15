@@ -38,7 +38,10 @@ window.HIST = [];
 window.HASS = {
   states: { "sensor.modem_dsl_sync": { state: "62.4", attributes: { unit_of_measurement: "Mbit/s", friendly_name: "DSL Sync" } },
             "sensor.speed_down": { state: "231.4", attributes: { unit_of_measurement: "Mbit/s" } },
-            "sensor.speed_up": { state: "38.9", attributes: { unit_of_measurement: "Mbit/s" } } },
+            "sensor.speed_up": { state: "38.9", attributes: { unit_of_measurement: "Mbit/s" } },
+            "switch.homelines_daily_reconnect": { state: "on", attributes: { friendly_name: "Tägliche Neueinwahl" } },
+            "sensor.homelines_last_reconnect": { state: new Date(Date.now() - 3 * 60000).toISOString(),
+                                                 attributes: { device_class: "timestamp", friendly_name: "Letzte Neueinwahl" } } },
   callWS: async (m) => { HIST.push(m.entity_ids); return {}; }, callService: async () => {},
   connection: {
     addEventListener() {}, removeEventListener() {},
@@ -51,7 +54,9 @@ window.pops = () => [...document.querySelectorAll("body > .hl-pop")].map(p => {
   return { title: (p.querySelector(".pt") || {}).textContent || null, shown: p.style.display !== "none",
     values: of("values"), charts: of("chart"), controls: of("controls"), timelines: of("timeline"), types: bl.map(b => b.type),
     shownValues: d ? [...d.querySelectorAll(".hld-v")].map(v => [v.dataset.e, v.querySelector(".hld-x").textContent]) : [],
-    cards: [...p.querySelectorAll(".stub")].map(s => JSON.parse(s.dataset.cfg)) }; });
+    cards: [...p.querySelectorAll(".stub")].map(s => JSON.parse(s.dataset.cfg)),
+    ctlRows: [...p.querySelectorAll(".hld-ctl")].map(r => ({ e: r.querySelector("[data-e]").dataset.e, text: r.innerText.replace(/\\s+/g, " ").trim(),
+      sw: r.querySelector(".hld-sw") ? r.querySelector(".hld-sw").classList.contains("on") : null })) }; });
 </script></body></html>"""
 
 
@@ -117,7 +122,11 @@ async def test_card_detail_windows(hass, unifi, ping):
         assert ["sensor.modem_dsl_sync", "62,4 Mbit/s"] in w2["shownValues"]
         assert w2["charts"] == ["sensor.modem_dsl_sync"]
         assert "button.homelines_reconnect_now" in w2["controls"] and "switch.homelines_daily_reconnect" in w2["controls"]
-        assert w2["cards"][0]["type"] == "entities" and len(w2["cards"][0]["entities"]) == len(w2["controls"])
+        # 0.8.8: Bedienzeilen zeichnet HomeLines selbst (keine HA-Liste mehr, die im Fenster leer bliebe)
+        assert w2["cards"] == [] and [r["e"] for r in w2["ctlRows"]] == w2["controls"]
+        rows = {r["e"]: r for r in w2["ctlRows"]}
+        assert rows["switch.homelines_daily_reconnect"]["sw"] is True
+        assert "heute" in rows["sensor.homelines_last_reconnect"]["text"] and "vor 3 Minuten" in rows["sensor.homelines_last_reconnect"]["text"]
         await page.wait_for_function("HIST.some(h => h && h.includes('sensor.modem_dsl_sync'))")
         await page.evaluate("history.back()")
         await page.wait_for_function("!document.querySelector('.hl-pop')")

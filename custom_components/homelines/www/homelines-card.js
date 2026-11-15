@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.7";
+const HL_VERSION = "0.8.8";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
 const HL_LOGO = `<svg class="hllogo" viewBox="14 22 924 742" aria-hidden="true"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/></svg>`;
 
@@ -957,14 +957,41 @@ const detailCss = `
 .hld .hld-tl .lb{color:var(--secondary-text-color);white-space:nowrap;text-align:right;cursor:pointer}
 .hld .hld-tl .bar{position:relative;height:22px;border-radius:4px;overflow:hidden;background:var(--divider-color)}
 .hld .hld-tl .bar div{position:absolute;top:0;bottom:0;color:#fff;font-size:11px;line-height:22px;padding-left:4px;overflow:hidden;white-space:nowrap;box-sizing:border-box;border-right:1px solid rgba(255,255,255,.4)}
-.hld .hld-empty{color:var(--secondary-text-color);font-size:13px;padding:6px 0}`;
+.hld .hld-empty{color:var(--secondary-text-color);font-size:13px;padding:6px 0}
+.hld .hld-ctl{min-height:40px}.hld .hld-ctl ha-icon{color:var(--state-icon-color,#44739e);cursor:pointer;flex:none;width:40px;display:flex;justify-content:center}
+.hld .hld-ctl .n{flex:1;min-width:0;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hld .hld-ctl .r{color:var(--primary-text-color)}
+.hld .hld-sw{width:36px;height:20px;border-radius:10px;border:0;padding:0;position:relative;cursor:pointer;flex:none;margin-left:auto;background:var(--switch-unchecked-track-color,#9e9e9e)}
+.hld .hld-sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.hld .hld-sw.on{background:var(--switch-checked-track-color,var(--primary-color,#03a9f4))}.hld .hld-sw.on::after{left:18px}
+.hld .hld-b{margin-left:auto;border:0;background:none;color:var(--primary-color,#03a9f4);font:inherit;font-weight:500;cursor:pointer;padding:6px 8px;border-radius:6px}
+.hld .hld-b:hover{background:var(--secondary-background-color)}
+.hld .hld-in{margin-left:auto;font:inherit;padding:4px 6px;border:1px solid var(--divider-color);border-radius:6px;background:var(--card-background-color,#fff);color:var(--primary-text-color);max-width:50%}`;
 
+const HL_TOGGLE = new Set(["switch", "input_boolean", "light", "fan", "automation", "siren", "humidifier"]);
+const HL_CTL_ICON = { switch: "mdi:toggle-switch-variant", input_boolean: "mdi:toggle-switch-variant", button: "mdi:gesture-tap-button",
+  input_button: "mdi:gesture-tap-button", script: "mdi:script-text", time: "mdi:clock-outline", select: "mdi:format-list-bulleted",
+  input_select: "mdi:format-list-bulleted", number: "mdi:ray-vertex", input_number: "mdi:ray-vertex", light: "mdi:lightbulb", sensor: "mdi:eye" };
+/** Zeitpunkt wie „heute 22:42 (vor 3 Min.)“ – ohne HA-Hilfsbausteine. */
+function hlWhen(h, iso) {
+  const d = new Date(iso); if (isNaN(d)) return "–";
+  const lang = (h && h.locale && h.locale.language) || (h && h.language) || "de";
+  const now = new Date(), day = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dd = Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - day) / 864e5);
+  const time = d.toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" });
+  const min = Math.round((now - d) / 6e4);
+  let rel = "", date = d.toLocaleDateString(lang, { day: "2-digit", month: "2-digit", year: "numeric" });
+  try { const rf = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
+    if (dd === 0 || dd === -1) date = rf.format(dd, "day");   // „heute“ / „gestern“ in der Sprache des Nutzers
+    rel = Math.abs(min) < 60 ? rf.format(-min, "minute") : Math.abs(min) < 1440 * 2 ? rf.format(-Math.round(min / 60), "hour") : rf.format(-Math.round(min / 1440), "day");
+  } catch (e) { /* ältere Browser */ }
+  return `${date} ${time}${rel ? ` (${rel})` : ""}`;
+}
 class HomeLinesDetail extends HTMLElement {
   set spec(v) { this._spec = v; this._series = null; this._key = null; this._paint(); this._load(); }
   set state(v) { this._s = v; this._paint(); }
   set hass(h) {
     const first = !this._hass; this._hass = h;
-    (this._ctls || []).forEach(c => { c.hass = h; });
     if (first) this._load();
     const key = this._ents().map(e => h.states[e] && h.states[e].state).join("|");
     if (key !== this._key) { this._key = key; this._paint(); }
@@ -1104,13 +1131,40 @@ class HomeLinesDetail extends HTMLElement {
     return `<div class="hld-box"><div class="hld-t">Protokoll</div><table><tr><th></th><th>Beginn</th><th>Dauer</th><th>Ursache</th></tr>
       ${rec.slice(0, 20).map(o => `<tr><td><span class="dot ${o.cause === "internet" ? "err" : "warn"}"></span></td><td>${esc(o.start)}</td><td>${esc(o.duration)}</td><td>${esc(HL_CAUSE[o.cause] || o.cause || "")}</td></tr>`).join("")}</table></div>`;
   }
-  async _controls(box, b) {
-    let helpers = null;
-    try { helpers = window.loadCardHelpers ? await window.loadCardHelpers() : null; } catch (err) { helpers = null; }
-    if (!helpers) return;
-    const names = this._names(b.entities);
-    const el = helpers.createCardElement({ type: "entities", title: b.title, entities: b.entities.map((e, i) => ({ entity: e, name: names[i] })) });
-    el.hass = this._hass; box.appendChild(el); (this._ctls = this._ctls || []).push(el);
+  /* Bedienzeilen (Schalter, Knöpfe, Uhrzeit, Auswahl, Zahl, Zeitpunkt) zeichnet HomeLines selbst.
+     Die HA-Liste („entities“) bleibt in diesem Fenster seit HA 2026 teils leer: Schalter und Zeitangaben holen
+     sich ihre Daten dort aus der HA-Oberfläche, und unser Fenster liegt außerhalb davon. */
+  _controls(b) {
+    const h = this._hass, names = this._names(b.entities);
+    const rows = b.entities.map((e, k) => {
+      const st = h.states[e], dom = e.split(".")[0], na = !st || st.state === "unavailable";
+      const icon = (st && st.attributes.icon) || HL_CTL_ICON[dom] || "mdi:information-outline";
+      let right;
+      if (na) right = `<span class="r">nicht verfügbar</span>`;
+      else if (HL_TOGGLE.has(dom)) right = `<button class="hld-sw${st.state === "on" ? " on" : ""}" data-act="toggle" data-x="${esc(e)}" role="switch" aria-checked="${st.state === "on"}" aria-label="${esc(names[k])}"></button>`;
+      else if (dom === "button" || dom === "input_button") right = `<button class="hld-b" data-act="press" data-x="${esc(e)}">Drücken</button>`;
+      else if (dom === "script") right = `<button class="hld-b" data-act="run" data-x="${esc(e)}">Ausführen</button>`;
+      else if (dom === "time") right = `<input class="hld-in" type="time" step="60" data-act="time" data-x="${esc(e)}" value="${esc(String(st.state).slice(0, 5))}">`;
+      else if ((dom === "select" || dom === "input_select") && Array.isArray(st.attributes.options))
+        right = `<select class="hld-in" data-act="select" data-x="${esc(e)}">${st.attributes.options.map(o => `<option${o === st.state ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+      else if (dom === "number" || dom === "input_number")
+        right = `<input class="hld-in" type="number" data-act="number" data-x="${esc(e)}" value="${esc(st.state)}" min="${esc(st.attributes.min ?? "")}" max="${esc(st.attributes.max ?? "")}" step="${esc(st.attributes.step ?? "any")}">`;
+      else if (st.attributes.device_class === "timestamp") right = `<span class="r">${esc(hlWhen(h, st.state))}</span>`;
+      else right = `<span class="r">${esc(this._val(e) ?? "–")}</span>`;
+      return `<div class="hld-row hld-ctl"><ha-icon icon="${esc(icon)}" data-e="${esc(e)}"></ha-icon><span class="n" data-e="${esc(e)}">${esc(names[k])}</span>${right}</div>`;
+    });
+    return `<div class="hld-box">${b.title ? `<div class="hld-t">${esc(b.title)}</div>` : ""}${rows.join("") || `<div class="hld-empty">–</div>`}</div>`;
+  }
+  _act(el, ev) {
+    const h = this._hass, e = el.dataset.x, dom = e.split(".")[0], a = el.dataset.act;
+    if (!h || !h.callService) return;
+    if (a === "toggle") { const st = h.states[e]; return h.callService(dom, st && st.state === "on" ? "turn_off" : "turn_on", { entity_id: e }); }
+    if (a === "press") return h.callService(dom, "press", { entity_id: e });
+    if (a === "run") return h.callService("script", "turn_on", { entity_id: e });
+    if (ev.type !== "change") return;
+    if (a === "time" && el.value) return h.callService("time", "set_value", { entity_id: e, time: `${el.value}:00` });
+    if (a === "select") return h.callService(dom, "select_option", { entity_id: e, option: el.value });
+    if (a === "number" && el.value !== "") return h.callService(dom, "set_value", { entity_id: e, value: Number(el.value) });
   }
   _paint() {
     const sp = this._spec, h = this._hass;
@@ -1118,10 +1172,12 @@ class HomeLinesDetail extends HTMLElement {
     if (!this._root) {
       this.innerHTML = `<style>${detailCss}</style><div class="hld"></div>`;
       this._root = this.querySelector(".hld");
-      this.addEventListener("click", ev => { const t = ev.target.closest("[data-e]"); if (t) hlMoreInfo(t.dataset.e); });
-      // Feste Reihenfolge der Bausteine; Bedienelemente werden einmal erzeugt und bleiben stehen
+      this.addEventListener("click", ev => {
+        const c = ev.target.closest("[data-act]"); if (c) { if (c.tagName === "BUTTON") this._act(c, ev); return; }
+        const t = ev.target.closest("[data-e]"); if (t) hlMoreInfo(t.dataset.e); });
+      this.addEventListener("change", ev => { const c = ev.target.closest("[data-act]"); if (c) this._act(c, ev); });
+      // Feste Reihenfolge der Bausteine
       this._slots = sp.blocks.map(b => { const d = document.createElement("div"); d.dataset.type = b.type; this._root.appendChild(d); return d; });
-      sp.blocks.forEach((b, i) => { if (b.type === "controls") this._controls(this._slots[i], b); });
     }
     sp.blocks.forEach((b, i) => {
       const slot = this._slots[i];
@@ -1134,6 +1190,10 @@ class HomeLinesDetail extends HTMLElement {
       else if (b.type === "timeline") slot.innerHTML = this._timeline(b);
       else if (b.type === "phone") slot.innerHTML = this._phone();
       else if (b.type === "log") slot.innerHTML = this._log();
+      else if (b.type === "controls") {   // nicht neu zeichnen, während jemand eine Uhrzeit, Zahl oder Auswahl eingibt
+        const f = document.activeElement;
+        if (!(f && slot.contains(f) && /^(INPUT|SELECT)$/.test(f.tagName))) slot.innerHTML = this._controls(b);
+      }
       else if (b.type === "hint") slot.innerHTML = `<div class="hld-box hld-hint">${esc(b.text)}</div>`;
     });
   }
