@@ -624,6 +624,39 @@
         }
       }
     },
+    "set_details": {
+      "name": "Detailansichten setzen",
+      "description": "Setzt Leitungsnamen und die Werte der Detailfenster in einem Schritt – dasselbe wie Konfigurieren → Leitungen und Detailansichten der Karte.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "line_names": {
+          "name": "Leitungsnamen",
+          "description": "Z. B. {\"WAN2\": \"DSL\"}."
+        },
+        "lines": {
+          "name": "Werte und Verlauf je Leitung",
+          "description": "Je Leitung „values“ (Kacheln) und „history“ (Verlauf) als Liste von Entitäten."
+        },
+        "speed_download": {
+          "name": "Geschwindigkeit: Download"
+        },
+        "speed_upload": {
+          "name": "Geschwindigkeit: Upload"
+        },
+        "speed_extra": {
+          "name": "Geschwindigkeit: weitere Werte"
+        },
+        "backup_extra": {
+          "name": "Notfall-Strecke: weitere Werte"
+        },
+        "replace": {
+          "name": "Alles ersetzen",
+          "description": "An: nicht genannte Namen und Detailwerte werden geleert. Aus: nur die genannten werden geändert."
+        }
+      }
+    },
     "reconnect": {
       "name": "Neu verbinden",
       "description": "Löst sofort eine PPPoE-Neueinwahl aus.",

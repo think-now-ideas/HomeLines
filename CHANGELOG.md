@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.8.3 – Detailansichten per Aktion setzen
+- **Neue Aktion `homelines.set_details`:** setzt Leitungsnamen, Werte und Verlauf je Leitung, Geschwindigkeit und
+  weitere Werte der Notfall-Strecke in einem Schritt – praktisch beim Umstellen oder zum Übertragen auf ein zweites
+  System (*Entwicklerwerkzeuge → Aktionen*). Ergebnis wie im Formular *Konfigurieren → Leitungen / Detailansichten*;
+  ohne `replace` werden nur die genannten Werte geändert, andere Optionen bleiben unberührt.
+
 ## 0.8.2 – Logo
 - **HomeLines hat ein Logo:** Symbol und Schriftzug für helle und dunkle Oberflächen unter
   `custom_components/homelines/brand/` (`icon`, `logo`, `dark_icon`, `dark_logo`, je einfach und `@2x`). Home Assistant

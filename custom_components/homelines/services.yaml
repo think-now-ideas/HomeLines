@@ -36,3 +36,24 @@ test_notify:
   fields:
     entry_id:
       selector: { config_entry: { integration: homelines } }
+set_details:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }
+    line_names:
+      example: '{"WAN1": "Glasfaser", "WAN2": "DSL", "WAN3": "5G Backup"}'
+      selector: { object: {} }
+    lines:
+      example: '{"WAN2": {"values": ["sensor.modem_dsl_sync"], "history": ["sensor.modem_dsl_sync"]}}'
+      selector: { object: {} }
+    speed_download:
+      selector: { entity: { domain: sensor } }
+    speed_upload:
+      selector: { entity: { domain: sensor } }
+    speed_extra:
+      selector: { entity: { multiple: true } }
+    backup_extra:
+      selector: { entity: { multiple: true } }
+    replace:
+      default: false
+      selector: { boolean: {} }

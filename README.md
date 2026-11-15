@@ -144,7 +144,23 @@ Sensoren für Werte und Verlauf (z. B. Sync und Rauschabstand des Modems), die G
 Werte der Notfall-Strecke. Ein Tipp auf eine Leitung in der Karte öffnet dann ein Fenster damit – bei der
 Hauptleitung samt Neueinwahl, bei der Backup-Leitung samt Handy, Verbrauch und Kosten. Die Kennzahlen öffnen
 „Ausfälle und Verlauf“, die Geschwindigkeit ihren Verlauf. Eine eigene Dashboard-Seite mit Popups ist dafür nicht nötig;
-im einfachsten Fall genügen `type: custom:homelines-card` und `type: custom:homelines-mini` ohne weitere Einstellungen. Für eigene Vorlagen steht der Name der aktiven Leitung
+im einfachsten Fall genügen `type: custom:homelines-card` und `type: custom:homelines-mini` ohne weitere Einstellungen.
+
+Statt im Formular lassen sich Namen und Detailansichten auch in einem Schritt per Aktion setzen
+(*Entwicklerwerkzeuge → Aktionen*, ab 0.8.3):
+
+```yaml
+action: homelines.set_details
+data:
+  line_names: { WAN1: Glasfaser, WAN2: DSL, WAN3: 5G Backup }
+  lines:
+    WAN2:
+      values: [sensor.modem_dsl_sync, sensor.modem_dsl_snr]
+      history: [sensor.modem_dsl_sync]
+  speed_download: sensor.speed_down
+  speed_upload: sensor.speed_up
+  backup_extra: [sensor.notfall_router_leistung]
+``` Für eigene Vorlagen steht der Name der aktiven Leitung
 im Attribut `name` von `sensor.homelines_active_wan`.
 
 Die YAML-Beispiele unten zeigen alle Einstellungen:

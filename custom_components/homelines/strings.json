@@ -624,6 +624,39 @@
         }
       }
     },
+    "set_details": {
+      "name": "Set detail views",
+      "description": "Sets line names and detail views in one step.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "line_names": {
+          "name": "Line names",
+          "description": "E.g. {\"WAN2\": \"DSL\"}."
+        },
+        "lines": {
+          "name": "Values and history per line",
+          "description": "Per line: values and history lists."
+        },
+        "speed_download": {
+          "name": "Speed: download"
+        },
+        "speed_upload": {
+          "name": "Speed: upload"
+        },
+        "speed_extra": {
+          "name": "Speed: more values"
+        },
+        "backup_extra": {
+          "name": "Backup line: more values"
+        },
+        "replace": {
+          "name": "Replace all",
+          "description": "On: clear everything not given."
+        }
+      }
+    },
     "reconnect": {
       "name": "Reconnect",
       "description": "Triggers a PPPoE reconnect now.",

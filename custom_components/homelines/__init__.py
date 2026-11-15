@@ -14,7 +14,20 @@ from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, entity_registry as er
 from homeassistant.util import dt as dt_util
 
-from .const import CARD_URL, DOMAIN, GROUPS, PLATFORMS, VERSION
+from .const import (
+    CARD_URL,
+    CONF_BACKUP_EXTRA,
+    CONF_SPEED_DOWN,
+    CONF_SPEED_EXTRA,
+    CONF_SPEED_UP,
+    DOMAIN,
+    GROUPS,
+    LINE_DETAIL_KEYS,
+    LINE_HISTORY_KEYS,
+    LINE_NAME_KEYS,
+    PLATFORMS,
+    VERSION,
+)
 from .hub import FlatError, HomeLinesHub
 from .websocket import async_register_websocket
 
@@ -132,3 +145,39 @@ def _register_services(hass: HomeAssistant) -> None:
         await get_hub(hass, call.data.get("entry_id")).async_test_notify()
 
     hass.services.async_register(DOMAIN, "test_notify", test_notify, vol.Schema(base))
+
+    wan = vol.All(cv.string, vol.Upper, vol.In([f"WAN{i}" for i in range(1, 5)]))
+    ents = vol.All(cv.ensure_list, [cv.entity_id])
+
+    async def set_details(call: ServiceCall) -> None:
+        """Leitungsnamen und Detailansichten in einem Rutsch setzen (statt im Formular)."""
+        hub = get_hub(hass, call.data.get("entry_id"))
+        opts = dict(hub.entry.options)
+        if call.data.get("replace"):
+            for key in [*LINE_NAME_KEYS, *LINE_DETAIL_KEYS, *LINE_HISTORY_KEYS,
+                        CONF_SPEED_DOWN, CONF_SPEED_UP, CONF_SPEED_EXTRA, CONF_BACKUP_EXTRA]:
+                opts.pop(key, None)
+        by_wan = lambda keys: {wid: key for key, wid in keys.items()}  # noqa: E731
+        names, values, history = by_wan(LINE_NAME_KEYS), by_wan(LINE_DETAIL_KEYS), by_wan(LINE_HISTORY_KEYS)
+        for wid, name in (call.data.get("line_names") or {}).items():
+            opts[names[wid]] = name
+        for wid, d in (call.data.get("lines") or {}).items():
+            if "values" in d:
+                opts[values[wid]] = d["values"]
+            if "history" in d:
+                opts[history[wid]] = d["history"]
+        for key in ("speed_download", "speed_upload", "speed_extra", "backup_extra"):
+            if key in call.data:
+                opts[key] = call.data[key]
+        hass.config_entries.async_update_entry(hub.entry, options=opts)
+
+    hass.services.async_register(DOMAIN, "set_details", set_details, vol.Schema({
+        **base,
+        vol.Optional("line_names"): {wan: cv.string},
+        vol.Optional("lines"): {wan: vol.Schema({vol.Optional("values"): ents, vol.Optional("history"): ents})},
+        vol.Optional("speed_download"): cv.entity_id,
+        vol.Optional("speed_upload"): cv.entity_id,
+        vol.Optional("speed_extra"): ents,
+        vol.Optional("backup_extra"): ents,
+        vol.Optional("replace", default=False): cv.boolean,
+    }))

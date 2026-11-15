@@ -184,3 +184,34 @@ async def _setup_with_data(hass, data, options):
         return await _setup(hass, options=options)
     finally:
         test_homelines.MockConfigEntry = orig
+
+
+async def test_set_details_action(hass, unifi, ping):
+    """0.8.3: alles in einem Rutsch per Aktion, danach wie im Formular gespeichert."""
+    entry, _ = await _setup(hass, options={**OPTIONS, "details_wan1": ["sensor.alt"], "line_name_wan4": "Alt"})
+    await hass.services.async_call("homelines", "set_details", {
+        "line_names": {"WAN1": "Glasfaser", "wan2": "DSL"},
+        "lines": {"WAN2": {"values": ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"], "history": ["sensor.modem_dsl_sync"]}},
+        "speed_download": "sensor.speed_down", "speed_upload": "sensor.speed_up",
+        "speed_extra": ["button.speedtest_starten"], "backup_extra": ["sensor.notfall_router_leistung"],
+    }, blocking=True)
+    await hass.async_block_till_done()
+    o = entry.options
+    assert o["line_name_wan1"] == "Glasfaser" and o["line_name_wan2"] == "DSL" and o["line_name_wan4"] == "Alt"
+    assert o["details_wan2"] == ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"] and o["history_wan2"] == ["sensor.modem_dsl_sync"]
+    assert o["details_wan1"] == ["sensor.alt"]  # ohne replace bleibt Vorhandenes
+    assert o["speed_extra"] == ["button.speedtest_starten"] and o["phone_rx"] == OPTIONS["phone_rx"]
+    hub = hass.data["homelines"][entry.entry_id]  # nach dem Neuladen
+    assert {w["id"]: w["name"] for w in hub.snapshot()["wans"]}["WAN2"] == "DSL"
+
+    await hass.services.async_call("homelines", "set_details", {"replace": True, "speed_download": "sensor.speed_down"},
+                                   blocking=True)
+    await hass.async_block_till_done()
+    o = entry.options
+    assert "details_wan1" not in o and "line_name_wan4" not in o and o["speed_download"] == "sensor.speed_down"
+    assert o["phone_rx"] == OPTIONS["phone_rx"]  # andere Optionen unberührt
+
+    import pytest as _pt
+    import voluptuous as _vol
+    with _pt.raises(_vol.Invalid):
+        await hass.services.async_call("homelines", "set_details", {"line_names": {"WAN7": "x"}}, blocking=True)
