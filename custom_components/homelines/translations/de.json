@@ -114,6 +114,7 @@
       "ssh_missing": "Für die Neueinwahl Adresse und SSH-Passwort eintragen.",
       "ssh_auth": "SSH-Benutzer oder Passwort falsch.",
       "ssh_connect": "SSH nicht erreichbar. Ist SSH am Router aktiviert?",
+      "ssh_hostkey": "Der Router meldet sich mit einem anderen Fingerabdruck als gespeichert. Das Passwort wurde nicht gesendet. Bestätige den neuen Fingerabdruck unter Einstellungen → Reparaturen.",
       "invalid_interface": "Ungültiger Schnittstellenname.",
       "entity_missing": "Bitte den Auslöser wählen.",
       "interface_not_found": "Diese PPP-Schnittstelle gibt es auf dem Router nicht."
@@ -373,6 +374,7 @@
       "ssh_missing": "Für die Neueinwahl Adresse und SSH-Passwort eintragen.",
       "ssh_auth": "SSH-Benutzer oder Passwort falsch.",
       "ssh_connect": "SSH nicht erreichbar. Ist SSH am Router aktiviert?",
+      "ssh_hostkey": "Der Router meldet sich mit einem anderen Fingerabdruck als gespeichert. Das Passwort wurde nicht gesendet. Bestätige den neuen Fingerabdruck unter Einstellungen → Reparaturen.",
       "invalid_interface": "Ungültiger Schnittstellenname.",
       "entity_missing": "Bitte den Auslöser wählen.",
       "interface_not_found": "Diese PPP-Schnittstelle gibt es auf dem Router nicht."
@@ -680,6 +682,20 @@
     "primary_wan_missing": {
       "title": "Hauptleitung im Router nicht gefunden",
       "description": "Die Leitung „{name}“ für die Sperrregel gibt es in UniFi nicht mehr, vermutlich wurde sie neu angelegt. HomeLines konnte sie auch über Name und WAN-Gruppe nicht zuordnen. Wähle sie unter HomeLines → Konfigurieren → Leitungen → „Hauptleitung für die Sperrregel“ neu aus."
+    },
+    "ssh_host_key_changed": {
+      "title": "Router-Fingerabdruck hat sich geändert",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Neuen Router-Fingerabdruck übernehmen?",
+            "description": "Für die Neueinwahl meldet sich HomeLines per SSH am Router an. Der Router zeigt jetzt einen anderen Fingerabdruck als beim letzten Mal. HomeLines hat deshalb das Passwort **nicht** gesendet und die Neueinwahl gesperrt.\n\nBisher: `{old}`\nJetzt: `{new}`\n\nDas ist normal, wenn du den Router zurückgesetzt, ausgetauscht oder neu eingerichtet hast. Dann hier bestätigen. Hast du nichts am Router geändert, nicht bestätigen und erst prüfen, ob ein fremdes Gerät die Adresse des Routers benutzt."
+          }
+        },
+        "abort": {
+          "not_loaded": "HomeLines ist gerade nicht geladen."
+        }
+      }
     }
   }
 }

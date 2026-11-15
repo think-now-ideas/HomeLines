@@ -214,6 +214,7 @@ def build(lang):
         "ssh_missing": tr("Für die Neueinwahl Adresse und SSH-Passwort eintragen.", "Enter address and SSH password."),
         "ssh_auth": tr("SSH-Benutzer oder Passwort falsch.", "Wrong SSH user or password."),
         "ssh_connect": tr("SSH nicht erreichbar. Ist SSH am Router aktiviert?", "SSH not reachable."),
+        "ssh_hostkey": tr("Der Router meldet sich mit einem anderen Fingerabdruck als gespeichert. Das Passwort wurde nicht gesendet. Bestätige den neuen Fingerabdruck unter Einstellungen → Reparaturen.", "The router presents a different host key than stored. The password was not sent. Confirm the new key under Settings → Repairs."),
         "invalid_interface": tr("Ungültiger Schnittstellenname.", "Invalid interface name."),
         "entity_missing": tr("Bitte den Auslöser wählen.", "Please choose the trigger."),
         "interface_not_found": tr("Diese PPP-Schnittstelle gibt es auf dem Router nicht.", "PPP interface not found on router."),
@@ -351,6 +352,14 @@ def build(lang):
         "primary_wan_missing": {"title": tr("Hauptleitung im Router nicht gefunden", "Primary line not found on router"),
                                 "description": tr("Die Leitung „{name}“ für die Sperrregel gibt es in UniFi nicht mehr, vermutlich wurde sie neu angelegt. HomeLines konnte sie auch über Name und WAN-Gruppe nicht zuordnen. Wähle sie unter HomeLines → Konfigurieren → Leitungen → „Hauptleitung für die Sperrregel“ neu aus.",
                                                   "The line “{name}” used for the block rule no longer exists in UniFi. Choose it again under HomeLines → Configure → Lines.")},
+    }
+    issues["ssh_host_key_changed"] = {
+        "title": tr("Router-Fingerabdruck hat sich geändert", "Router host key has changed"),
+        "fix_flow": {"step": {"confirm": {
+            "title": tr("Neuen Router-Fingerabdruck übernehmen?", "Accept new router host key?"),
+            "description": tr("Für die Neueinwahl meldet sich HomeLines per SSH am Router an. Der Router zeigt jetzt einen anderen Fingerabdruck als beim letzten Mal. HomeLines hat deshalb das Passwort **nicht** gesendet und die Neueinwahl gesperrt.\n\nBisher: `{old}`\nJetzt: `{new}`\n\nDas ist normal, wenn du den Router zurückgesetzt, ausgetauscht oder neu eingerichtet hast. Dann hier bestätigen. Hast du nichts am Router geändert, nicht bestätigen und erst prüfen, ob ein fremdes Gerät die Adresse des Routers benutzt.",
+                              "HomeLines logs in to the router via SSH for the reconnect. The router now presents a different host key. The password was **not** sent and the reconnect is blocked.\n\nBefore: `{old}`\nNow: `{new}`\n\nThis is expected after a reset or replacement of the router. Otherwise do not confirm.")}},
+            "abort": {"not_loaded": tr("HomeLines ist gerade nicht geladen.", "HomeLines is not loaded.")}},
     }
     return {
         "config": {"step": steps, "error": errors, "abort": {"already_configured": tr("Dieser Router ist schon eingerichtet.", "Already configured.")}},

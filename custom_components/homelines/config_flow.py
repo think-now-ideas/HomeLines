@@ -122,7 +122,7 @@ from .const import (
     ROUTER_TYPES,
     ROUTER_UNIFI,
 )
-from .reconnect import SSHAuthError, SSHClient, SSHError, validate_interface
+from .reconnect import SSHAuthError, SSHClient, SSHError, SSHHostKeyError, validate_interface
 from .router import RouterAuthError, RouterError, UnifiAdapter
 
 ENTITY = sel.EntitySelector
@@ -371,7 +371,8 @@ async def validate_unifi(hass, data: dict) -> tuple[dict, list[dict]]:
     return errors, wans
 
 
-async def validate_ssh(data: dict) -> dict:
+async def validate_ssh(data: dict, host_key: str | None = None) -> dict:
+    """SSH-Zugang prüfen. ``host_key``: gespeicherter Router-Fingerabdruck (nur in den Optionen)."""
     if data.get(CONF_RECONNECT_METHOD) == METHOD_HA_ACTION:
         if data.get(CONF_RECONNECT_ENABLED) and not data.get(CONF_RECONNECT_ENTITY):
             return {CONF_RECONNECT_ENTITY: "entity_missing"}
@@ -384,9 +385,12 @@ async def validate_ssh(data: dict) -> dict:
         validate_interface(data[CONF_PPP_INTERFACE])
     except ValueError:
         return {CONF_PPP_INTERFACE: "invalid_interface"}
-    client = SSHClient(data[CONF_SSH_HOST], int(data[CONF_SSH_PORT]), data[CONF_SSH_USER], data[CONF_SSH_PASSWORD])
+    client = SSHClient(data[CONF_SSH_HOST], int(data[CONF_SSH_PORT]), data[CONF_SSH_USER], data[CONF_SSH_PASSWORD],
+                       host_key=host_key)
     try:
         found = await client.interfaces()
+    except SSHHostKeyError:
+        return {"base": "ssh_hostkey"}
     except SSHAuthError:
         return {"base": "ssh_auth"}
     except SSHError:
@@ -620,7 +624,9 @@ class HomeLinesOptionsFlow(OptionsFlow):
         errors: dict = {}
         if user_input is not None:
             merged = {**cur, **user_input}
-            errors = await validate_ssh(merged)
+            hub = self.hass.data.get(DOMAIN, {}).get(self.config_entry.entry_id)
+            pin = hub.ssh_pin(merged.get(CONF_SSH_HOST), merged.get(CONF_SSH_PORT)) if hub else None
+            errors = await validate_ssh(merged, pin)
             if not errors:
                 return self._save(schema, user_input)
         return self.async_show_form(step_id="reconnect", data_schema=schema, errors=errors)

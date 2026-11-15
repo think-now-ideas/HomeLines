@@ -114,6 +114,7 @@
       "ssh_missing": "Enter address and SSH password.",
       "ssh_auth": "Wrong SSH user or password.",
       "ssh_connect": "SSH not reachable.",
+      "ssh_hostkey": "The router presents a different host key than stored. The password was not sent. Confirm the new key under Settings → Repairs.",
       "invalid_interface": "Invalid interface name.",
       "entity_missing": "Please choose the trigger.",
       "interface_not_found": "PPP interface not found on router."
@@ -373,6 +374,7 @@
       "ssh_missing": "Enter address and SSH password.",
       "ssh_auth": "Wrong SSH user or password.",
       "ssh_connect": "SSH not reachable.",
+      "ssh_hostkey": "The router presents a different host key than stored. The password was not sent. Confirm the new key under Settings → Repairs.",
       "invalid_interface": "Invalid interface name.",
       "entity_missing": "Please choose the trigger.",
       "interface_not_found": "PPP interface not found on router."
@@ -680,6 +682,20 @@
     "primary_wan_missing": {
       "title": "Primary line not found on router",
       "description": "The line “{name}” used for the block rule no longer exists in UniFi. Choose it again under HomeLines → Configure → Lines."
+    },
+    "ssh_host_key_changed": {
+      "title": "Router host key has changed",
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "title": "Accept new router host key?",
+            "description": "HomeLines logs in to the router via SSH for the reconnect. The router now presents a different host key. The password was **not** sent and the reconnect is blocked.\n\nBefore: `{old}`\nNow: `{new}`\n\nThis is expected after a reset or replacement of the router. Otherwise do not confirm."
+          }
+        },
+        "abort": {
+          "not_loaded": "HomeLines is not loaded."
+        }
+      }
     }
   }
 }

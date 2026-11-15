@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.8.7 – Router-Fingerabdruck für die SSH-Neueinwahl
+- **Sicherheit:** HomeLines merkt sich beim ersten SSH-Verbinden den Fingerabdruck (Hostschlüssel) des Routers und schickt das Passwort danach nur noch an genau dieses Gerät. Bisher wurde der Fingerabdruck nicht geprüft; ein fremdes Gerät im Heimnetz hätte sich als Router ausgeben und das Passwort mitlesen können.
+- Meldet sich ein Gerät mit anderem Fingerabdruck, wird die Neueinwahl gesperrt, das Passwort nicht gesendet und unter *Einstellungen → Reparaturen* ein Hinweis angezeigt. Nach einem Zurücksetzen oder Austausch des Routers dort „Neuen Router-Fingerabdruck übernehmen“ bestätigen.
+- Die SSH-Prüfung in den Optionen nutzt denselben Fingerabdruck; bei geänderter Adresse oder geändertem Port wird neu gelernt.
+- README: neuer Abschnitt „Sicherheit“ (warum die Zertifikatsprüfung zur UniFi-Verbindung standardmäßig aus bleibt).
+
 ## 0.8.6 – Übersicht in zwei Spalten, eigene Kacheln in der Karte
 - **Übersicht in zwei Spalten:** Notfall-Strecke, Leitungen, Geschwindigkeit und Ausfälle stehen je zur halben
   Breite nebeneinander (auf schmalen Bildschirmen untereinander) statt zu dritt.

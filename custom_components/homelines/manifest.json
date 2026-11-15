@@ -8,7 +8,8 @@
   "dependencies": [
     "http",
     "frontend",
-    "network"
+    "network",
+    "repairs"
   ],
   "documentation": "https://github.com/think-now-ideas/HomeLines",
   "integration_type": "hub",
@@ -18,5 +19,5 @@
     "asyncssh>=2.14.0",
     "icmplib>=3.0"
   ],
-  "version": "0.8.6"
+  "version": "0.8.7"
 }

@@ -81,6 +81,7 @@ UniFi-API-Schlüssel: *UniFi → Einstellungen → Control Plane → Integration
 **3. Neueinwahl (optional)**
 
 - **SSH** (UniFi, teils OpenWrt): SSH-Daten des Routers, Schnittstelle `ppp1`, Uhrzeit `04:00`.
+  Ab 0.8.7 merkt sich HomeLines beim ersten Verbinden den Fingerabdruck des Routers (SSH-Hostschlüssel) und schickt das Passwort danach nur noch an genau dieses Gerät. Meldet sich ein Gerät mit anderem Fingerabdruck, sperrt HomeLines die Neueinwahl, sendet das Passwort nicht und meldet es unter *Einstellungen → Reparaturen*. Nach einem Zurücksetzen oder Austausch des Routers dort „Neuen Router-Fingerabdruck übernehmen“ bestätigen. Wer Adresse oder Port in den Optionen ändert, startet automatisch mit einem neuen Fingerabdruck.
 - **HA-Button oder Skript** (jeder Router, z. B. FRITZ!Box-Button „Neu verbinden“): Auslöser wählen, optional einen Sensor mit der öffentlichen IP zur Erfolgskontrolle.
 
 Danach in den **Optionen** (Zahnrad der Integration):
@@ -280,6 +281,12 @@ Ereignisse: `homelines_mode_changed`, `homelines_outage_started`, `homelines_out
 - Kosten sind eine Schätzung aus den Handy-Zählern. Verbindlich ist die Abrechnung des Anbieters.
 - Beim Löschen der Integration entfernt HomeLines seine UniFi-Regel wieder.
 - Verbrauchszähler werden anhand ihrer Einheit umgerechnet (GB, MB, kB …). Damit lassen sich auch Router mit eigenem Mobilfunk-Zähler nutzen.
+
+## Sicherheit
+
+- **SSH zur Neueinwahl:** nur zum Router mit bekanntem Fingerabdruck (siehe oben). Am sichersten ist ein eigener SSH-Benutzer mit einem langen Passwort, das sonst nirgends verwendet wird.
+- **UniFi-Verbindung:** Die Zertifikatsprüfung ist standardmäßig aus, weil UniFi-Router ein selbst ausgestelltes Zertifikat verwenden, das sich bei Updates ändern kann. Eine feste Prüfung würde dann genau im Ausfall den Notbetrieb blockieren. Der API-Schlüssel verlässt das Heimnetz nicht. Wer ein gültiges Zertifikat auf dem Router hat, kann „Zertifikat prüfen“ einschalten.
+- Zugangsdaten speichert Home Assistant wie bei allen Integrationen in seiner Konfiguration; die Karte bekommt sie nie zu sehen.
 
 ## Entwicklung
 

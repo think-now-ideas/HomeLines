@@ -36,6 +36,29 @@ class SSHAuthError(SSHError):
     """Anmeldung abgelehnt."""
 
 
+class SSHHostKeyError(SSHError):
+    """Der Router meldet sich mit einem anderen Fingerabdruck als gespeichert.
+
+    Das Passwort wurde in diesem Fall NICHT gesendet. ``new_key`` ist der Schlüssel, den das Gerät
+    jetzt zeigt (oder None, falls er nicht gelesen werden konnte)."""
+
+    def __init__(self, new_key: str | None) -> None:
+        self.new_key = new_key
+        self.fingerprint = fingerprint(new_key) if new_key else None
+        super().__init__("Der Router meldet sich mit einem anderen Fingerabdruck als gespeichert – "
+                         "Passwort nicht gesendet, Neueinwahl gesperrt. Unter Einstellungen → Reparaturen bestätigen.")
+
+
+def fingerprint(key: str | None) -> str | None:
+    """SHA256-Fingerabdruck eines öffentlichen Schlüssels im OpenSSH-Format (wie ``ssh-keygen -l``)."""
+    if not key:
+        return None
+    try:
+        return asyncssh.import_public_key(key).get_fingerprint("sha256")
+    except (asyncssh.KeyImportError, ValueError):
+        return None
+
+
 def validate_interface(name: str) -> str:
     if not _IFACE_RE.match(name or ""):
         raise ValueError(f"Ungültiger Schnittstellenname: {name!r}")
@@ -69,19 +92,56 @@ class LinkState:
 
 
 class SSHClient:
-    """Kurze SSH-Verbindung je Vorgang."""
+    """Kurze SSH-Verbindung je Vorgang – nur zu einem Router mit bekanntem Fingerabdruck.
 
-    def __init__(self, host: str, port: int, user: str, password: str) -> None:
+    ``host_key`` ist der gespeicherte öffentliche Schlüssel des Routers (OpenSSH-Zeile). Fehlt er,
+    liest der Client ihn beim ersten Verbinden OHNE Anmeldung aus und merkt ihn sich in ``learned``
+    (der Aufrufer speichert ihn dauerhaft). Das Passwort geht nur an ein Gerät, das genau diesen
+    Schlüssel beweist; ein anderer Schlüssel führt zu ``SSHHostKeyError``."""
+
+    def __init__(self, host: str, port: int, user: str, password: str, host_key: str | None = None) -> None:
         self.host, self.port, self.user, self.password = host, port, user, password
+        self.host_key = host_key
+        self.learned: str | None = None   # beim ersten Verbinden gelernter Schlüssel
+        self.connected = False            # mindestens eine Anmeldung hat geklappt
+
+    async def fetch_host_key(self) -> str:
+        """Öffentlichen Schlüssel des Geräts lesen, ohne sich anzumelden (kein Passwort)."""
+        try:
+            async with asyncio.timeout(15):
+                key = await asyncssh.get_server_host_key(self.host, self.port)
+        except (OSError, asyncssh.Error, TimeoutError) as err:
+            raise SSHError(str(err)) from err
+        if key is None:
+            raise SSHError("Router hat keinen Schlüssel gemeldet")
+        return key.export_public_key("openssh").decode().strip()
 
     async def run(self, command: str, timeout: int = 30) -> tuple[int, str]:
+        key = self.host_key or self.learned
+        if key is None:
+            key = self.learned = await self.fetch_host_key()
+        try:
+            trusted = asyncssh.import_public_key(key)
+        except (asyncssh.KeyImportError, ValueError) as err:
+            raise SSHError(f"Gespeicherter Router-Fingerabdruck ist ungültig: {err}") from err
         try:
             async with asyncio.timeout(timeout + 15):
                 async with asyncssh.connect(
                     self.host, port=self.port, username=self.user, password=self.password,
-                    known_hosts=None, connect_timeout=15) as conn:
+                    known_hosts=([trusted], [], []), connect_timeout=15) as conn:
+                    self.connected = True
                     res = await conn.run(command, check=False, timeout=timeout)
                     return res.exit_status or 0, str(res.stdout or "") + str(res.stderr or "")
+        except (asyncssh.HostKeyNotVerifiable, asyncssh.KeyExchangeFailed) as err:
+            # Anderer Schlüssel – oder ein ganz anderer Schlüsseltyp, dann scheitert schon der
+            # Schlüsselaustausch. In beiden Fällen wurde KEIN Passwort gesendet.
+            try:
+                new = await self.fetch_host_key()
+            except SSHError:
+                new = None
+            if isinstance(err, asyncssh.KeyExchangeFailed) and new is not None and fingerprint(new) == trusted.get_fingerprint("sha256"):
+                raise SSHError(str(err)) from err   # gleicher Schlüssel, anderes Problem
+            raise SSHHostKeyError(new) from err
         except asyncssh.PermissionDenied as err:
             raise SSHAuthError(str(err)) from err
         except (OSError, asyncssh.Error, TimeoutError) as err:

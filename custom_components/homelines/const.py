@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "homelines"
 NAME = "HomeLines"
-VERSION = "0.8.6"
+VERSION = "0.8.7"
 
 PLATFORMS = ["binary_sensor", "button", "sensor", "switch", "time"]
 
@@ -197,3 +197,4 @@ CONF_IMPORTED_FROM = "imported_from"  # Eintrags-ID der übernommenen LineGuard-
 # --- Reparatur-Hinweise ----------------------------------------------------
 ISSUE_LEGACY = "legacy_running"
 ISSUE_WAN = "primary_wan_missing"
+ISSUE_HOSTKEY = "ssh_host_key_changed"  # Router meldet sich mit anderem SSH-Fingerabdruck

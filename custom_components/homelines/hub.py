@@ -136,6 +136,7 @@ from .const import (
     LINE_DETAIL_KEYS,
     LINE_HISTORY_KEYS,
     LINE_NAME_KEYS,
+    ISSUE_HOSTKEY,
     ISSUE_WAN,
     LEGACY_DOMAIN,
     LEGACY_ROUTE_DESCRIPTION,
@@ -157,7 +158,7 @@ from .const import (
     STORAGE_VERSION,
 )
 from .monitor import CAUSE_INTERNET, CAUSE_LOCAL, CAUSE_UNKNOWN, OutageLog, Pinger, fmt_duration
-from .reconnect import SSHClient, SSHError
+from .reconnect import SSHClient, SSHError, SSHHostKeyError, fingerprint
 from .router import BaseAdapter, Inventory, RouterError, create_adapter
 
 _LOGGER = logging.getLogger(__name__)
@@ -282,6 +283,7 @@ class HomeLinesHub:
                                                       INVENTORY_INTERVAL))
         self._unsubs.append(async_track_time_interval(self.hass, self._async_watch, timedelta(minutes=1)))
         self._schedule_reconnect()
+        self._ssh_issue()  # offener Fingerabdruck-Wechsel bleibt nach Neustart sichtbar
         self._reschedule_ping()
         self._reschedule_flat()
         self.hass.async_create_task(self._async_refresh_inventory())
@@ -1183,10 +1185,17 @@ class HomeLinesHub:
         try:
             if method in SSH_METHODS:
                 client = SSHClient(self.opt(CONF_SSH_HOST), int(self.opt(CONF_SSH_PORT, DEFAULT_SSH_PORT)),
-                                   self.opt(CONF_SSH_USER, DEFAULT_SSH_USER), self.opt(CONF_SSH_PASSWORD))
-                result, old_ip, new_ip = await client.reconnect(method, self.opt(CONF_PPP_INTERFACE, DEFAULT_PPP_INTERFACE))
+                                   self.opt(CONF_SSH_USER, DEFAULT_SSH_USER), self.opt(CONF_SSH_PASSWORD),
+                                   host_key=self.ssh_pin())
+                try:
+                    result, old_ip, new_ip = await client.reconnect(method, self.opt(CONF_PPP_INTERFACE, DEFAULT_PPP_INTERFACE))
+                finally:
+                    self._ssh_seen(client)
             else:
                 result, old_ip, new_ip = await self._reconnect_via_ha()
+        except SSHHostKeyError as err:
+            self._ssh_key_changed(err)
+            result, old_ip, new_ip, error = RESULT_ERROR, None, None, str(err)
         except (SSHError, ValueError, HomeAssistantError) as err:
             result, old_ip, new_ip, error = RESULT_ERROR, None, None, str(err)
         finally:
@@ -1203,6 +1212,69 @@ class HomeLinesHub:
         self._save()
         self._push()
         return result
+
+    # ------------------------------------------------------- SSH-Fingerabdruck
+    def _ssh_target(self, host: str | None = None, port: Any = None) -> str:
+        return f"{host or self.opt(CONF_SSH_HOST)}:{int(port or self.opt(CONF_SSH_PORT, DEFAULT_SSH_PORT))}"
+
+    def ssh_pin(self, host: str | None = None, port: Any = None) -> str | None:
+        """Gespeicherter Router-Schlüssel – nur, wenn Adresse und Port noch dieselben sind.
+
+        Nach einer Änderung von Adresse oder Port wird beim nächsten Verbinden neu gelernt."""
+        pin = self.data.get("ssh") or {}
+        return pin.get("key") if pin.get("target") == self._ssh_target(host, port) else None
+
+    def _ssh_seen(self, client: SSHClient) -> None:
+        """Nach einem SSH-Vorgang: neu gelernten Schlüssel speichern, erledigten Hinweis entfernen."""
+        if not client.connected:
+            return
+        if client.learned:
+            self.data["ssh"] = {"target": self._ssh_target(), "key": client.learned,
+                                "fingerprint": fingerprint(client.learned), "since": dt_util.utcnow().isoformat()}
+            _LOGGER.info("Router-Fingerabdruck gespeichert: %s", self.data["ssh"]["fingerprint"])
+            self._save()
+        if self.data.pop("ssh_pending", None) is not None:
+            self._save()
+        ir.async_delete_issue(self.hass, DOMAIN, f"{ISSUE_HOSTKEY}_{self.entry.entry_id}")
+
+    def _ssh_key_changed(self, err: SSHHostKeyError) -> None:
+        """Router meldet sich mit anderem Schlüssel: merken und unter Reparaturen melden."""
+        _LOGGER.warning("Router meldet sich mit anderem SSH-Fingerabdruck (%s statt %s) – Passwort nicht gesendet",
+                        err.fingerprint, (self.data.get("ssh") or {}).get("fingerprint"))
+        self.data["ssh_pending"] = {"target": self._ssh_target(), "key": err.new_key, "fingerprint": err.fingerprint,
+                                    "seen": dt_util.utcnow().isoformat()}
+        self._save()
+        self._ssh_issue()
+
+    def _ssh_issue(self) -> None:
+        pend = self.data.get("ssh_pending")
+        if not pend:
+            return
+        ir.async_create_issue(
+            self.hass, DOMAIN, f"{ISSUE_HOSTKEY}_{self.entry.entry_id}", is_fixable=True,
+            severity=ir.IssueSeverity.ERROR, translation_key=ISSUE_HOSTKEY,
+            data={"entry_id": self.entry.entry_id},
+            translation_placeholders={"old": (self.data.get("ssh") or {}).get("fingerprint") or "–",
+                                      "new": pend.get("fingerprint") or "nicht lesbar"})
+
+    def ssh_pending(self) -> dict | None:
+        return self.data.get("ssh_pending")
+
+    async def async_accept_host_key(self) -> None:
+        """Neuen Router-Fingerabdruck übernehmen (aus dem Reparatur-Dialog).
+
+        Konnte der neue Schlüssel nicht gelesen werden, wird der alte gelöscht; beim nächsten
+        Verbinden lernt HomeLines den Schlüssel dann neu."""
+        pend = self.data.pop("ssh_pending", None) or {}
+        if pend.get("key"):
+            self.data["ssh"] = {"target": pend.get("target") or self._ssh_target(), "key": pend["key"],
+                                "fingerprint": pend.get("fingerprint"), "since": dt_util.utcnow().isoformat()}
+            _LOGGER.info("Neuer Router-Fingerabdruck übernommen: %s", pend.get("fingerprint"))
+        else:
+            self.data.pop("ssh", None)
+        ir.async_delete_issue(self.hass, DOMAIN, f"{ISSUE_HOSTKEY}_{self.entry.entry_id}")
+        await self._store.async_save(self._stored())
+        self._push()
 
     def _ip_now(self) -> str | None:
         st = self._state(CONF_WAN_IP_ENTITY)
