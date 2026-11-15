@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "homelines"
 NAME = "HomeLines"
-VERSION = "0.8.4"
+VERSION = "0.8.5"
 
 PLATFORMS = ["binary_sensor", "button", "sensor", "switch", "time"]
 
@@ -42,6 +42,7 @@ CONF_SPEED_DOWN = "speed_download"
 CONF_SPEED_UP = "speed_upload"
 CONF_BACKUP_EXTRA = "backup_extra"
 CONF_SPEED_EXTRA = "speed_extra"
+CONF_MONITOR_EXTRA = "monitor_extra"  # z. B. Latenz-Sensor des Routers
 
 # Erkennung der Hauptleitung (routerneutral)
 CONF_DETECTION = "detection"

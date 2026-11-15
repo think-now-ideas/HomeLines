@@ -8,15 +8,16 @@ data:
     WAN3: 5G Backup
   lines:
     WAN2:
-      values:
+      values:                     # die ersten zwei erscheinen in der Übersicht
         - sensor.modem_dsl_status
+        - sensor.modem_dsl_rauschabstand_download
         - sensor.modem_dsl_sync_download
         - sensor.modem_dsl_sync_upload
-        - sensor.modem_dsl_rauschabstand_download
         - sensor.modem_dsl_rauschabstand_upload
       history:
         - sensor.modem_dsl_sync_download
         - sensor.modem_dsl_rauschabstand_download
+        - sensor.modem_dsl_rauschabstand_upload
   speed_download: sensor.router_speedtest_download
   speed_upload: sensor.router_speedtest_upload
   speed_extra:
@@ -24,3 +25,5 @@ data:
     - button.router_speedtest_starten
   backup_extra:
     - sensor.notfall_router_leistung
+  monitor_extra:
+    - sensor.router_latenz

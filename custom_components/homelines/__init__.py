@@ -17,6 +17,7 @@ from homeassistant.util import dt as dt_util
 from .const import (
     CARD_URL,
     CONF_BACKUP_EXTRA,
+    CONF_MONITOR_EXTRA,
     CONF_SPEED_DOWN,
     CONF_SPEED_EXTRA,
     CONF_SPEED_UP,
@@ -155,7 +156,7 @@ def _register_services(hass: HomeAssistant) -> None:
         opts = dict(hub.entry.options)
         if call.data.get("replace"):
             for key in [*LINE_NAME_KEYS, *LINE_DETAIL_KEYS, *LINE_HISTORY_KEYS,
-                        CONF_SPEED_DOWN, CONF_SPEED_UP, CONF_SPEED_EXTRA, CONF_BACKUP_EXTRA]:
+                        CONF_SPEED_DOWN, CONF_SPEED_UP, CONF_SPEED_EXTRA, CONF_BACKUP_EXTRA, CONF_MONITOR_EXTRA]:
                 opts.pop(key, None)
         by_wan = lambda keys: {wid: key for key, wid in keys.items()}  # noqa: E731
         names, values, history = by_wan(LINE_NAME_KEYS), by_wan(LINE_DETAIL_KEYS), by_wan(LINE_HISTORY_KEYS)
@@ -166,7 +167,7 @@ def _register_services(hass: HomeAssistant) -> None:
                 opts[values[wid]] = d["values"]
             if "history" in d:
                 opts[history[wid]] = d["history"]
-        for key in ("speed_download", "speed_upload", "speed_extra", "backup_extra"):
+        for key in ("speed_download", "speed_upload", "speed_extra", "backup_extra", "monitor_extra"):
             if key in call.data:
                 opts[key] = call.data[key]
         hass.config_entries.async_update_entry(hub.entry, options=opts)
@@ -179,5 +180,6 @@ def _register_services(hass: HomeAssistant) -> None:
         vol.Optional("speed_upload"): cv.entity_id,
         vol.Optional("speed_extra"): ents,
         vol.Optional("backup_extra"): ents,
+        vol.Optional("monitor_extra"): ents,
         vol.Optional("replace", default=False): cv.boolean,
     }))

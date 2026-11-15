@@ -32,6 +32,7 @@ DETAILS = {
     "speed_upload": t("Geschwindigkeit: Upload-Sensor", "Speed: upload sensor"),
     "speed_extra": t("Geschwindigkeit: weitere Werte", "Speed: more values"),
     "backup_extra": t("Notfall-Strecke: weitere Werte", "Backup line: more values"),
+    "monitor_extra": t("Ausfälle: weitere Werte", "Outages: more values"),
 }
 DETAILS_DESC = {
     **{k: v for i in range(1, 5) for k, v in (
@@ -42,6 +43,8 @@ DETAILS_DESC = {
     "speed_upload": t("Zweite Linie im Verlauf.", "Second line in the graph."),
     "speed_extra": t("Z. B. Ping und letzter Lauf des Speedtests, Knopf „Speedtest starten“, Schalter für den automatischen Speedtest.",
                      "E.g. speedtest ping, last run, run button."),
+    "monitor_extra": t("Z. B. die Latenz-Messung des Routers. Erscheint im Fenster „Ausfälle und Verlauf“, Latenzen im gemeinsamen Diagramm.",
+                       "E.g. the router's latency sensor."),
     "backup_extra": t("Z. B. Stromverbrauch des Notfall-Routers. Handy, Verbrauch und Kosten zeigt HomeLines dort von selbst.",
                       "E.g. power of the backup router."),
 }
@@ -336,6 +339,7 @@ def build(lang):
                                    "speed_upload": {"name": tr("Geschwindigkeit: Upload", "Speed: upload")},
                                    "speed_extra": {"name": tr("Geschwindigkeit: weitere Werte", "Speed: more values")},
                                    "backup_extra": {"name": tr("Notfall-Strecke: weitere Werte", "Backup line: more values")},
+                                   "monitor_extra": {"name": tr("Ausfälle: weitere Werte", "Outages: more values")},
                                    "replace": {"name": tr("Alles ersetzen", "Replace all"),
                                                "description": tr("An: nicht genannte Namen und Detailwerte werden geleert. Aus: nur die genannten werden geändert.", "On: clear everything not given.")}}},
         "reconnect": {"name": tr("Neu verbinden", "Reconnect"), "description": tr("Löst sofort eine PPPoE-Neueinwahl aus.", "Triggers a PPPoE reconnect now."), "fields": {"entry_id": {"name": "HomeLines"}}},

@@ -1,5 +1,25 @@
 # Änderungen
 
+## 0.8.5 – Detailfenster wie ein gut gebautes Dashboard
+- **Verläufe zusammengefasst:** Werte mit gleicher Einheit stehen in einem Diagramm mit Legende (Name und aktueller
+  Wert, Tipp öffnet das HA-Detailfenster), z. B. Sync und Erreichbar, Rauschabstand Download und Upload, Speedtest
+  Download und Upload oder alle Leistungsmesser einer Kachel. Zeitraum: 30 Tage für Leitungen und Geschwindigkeit,
+  24 Stunden für Latenz und Kacheln (einstellbar). Spitzen bleiben auch bei langen Zeiträumen sichtbar.
+- **Kurze Namen:** Gemeinsame Anfänge (z. B. „HomeLines …“, Gerätename des Modems) und gemeinsame Endungen
+  (z. B. „… Leistung“) werden weggelassen.
+- **Notfall-Strecke:** Prüfliste des Notfall-Handys (meldet sich, USB-Kabel mit Akku, Mobilfunk mit Netz und Signal,
+  mobile Daten, WLAN) mit Ampelpunkten, Knöpfe „Testmeldung senden“ und „Verbrauch zurücksetzen“, Zeitleiste
+  „Notbetrieb – 30 Tage“.
+- **Ausfälle und Verlauf:** zusätzlich Router-Status und letzte Prüfung, **Protokoll** der letzten Ausfälle (Beginn,
+  Dauer, Ursache), Zeitleiste „Verbindung – 24 Stunden“ (Internet, Router, Hauptleitung, aktive Leitung,
+  Betriebsart), Latenz – 24 Stunden, Paketverlust – 30 Tage.
+- **Neue Option „Ausfälle: weitere Werte“** (`monitor_extra`, auch in `homelines.set_details`), z. B. die
+  Latenz-Messung des Routers; sie erscheint als Feld und im Latenz-Diagramm.
+- Leitungen ohne Detailwerte zeigen einen Hinweis statt eines leeren Fensters.
+- Leitungskachel zeigt ohne eigene Zusatzzeile die Bandbreite aus den Detailwerten (z. B. „253 · 46 Mbit/s“);
+  die Übersichtszeile einer Leitung die ersten zwei Detailwerte (Reihenfolge wie in den Optionen).
+- Geprüft gegen ein echtes Home Assistant mit Frontend.
+
 ## 0.8.4 – Übersicht zurück, Detailfenster mit echten Werten, Kachel ohne Code
 - **Übersicht in der großen Karte:** unter den Kennzahlen je eine Zeile für Notfall-Strecke (Handy, Akku, weitere
   Werte), jede Leitung mit Detailwerten (z. B. „DSL – SHOWTIME · 250 Mbit/s · 46 Mbit/s“), Geschwindigkeit und

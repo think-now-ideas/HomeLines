@@ -54,6 +54,8 @@ set_details:
       selector: { entity: { multiple: true } }
     backup_extra:
       selector: { entity: { multiple: true } }
+    monitor_extra:
+      selector: { entity: { multiple: true } }
     replace:
       default: false
       selector: { boolean: {} }

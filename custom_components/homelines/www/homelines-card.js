@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.4";
+const HL_VERSION = "0.8.5";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
 const HL_LOGO = `<svg class="hllogo" viewBox="14 22 924 742" aria-hidden="true"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/></svg>`;
 
@@ -273,7 +273,7 @@ class HomeLinesCard extends HTMLElement {
   _subscribe() {
     this._onFeed = this._onFeed || (f => {
       this._fstate = f.state;
-      if (f.data) { this._s = f.data; this._render(); }
+      if (f.data) { this._s = f.data; this._render(); if (this._detailEl && this._detail && this._detail.open) this._detailEl.state = f.data; }
       else if (this._main) this._main.innerHTML = hlStatusBox(f);
     });
     this._feed = hlFeed(this._hass, this._config.entry_id);
@@ -308,6 +308,15 @@ class HomeLinesCard extends HTMLElement {
       if (cls === "na") label = cfg.na_text || tr.notConnected;
       if (!isAct && !w.backup && w.state === "online" && mode === "normal") label = `${tr.reserve} · ${label}`;
       let info = this._infos[w.id] || "";
+      if (!info && !w.backup) {
+        const ents = (((s.details || {}).lines || {})[w.id] || {}).entities || [];
+        const nums = ents.map(e => this._hass.states[e]).filter(st => st && !isNaN(parseFloat(st.state)) && /^-?[\d.]+$/.test(st.state));
+        // Bandbreite bevorzugt (z. B. Sync ↓/↑), sonst die erste Einheit
+        const bw = nums.find(st => /bit\/s/.test(st.attributes.unit_of_measurement || ""));
+        const u = (bw || nums[0] || { attributes: {} }).attributes.unit_of_measurement || "";
+        const pair = nums.filter(st => (st.attributes.unit_of_measurement || "") === u).slice(0, 2);
+        if (pair.length) info = pair.map(st => Math.round(parseFloat(st.state)).toLocaleString("de-DE")).join(" · ") + (u ? " " + u : "");
+      }
       if (!info && w.backup && ph0.configured) info = ph0.reporting ? `${tr.phoneReady}${ph0.battery != null ? " · " + Math.round(ph0.battery) + " %" : ""}` : tr.phoneSilent;
       const nav = cfg.tap || cfg.navigation_path;
       return `<div class="line ${cls}"${nav ? ` data-nav="${esc(nav)}"` : ` data-a="detail" data-k="line" data-id="${esc(w.id)}"`} style="cursor:pointer">${isAct ? `<span class="tag">${tr.active}</span>` : ""}
@@ -412,7 +421,7 @@ class HomeLinesCard extends HTMLElement {
   _openDetail(kind, wid) {
     if (!this._s) return;
     const spec = hlDetail(this._s, kind, wid);
-    const el = document.createElement("homelines-detail"); el.spec = spec;
+    const el = document.createElement("homelines-detail"); el.state = this._s; el.spec = spec; this._detailEl = el;
     this._detail = hlOpenPopup(this._hass, null, null, { showCard: false, content: el, title: spec.title });
   }
 
@@ -761,7 +770,7 @@ function hlOverview(s, hass) {
     rows.push({ k: "line", id: backup.id, icon: "mdi:cellphone-link", n: "Notfall-Strecke", t, cls });
   }
   (s.wans || []).filter(w => !w.backup && ((d.lines || {})[w.id] || {}).entities && d.lines[w.id].entities.length).forEach(w => {
-    const vals = d.lines[w.id].entities.map(e => hlFmt(hass, e)).filter(Boolean).slice(0, 3);
+    const vals = d.lines[w.id].entities.map(e => hlFmt(hass, e)).filter(Boolean).slice(0, 2);
     rows.push({ k: "line", id: w.id, icon: "mdi:router-network", n: w.name || w.id, t: vals.join(" · ") || "–",
       cls: w.state === "offline" && w.primary ? "err" : "" });
   });
@@ -785,32 +794,62 @@ function hlOverviewEntities(s) {
 }
 
 /* Eingebaute Detailfenster (ab 0.8.0): aus den HomeLines-Optionen, ohne eigene Dashboard-Seite */
+/* Detailfenster (ab 0.8.5): Bausteine statt fertiger HA-Karten.
+   values    – Felder mit Name und Wert (Tipp: HA-Detailfenster)
+   chart     – Verlauf; Werte mit gleicher Einheit in einem Diagramm mit Legende
+   timeline  – Zustände als Streifen (z. B. Internet an/aus, Betriebsart)
+   controls  – Schalter und Knöpfe (HA-Liste)
+   phone     – Prüfliste Notfall-Handy, log – Ausfall-Protokoll, hint – Hinweis */
+const HL_CTL = /^(button|switch|input_[a-z]+|time|select|number|script|automation)\./;
 function hlDetail(s, kind, wid) {
-  // Werte (Kacheln), Verläufe und Bedienelemente; gezeichnet von <homelines-detail>
-  const d = s.details || {}, own = d.own || {}, values = [], charts = [], controls = [];
-  const add = (list, arr) => (arr || []).filter(Boolean).forEach(e => { if (!list.includes(e)) list.push(e); });
-  const isCtl = e => /^(button|switch|input_[a-z]+|time|select|number)\./.test(e);
-  const sort = arr => (arr || []).filter(Boolean).forEach(e => { const L = isCtl(e) ? controls : values; if (!L.includes(e)) L.push(e); });
+  const d = s.details || {}, own = d.own || {}, blocks = [];
+  const uniq = arr => [...new Set((arr || []).filter(Boolean))];
+  const vals = arr => uniq(arr).filter(e => !HL_CTL.test(e));
+  const ctls = arr => uniq(arr).filter(e => HL_CTL.test(e));
+  const push = (type, o) => { if (o.entities && !o.entities.length) return; blocks.push({ type, ...o }); };
   if (kind === "line") {
     const w = (s.wans || []).find(x => x.id === wid) || { id: wid, name: wid };
     const ld = (d.lines || {})[wid] || {};
-    if (w.entity_id) add(values, [w.entity_id]);
-    sort(ld.entities); add(charts, ld.history);
-    if (w.primary && s.reconnect && s.reconnect.configured)
-      add(controls, ["daily_reconnect", "reconnect_time", "last_reconnect", "reconnect_result", "wan_ip", "reconnect_now"].map(k => own[k]));
-    if (w.backup) { add(values, ["status", "phone", "devices_online", "usage", "cost", "balance"].map(k => own[k])); sort(d.phone); sort(d.backup); }
-    return { title: w.name && w.name !== w.id ? `${w.name} (${w.id})` : w.id, values, charts, controls, hours: 168,
-      controlsTitle: w.primary && s.reconnect && s.reconnect.configured ? "Neueinwahl" : "Bedienung" };
+    if (w.backup) {
+      push("phone", {});
+      push("values", { entities: vals([own.status, ...(ld.entities || []), ...(d.backup || []), own.usage, own.cost, own.balance, own.devices_online]) });
+      push("controls", { title: "Aktionen", entities: ctls([own.test_notify, own.reset_usage, ...(ld.entities || []), ...(d.backup || [])]) });
+      push("chart", { entities: uniq(ld.history), hours: 720 });
+      push("timeline", { title: "Notbetrieb – 30 Tage", entities: uniq([own.status]), hours: 720 });
+    } else {
+      if (!(ld.entities || []).length && !(ld.history || []).length)
+        push("hint", { text: w.entity_id ? "Für diese Leitung sind keine Detailwerte eingestellt (HomeLines → Konfigurieren → Detailansichten der Karte)."
+          : "Noch nicht angeschlossen. Sobald die Leitung im Router läuft, erscheinen hier Status und Werte – Sensoren dafür unter HomeLines → Konfigurieren → Detailansichten der Karte." });
+      push("values", { entities: vals([w.entity_id, ...(ld.entities || [])]) });
+      push("chart", { entities: uniq(ld.history), hours: 720 });
+      const rc = w.primary && s.reconnect && s.reconnect.configured
+        ? ["daily_reconnect", "reconnect_time", "last_reconnect", "reconnect_result", "wan_ip", "reconnect_now"].map(k => own[k]) : [];
+      push("controls", { title: rc.length ? "Neueinwahl" : "Bedienung", entities: ctls([...rc.filter(e => HL_CTL.test(e)), ...(ld.entities || [])])
+        .concat(rc.filter(e => e && !HL_CTL.test(e))) });
+    }
+    return { title: w.name && w.name !== w.id ? `${w.name} (${w.id})` : w.id, blocks };
   }
   if (kind === "speed") {
     const sp = d.speed || {};
-    add(values, [sp.download, sp.upload]); sort(sp.extra); add(charts, [sp.download, sp.upload]);
-    return { title: "Geschwindigkeit", values, charts, controls, hours: 168 };
+    push("values", { entities: vals([sp.download, sp.upload, ...(sp.extra || [])]) });
+    push("controls", { title: "Bedienung", entities: ctls(sp.extra) });
+    push("chart", { title: "Speedtest – 30 Tage", entities: uniq([sp.download, sp.upload]), hours: 720 });
+    return { title: "Geschwindigkeit", blocks };
   }
-  if (kind === "entities") return { title: wid.title, values: wid.entities, charts: wid.entities, controls: [], hours: wid.hours || 24 };
-  add(values, ["outages_24h", "outages_7d", "outages_30d", "downtime_7d", "availability_7d", "availability_30d", "latency", "packet_loss"].map(k => own[k]));
-  add(charts, [own.internet, own.latency]);
-  return { title: "Ausfälle und Verlauf", values, charts, controls, hours: 168 };
+  if (kind === "entities") {
+    push("values", { entities: vals(wid.entities) });
+    push("controls", { title: "Bedienung", entities: ctls(wid.entities) });
+    push("chart", { entities: vals(wid.entities), hours: wid.hours || 24 });
+    return { title: wid.title, blocks };
+  }
+  const prim = (s.wans || []).find(w => w.primary);
+  push("values", { entities: vals([own.internet, own.router, own.outages_24h, own.outages_7d, own.outages_30d, own.availability_7d, own.downtime_7d, own.last_check, ...(d.monitor || [])]) });
+  push("log", {});
+  push("timeline", { title: "Verbindung – 24 Stunden", entities: uniq([own.internet, own.router, prim && prim.entity_id, d.active_wan_entity, own.status]), hours: 24 });
+  push("chart", { title: "Latenz – 24 Stunden", entities: uniq([own.latency, ...(d.monitor || [])]), hours: 24 });
+  push("chart", { title: "Paketverlust – 30 Tage", entities: uniq([own.packet_loss]), hours: 720 });
+  push("controls", { title: "Bedienung", entities: ctls(d.monitor) });
+  return { title: "Ausfälle und Verlauf", blocks };
 }
 
 function hlMoreInfo(entityId) {
@@ -823,120 +862,238 @@ function hlMoreInfo(entityId) {
   ha.dispatchEvent(new CustomEvent("hass-more-info", { bubbles: true, composed: true, detail: { entityId } }));
   const dlg = () => ha.shadowRoot && ha.shadowRoot.querySelector("ha-more-info-dialog");
   let seen = false;
+  const t0 = Date.now();
   const t = setInterval(() => {
     const d = dlg(), open = !!(d && (d.open || d._open || (d.shadowRoot && d.shadowRoot.querySelector("[open]"))) && d.isConnected);
     if (open) seen = true;
-    if ((seen && !open) || (!seen && Date.now() - t0 > 4000)) {
-      clearInterval(t); pops.forEach(p => { p.style.visibility = ""; });
-    }
-  }, 250), t0 = Date.now();
+    if ((seen && !open) || (!seen && Date.now() - t0 > 4000)) { clearInterval(t); pops.forEach(p => { p.style.visibility = ""; }); }
+  }, 250);
 }
 
+/* Kurze Namen: was alle Namen eines Bausteins vorne oder hinten gemeinsam haben, fällt weg
+   („Modem DSL Sync Download“, „Modem DSL Rauschabstand Download“ → „Sync Download“, „Rauschabstand Download“) */
+function hlShortNames(names) {
+  if (names.length < 2) return names;
+  const w = names.map(n => String(n).split(/\s+/));
+  // Vorne: Namen mit gleichem Anfang (z. B. „HomeLines …“, „Modem DSL …“) gruppenweise kürzen
+  const groups = {};
+  w.forEach((x, i) => { (groups[x[0]] = groups[x[0]] || []).push(i); });
+  const pre = w.map(() => 0);
+  Object.values(groups).filter(g => g.length > 1).forEach(g => {
+    const min = Math.min(...g.map(i => w[i].length));
+    let p = 0;
+    while (p < min - 1 && g.every(i => w[i][p] === w[g[0]][p])) p++;
+    g.forEach(i => { pre[i] = p; });
+  });
+  // Hinten nur, was wirklich alle gemeinsam haben (z. B. „… Leistung“)
+  let suf = 0;
+  const min = Math.min(...w.map((x, i) => x.length - pre[i]));
+  while (suf < min - 1 && w.every(x => x[x.length - 1 - suf] === w[0][w[0].length - 1 - suf])) suf++;
+  return w.map((x, i) => x.slice(pre[i], x.length - suf).join(" ") || x.join(" "));
+}
+const HL_COLORS = ["#4469d0", "#e8b33f", "#e9735a", "#5fb7a0", "#9b6ad6", "#4fa7d8", "#c75c8a", "#7f8c3d"];
+const HL_CAUSE = { local: "Heimnetz", internet: "Internet/Anbieter", unknown: "unbekannt" };
+
 const detailCss = `
-.hld{display:block;color:var(--primary-text-color);font-family:var(--paper-font-body1_-_font-family,inherit)}
-.hld .hld-vals{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.hld{display:block;color:var(--primary-text-color)}
+.hld .hld-vals{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:8px}
 .hld .hld-v{background:var(--card-background-color,#fff);border:1px solid var(--divider-color);border-radius:12px;padding:10px 12px;cursor:pointer;min-width:0}
-.hld .hld-v .hld-n{font-size:13px;color:var(--secondary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hld .hld-v .hld-x{font-size:18px;font-weight:500;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hld .hld-n{font-size:13px;color:var(--secondary-text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hld .hld-x{font-size:17px;font-weight:500;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hld .hld-v.na .hld-x{color:var(--secondary-text-color);font-weight:400}
-.hld .hld-sec{margin:16px 2px 8px;font-size:14px;font-weight:500;color:var(--secondary-text-color)}
-.hld .hld-c{background:var(--card-background-color,#fff);border:1px solid var(--divider-color);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
-.hld .hld-c .hld-h{display:flex;justify-content:space-between;gap:8px;font-size:13px}.hld .hld-c .hld-h b{font-weight:500}
-.hld .hld-c svg{width:100%;height:70px;display:block;margin-top:6px}
-.hld .hld-c .hld-ax{display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color)}
-.hld .hld-ctl{margin-top:4px}
-.hld .hld-empty{color:var(--secondary-text-color);font-size:13px;padding:4px 2px}`;
+.hld .hld-box{background:var(--card-background-color,#fff);border:1px solid var(--divider-color);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.hld .hld-t{font-size:15px;font-weight:500;margin-bottom:8px}
+.hld .hld-hint{font-size:14px;line-height:1.5;color:var(--secondary-text-color)}
+.hld .hld-row{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px}.hld .hld-row .r{margin-left:auto;color:var(--secondary-text-color);text-align:right}
+.hld .dot{width:12px;height:12px;border-radius:50%;flex:none}.hld .dot.ok{background:var(--hl-ok,#2e7d32)}.hld .dot.warn{background:var(--hl-warn,#f29d0b)}.hld .dot.err{background:var(--hl-err,#db4437)}.hld .dot.mut{background:var(--divider-color)}
+.hld table{border-collapse:collapse;width:100%;font-size:14px}.hld td,.hld th{padding:6px 8px;border-bottom:1px solid var(--divider-color);text-align:left}.hld th{font-weight:500;color:var(--secondary-text-color)}
+.hld .hld-c svg{width:100%;height:150px;display:block}
+.hld .hld-ax{display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color);margin-top:2px}
+.hld .hld-leg{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:13px}.hld .hld-leg span{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.hld .hld-leg i{width:10px;height:10px;border-radius:50%;display:inline-block}.hld .hld-leg b{font-weight:400;color:var(--secondary-text-color)}
+.hld .hld-tl{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:13px}
+.hld .hld-tl .lb{color:var(--secondary-text-color);white-space:nowrap;text-align:right;cursor:pointer}
+.hld .hld-tl .bar{position:relative;height:22px;border-radius:4px;overflow:hidden;background:var(--divider-color)}
+.hld .hld-tl .bar div{position:absolute;top:0;bottom:0;color:#fff;font-size:11px;line-height:22px;padding-left:4px;overflow:hidden;white-space:nowrap;box-sizing:border-box;border-right:1px solid rgba(255,255,255,.4)}
+.hld .hld-empty{color:var(--secondary-text-color);font-size:13px;padding:6px 0}`;
 
 class HomeLinesDetail extends HTMLElement {
   set spec(v) { this._spec = v; this._series = null; this._key = null; this._paint(); this._load(); }
+  set state(v) { this._s = v; this._paint(); }
   set hass(h) {
     const first = !this._hass; this._hass = h;
-    if (this._ctl) this._ctl.hass = h;
+    (this._ctls || []).forEach(c => { c.hass = h; });
     if (first) this._load();
-    const sp = this._spec || {}, key = [...(sp.values || []), ...(sp.charts || [])].map(e => h.states[e] && h.states[e].state).join("|");
+    const key = this._ents().map(e => h.states[e] && h.states[e].state).join("|");
     if (key !== this._key) { this._key = key; this._paint(); }
   }
+  _ents() { return ((this._spec || {}).blocks || []).flatMap(b => b.entities || []); }
   _name(e) { const st = this._hass && this._hass.states[e]; return (st && st.attributes.friendly_name) || e; }
+  _names(list) { return hlShortNames(list.map(e => this._name(e))); }
   _val(e) {
     const h = this._hass, st = h && h.states[e];
-    if (!st) return null;
-    if (["unavailable", "unknown"].includes(st.state)) return null;
+    if (!st || ["unavailable", "unknown"].includes(st.state)) return null;
     try { if (h.formatEntityState) return h.formatEntityState(st); } catch (err) { /* ältere HA */ }
     return hlFmt(h, e) ?? st.state;
   }
   async _load() {
     const sp = this._spec, h = this._hass;
-    if (!sp || !h || !(sp.charts || []).length || !h.callWS) return;
-    const hrs = sp.hours || 168;
-    try {
-      const r = await h.callWS({ type: "history/history_during_period", entity_ids: sp.charts,
-        start_time: new Date(Date.now() - hrs * 3600000).toISOString(), minimal_response: true, no_attributes: true,
-        significant_changes_only: false });
-      this._series = {};
-      sp.charts.forEach(e => { this._series[e] = ((r && r[e]) || []).map(x => [(x.lu || x.lc || 0) * 1000, x.s]); });
-    } catch (err) { this._series = {}; }
+    if (!sp || !h || !h.callWS) return;
+    const need = {};
+    sp.blocks.filter(b => b.type === "chart" || b.type === "timeline").forEach(b => b.entities.forEach(e => { need[e] = Math.max(need[e] || 0, b.hours || 24); }));
+    const byHours = {};
+    Object.entries(need).forEach(([e, hrs]) => { (byHours[hrs] = byHours[hrs] || []).push(e); });
+    this._series = this._series || {};
+    await Promise.all(Object.entries(byHours).map(async ([hrs, ents]) => {
+      try {
+        const r = await h.callWS({ type: "history/history_during_period", entity_ids: ents,
+          start_time: new Date(Date.now() - hrs * 3600000).toISOString(), minimal_response: true, no_attributes: true,
+          significant_changes_only: false });
+        ents.forEach(e => { this._series[e] = ((r && r[e]) || []).map(x => [(x.lu || x.lc || 0) * 1000, x.s]); });
+      } catch (err) { ents.forEach(e => { this._series[e] = this._series[e] || []; }); }
+    }));
     this._paint();
   }
-  _chart(e) {
-    const sp = this._spec, hrs = sp.hours || 168, t1 = Date.now();
+  _pts(e, hrs) {
+    const t1 = Date.now(), t0 = t1 - hrs * 3600000;
     const pts = ((this._series || {})[e] || []).filter(p => p[0] <= t1);
-    // Gibt es noch keinen vollen Zeitraum, beginnt die Achse beim ersten Wert
-    const t0 = Math.min(t1 - 600000, Math.max(t1 - hrs * 3600000, pts.length ? pts[0][0] : t1 - hrs * 3600000));
     const st = this._hass.states[e];
     if (st) pts.push([t1, st.state]);
-    const X = t => Math.max(0, Math.min(100, (t - t0) / (t1 - t0) * 100));
-    let svg = "", range = "";
-    if (e.startsWith("binary_sensor.")) {
-      // Streifen: grün = an, rot = aus, grau = unbekannt
-      svg = pts.map((p, i) => { const a = X(Math.max(p[0], t0)), b = X(i + 1 < pts.length ? pts[i + 1][0] : t1); if (b <= a) return "";
-        const c = p[1] === "on" ? "var(--hl-ok,#2e7d32)" : p[1] === "off" ? "var(--hl-err,#db4437)" : "var(--divider-color)";
-        return `<rect x="${a.toFixed(2)}" y="8" width="${(b - a).toFixed(2)}" height="14" fill="${c}"/>`; }).join("");
-      svg = `<svg viewBox="0 0 100 30" preserveAspectRatio="none" style="height:30px">${svg}</svg>`;
-    } else {
-      const num = pts.map(p => [p[0], parseFloat(p[1])]).filter(p => !isNaN(p[1]));
-      if (num.length < 2) return `<div class="hld-c" data-e="${esc(e)}"><div class="hld-h"><b>${esc(this._name(e))}</b><span>${esc(this._val(e) ?? "–")}</span></div><div class="hld-empty">Noch kein Verlauf</div></div>`;
-      let lo = Math.min(...num.map(p => p[1])), hi = Math.max(...num.map(p => p[1]));
-      if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
-      const Y = v => 58 - (v - lo) / (hi - lo) * 52;
-      // Stufen: jeder Wert gilt bis zum nächsten
-      let d = ""; num.forEach((p, i) => { const x = X(Math.max(p[0], t0)); d += (i ? ` L${x.toFixed(2)},${Y(num[i - 1][1]).toFixed(2)}` : `M${x.toFixed(2)},${Y(p[1]).toFixed(2)}`) + ` L${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; });
-      const u = (st && st.attributes.unit_of_measurement) || "";
-      const f = v => v.toLocaleString("de-DE", { maximumFractionDigits: Math.abs(v) >= 100 ? 0 : 1 });
-      range = `${f(lo)} – ${f(hi)}${u ? " " + u : ""}`;
-      svg = `<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="var(--hl-acc,var(--primary-color,#03a9f4))" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`;
-    }
-    const span = (t1 - t0) / 3600000;
-    const ago = span >= hrs - 0.5 ? (hrs >= 48 ? `vor ${Math.round(hrs / 24)} Tagen` : `vor ${hrs} Stunden`) : `seit ${when(new Date(t0).toISOString())}`;
-    return `<div class="hld-c" data-e="${esc(e)}"><div class="hld-h"><b>${esc(this._name(e))}</b><span>${esc(this._val(e) ?? "–")}</span></div>${svg}
-      <div class="hld-ax"><span>${ago}</span><span>${esc(range)}</span><span>jetzt</span></div></div>`;
+    // Vor dem Zeitraum liegende Werte gelten ab Beginn
+    return pts.map(p => [Math.max(p[0], t0), p[1]]);
   }
-  async _controls() {
-    const sp = this._spec;
-    if (!(sp.controls || []).length || this._ctl) return;
+  _axis(hrs, t0) {
+    const t1 = Date.now(), span = (t1 - t0) / 3600000;
+    const from = span >= hrs - 0.5 ? (hrs >= 48 ? `vor ${Math.round(hrs / 24)} Tagen` : `vor ${hrs} Stunden`) : `seit ${when(new Date(t0).toISOString())}`;
+    return `<div class="hld-ax"><span>${from}</span><span>jetzt</span></div>`;
+  }
+  _chart(b) {
+    const h = this._hass, hrs = b.hours || 24, t1 = Date.now();
+    const ents = b.entities.filter(e => h.states[e]);
+    const numeric = ents.filter(e => !e.startsWith("binary_sensor.") && !isNaN(parseFloat(h.states[e].state)));
+    if (!numeric.length) return "";
+    // Gleiche Einheit → ein Diagramm
+    const groups = {};
+    numeric.forEach(e => { const u = h.states[e].attributes.unit_of_measurement || ""; (groups[u] = groups[u] || []).push(e); });
+    return Object.entries(groups).map(([u, list]) => {
+      const series = list.map(e => this._pts(e, hrs).map(p => [p[0], parseFloat(p[1])]).filter(p => !isNaN(p[1])));
+      const first = Math.min(...series.map(s => (s[0] || [t1])[0]));
+      const t0 = Math.min(t1 - 600000, Math.max(t1 - hrs * 3600000, first));
+      const all = series.flat().map(p => p[1]);
+      let lo = Math.min(...all), hi = Math.max(...all);
+      if (lo > 0 && lo < hi - lo) lo = 0;  // weit auseinander: ab null zeichnen
+      if (!isFinite(lo) || !isFinite(hi)) return "";
+      if (hi - lo < 1e-9) { if (lo === 0) hi = 1; else { lo -= Math.abs(lo) * 0.1 || 1; hi += Math.abs(hi) * 0.1 || 1; } }
+      const X = t => (t - t0) / (t1 - t0) * 100, Y = v => 96 - (v - lo) / (hi - lo) * 92;
+      const paths = series.map((pts, i) => {
+        // Stufenverlauf; je ~0,25 % Breite höchstens ein Minimum und ein Maximum (Spitzen bleiben sichtbar)
+        let d = "", lastX = -1, lastY = null, mn = null, mx = null;
+        const flush = x => { if (mn == null) return; d += ` L${x.toFixed(2)},${Y(mn).toFixed(2)} L${x.toFixed(2)},${Y(mx).toFixed(2)}`; };
+        pts.forEach((p, k) => {
+          const x = X(p[0]);
+          if (k === 0) { d = `M${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; lastX = x; lastY = p[1]; return; }
+          if (x - lastX < 0.25) { mn = Math.min(mn ?? p[1], p[1]); mx = Math.max(mx ?? p[1], p[1]); lastY = p[1]; return; }
+          flush(lastX); mn = mx = null;
+          d += ` L${x.toFixed(2)},${Y(lastY).toFixed(2)} L${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; lastX = x; lastY = p[1];
+        });
+        flush(lastX); d += ` L100,${Y(lastY ?? 0).toFixed(2)}`;
+        return `<path d="${d}" fill="none" stroke="${HL_COLORS[i % HL_COLORS.length]}" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+      }).join("");
+      const f = v => v.toLocaleString("de-DE", { maximumFractionDigits: Math.abs(v) >= 100 ? 0 : 1 });
+      const names = this._names(list);
+      const span = hrs >= 48 ? Math.round(hrs / 24) + " Tage" : hrs + " Stunden";
+      const multi = Object.keys(groups).length > 1;
+      const title = b.title && !multi ? b.title : list.length === 1 && multi ? `${this._name(list[0])} – ${span}` : `${multi ? u || "Werte" : "Verlauf"} – ${span}`;
+      return `<div class="hld-box hld-c"><div class="hld-t">${esc(title)}</div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color)"><span>${f(hi)}${u ? " " + esc(u) : ""}</span></div>
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">${paths}</svg>
+        <div style="font-size:11px;color:var(--secondary-text-color)">${f(lo)}${u ? " " + esc(u) : ""}</div>${this._axis(hrs, t0)}
+        <div class="hld-leg">${list.map((e, i) => `<span data-e="${esc(e)}"><i style="background:${HL_COLORS[i % HL_COLORS.length]}"></i>${esc(names[i])} <b>${esc(this._val(e) ?? "–")}</b></span>`).join("")}</div></div>`;
+    }).join("");
+  }
+  _timeline(b) {
+    const h = this._hass, hrs = b.hours || 24, t1 = Date.now();
+    const ents = b.entities.filter(e => h.states[e]);
+    if (!ents.length) return "";
+    const series = ents.map(e => this._pts(e, hrs));
+    const first = Math.min(...series.map(s => (s[0] || [t1])[0]));
+    const t0 = Math.min(t1 - 600000, Math.max(t1 - hrs * 3600000, first));
+    const names = this._names(ents);
+    const palette = {};
+    const col = (e, v) => {
+      if (["on", "connected", "online", "normal"].includes(v)) return "var(--hl-ok,#2e7d32)";
+      if (["off", "disconnected", "offline", "emergency"].includes(v)) return "var(--hl-err,#db4437)";
+      if (["unavailable", "unknown"].includes(v)) return "var(--divider-color)";
+      if (v === "dayflat") return "var(--hl-warn,#f29d0b)";
+      if (!(v in palette)) palette[v] = HL_COLORS[Object.keys(palette).length % HL_COLORS.length];
+      return palette[v];
+    };
+    const label = (e, v) => { try { return h.formatEntityState ? h.formatEntityState({ ...h.states[e], state: v }) : v; } catch (err) { return v; } };
+    const rows = ents.map((e, i) => {
+      // gleiche Zustände hintereinander zusammenfassen
+      const pts = series[i].filter((p, k, arr) => k === 0 || arr[k - 1][1] !== p[1]);
+      const segs = pts.map((p, k) => {
+        const a = Math.max(p[0], t0), z = k + 1 < pts.length ? pts[k + 1][0] : t1;
+        if (z <= a) return "";
+        const l = (a - t0) / (t1 - t0) * 100, w = (z - a) / (t1 - t0) * 100;
+        return `<div style="left:${l.toFixed(2)}%;width:${w.toFixed(2)}%;background:${col(e, p[1])}" title="${esc(label(e, p[1]))}">${w > 12 ? esc(label(e, p[1])) : ""}</div>`;
+      }).join("");
+      return `<span class="lb" data-e="${esc(e)}">${esc(names[i])}</span><div class="bar">${segs}</div>`;
+    }).join("");
+    return `<div class="hld-box"><div class="hld-t">${esc(b.title || "Verlauf")}</div><div class="hld-tl">${rows}</div>${this._axis(hrs, t0)}</div>`;
+  }
+  _phone() {
+    const s = this._s || {}, ph = s.phone || {}, mode = s.mode;
+    if (!ph.configured) return "";
+    const dot = c => `<span class="dot ${c}"></span>`, rows = [];
+    const a = agoMin(ph.last_seen);
+    rows.push([ph.reporting ? "ok" : "err", ph.reporting ? "meldet sich" : "meldet sich nicht", a != null ? `vor ${a} min` : ""]);
+    if (ph.charger !== null) rows.push([ph.usb ? "ok" : (mode === "normal" ? "warn" : "err"), ph.usb ? "USB-Kabel zum Notfall-Router" : "USB-Kabel zum Notfall-Router fehlt", ph.battery != null ? Math.round(ph.battery) + " %" : ""]);
+    if (ph.operator || ph.network) rows.push([ph.signal != null || ph.network ? "ok" : "warn", `Mobilfunk ${ph.operator || ""}`.trim(), [ph.network, ph.signal != null ? ph.signal + " dBm" : null].filter(Boolean).join(" · ")]);
+    if (ph.mobile_data !== null) rows.push([mode === "normal" ? (ph.mobile_data ? "warn" : "ok") : (ph.mobile_data ? "ok" : "err"),
+      ph.mobile_data ? "Mobile Daten an" : "Mobile Daten aus", mode === "normal" ? "im Notbetrieb an" : ""]);
+    if (ph.wifi !== null && ph.wifi !== undefined) rows.push([mode === "normal" ? (ph.wifi ? "ok" : "warn") : (ph.wifi ? "warn" : "ok"),
+      ph.wifi ? "WLAN verbunden" : "WLAN aus", ph.wifi_name && ph.wifi ? ph.wifi_name : ""]);
+    return `<div class="hld-box"><div class="hld-t">Notfall-Handy</div>${rows.map(r => `<div class="hld-row">${dot(r[0])}<span>${esc(r[1])}</span><span class="r">${esc(r[2])}</span></div>`).join("")}</div>`;
+  }
+  _log() {
+    const rec = ((this._s || {}).monitor || {}).recent || [];
+    if (!rec.length) return `<div class="hld-box"><div class="hld-t">Protokoll</div><div class="hld-empty">Keine Ausfälle aufgezeichnet.</div></div>`;
+    return `<div class="hld-box"><div class="hld-t">Protokoll</div><table><tr><th></th><th>Beginn</th><th>Dauer</th><th>Ursache</th></tr>
+      ${rec.slice(0, 20).map(o => `<tr><td><span class="dot ${o.cause === "internet" ? "err" : "warn"}"></span></td><td>${esc(o.start)}</td><td>${esc(o.duration)}</td><td>${esc(HL_CAUSE[o.cause] || o.cause || "")}</td></tr>`).join("")}</table></div>`;
+  }
+  async _controls(box, b) {
     let helpers = null;
     try { helpers = window.loadCardHelpers ? await window.loadCardHelpers() : null; } catch (err) { helpers = null; }
     if (!helpers) return;
-    this._ctl = helpers.createCardElement({ type: "entities", entities: sp.controls });
-    this._ctl.hass = this._hass;
-    const box = this.querySelector(".hld-ctl"); if (box) box.appendChild(this._ctl);
+    const names = this._names(b.entities);
+    const el = helpers.createCardElement({ type: "entities", title: b.title, entities: b.entities.map((e, i) => ({ entity: e, name: names[i] })) });
+    el.hass = this._hass; box.appendChild(el); (this._ctls = this._ctls || []).push(el);
   }
   _paint() {
     const sp = this._spec, h = this._hass;
     if (!sp || !h) return;
-    if (!this._box) {
-      this.innerHTML = `<style>${detailCss}</style><div class="hld"><div class="hld-vals"></div><div class="hld-charts"></div><div class="hld-ctl"></div></div>`;
-      this._box = this.querySelector(".hld");
+    if (!this._root) {
+      this.innerHTML = `<style>${detailCss}</style><div class="hld"></div>`;
+      this._root = this.querySelector(".hld");
       this.addEventListener("click", ev => { const t = ev.target.closest("[data-e]"); if (t) hlMoreInfo(t.dataset.e); });
-      this._controls();
+      // Feste Reihenfolge der Bausteine; Bedienelemente werden einmal erzeugt und bleiben stehen
+      this._slots = sp.blocks.map(b => { const d = document.createElement("div"); d.dataset.type = b.type; this._root.appendChild(d); return d; });
+      sp.blocks.forEach((b, i) => { if (b.type === "controls") this._controls(this._slots[i], b); });
     }
-    this.querySelector(".hld-vals").innerHTML = (sp.values || []).map(e => {
-      const v = this._val(e);
-      return `<div class="hld-v${v == null ? " na" : ""}" data-e="${esc(e)}"><div class="hld-n">${esc(this._name(e))}</div><div class="hld-x">${esc(v ?? "nicht verfügbar")}</div></div>`;
-    }).join("") || "";
-    const charts = (sp.charts || []).filter(e => h.states[e]);
-    this.querySelector(".hld-charts").innerHTML = charts.length ? `<div class="hld-sec">Verlauf</div>${charts.map(e => this._chart(e)).join("")}` : "";
-    const ctl = this.querySelector(".hld-ctl");
-    if ((sp.controls || []).length && !ctl.querySelector(".hld-sec")) ctl.insertAdjacentHTML("afterbegin", `<div class="hld-sec">${sp.controlsTitle || "Bedienung"}</div>`);
+    sp.blocks.forEach((b, i) => {
+      const slot = this._slots[i];
+      if (b.type === "values") {
+        const names = this._names(b.entities);
+        slot.innerHTML = `<div class="hld-vals">${b.entities.map((e, k) => { const v = this._val(e);
+          return `<div class="hld-v${v == null ? " na" : ""}" data-e="${esc(e)}"><div class="hld-n">${esc(names[k])}</div><div class="hld-x">${esc(v ?? "nicht verfügbar")}</div></div>`; }).join("")}</div>`;
+      }
+      else if (b.type === "chart") slot.innerHTML = this._chart(b);
+      else if (b.type === "timeline") slot.innerHTML = this._timeline(b);
+      else if (b.type === "phone") slot.innerHTML = this._phone();
+      else if (b.type === "log") slot.innerHTML = this._log();
+      else if (b.type === "hint") slot.innerHTML = `<div class="hld-box hld-hint">${esc(b.text)}</div>`;
+    });
   }
 }
 if (!customElements.get("homelines-detail")) customElements.define("homelines-detail", HomeLinesDetail);

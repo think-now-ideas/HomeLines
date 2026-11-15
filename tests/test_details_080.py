@@ -20,6 +20,7 @@ DETAILS = {
     "speed_download": "sensor.speed_down", "speed_upload": "sensor.speed_up",
     "speed_extra": ["button.speedtest_starten"],
     "backup_extra": ["sensor.notfall_router_leistung"],
+    "monitor_extra": ["sensor.router_latenz"],
     "line_name_wan2": "DSL",
 }
 
@@ -45,9 +46,10 @@ window.HASS = {
     sendMessagePromise: async () => ({}) } };
 window.add = (type, cfg) => { const el = document.createElement(type); el.setConfig(cfg); document.body.appendChild(el); el.hass = HASS; return el; };
 window.pops = () => [...document.querySelectorAll("body > .hl-pop")].map(p => {
-  const d = p.querySelector("homelines-detail"), sp = (d && d._spec) || {};
+  const d = p.querySelector("homelines-detail"), bl = ((d && d._spec) || {}).blocks || [];
+  const of = t => bl.filter(b => b.type === t).flatMap(b => b.entities || []);
   return { title: (p.querySelector(".pt") || {}).textContent || null, shown: p.style.display !== "none",
-    values: sp.values || [], charts: sp.charts || [], controls: sp.controls || [],
+    values: of("values"), charts: of("chart"), controls: of("controls"), timelines: of("timeline"), types: bl.map(b => b.type),
     shownValues: d ? [...d.querySelectorAll(".hld-v")].map(v => [v.dataset.e, v.querySelector(".hld-x").textContent]) : [],
     cards: [...p.querySelectorAll(".stub")].map(s => JSON.parse(s.dataset.cfg)) }; });
 </script></body></html>"""
@@ -73,6 +75,7 @@ async def test_snapshot_details(hass, unifi, ping):
     assert d["speed"] == {"download": "sensor.speed_down", "upload": "sensor.speed_up",
                           "extra": ["button.speedtest_starten"]}
     assert d["backup"] == ["sensor.notfall_router_leistung"]
+    assert d["monitor"] == ["sensor.router_latenz"]
     assert d["own"]["status"] == "sensor.homelines_status" and d["own"]["test_notify"] == "button.homelines_test_notify"
     assert "sensor.notfall_handy_battery" in d["phone"]
     lines = {w["id"]: w for w in hub.snapshot()["wans"]}
@@ -114,7 +117,7 @@ async def test_card_detail_windows(hass, unifi, ping):
         assert ["sensor.modem_dsl_sync", "62,4 Mbit/s"] in w2["shownValues"]
         assert w2["charts"] == ["sensor.modem_dsl_sync"]
         assert "button.homelines_reconnect_now" in w2["controls"] and "switch.homelines_daily_reconnect" in w2["controls"]
-        assert w2["cards"] == [{"type": "entities", "entities": w2["controls"]}]
+        assert w2["cards"][0]["type"] == "entities" and len(w2["cards"][0]["entities"]) == len(w2["controls"])
         await page.wait_for_function("HIST.some(h => h && h.includes('sensor.modem_dsl_sync'))")
         await page.evaluate("history.back()")
         await page.wait_for_function("!document.querySelector('.hl-pop')")
@@ -123,9 +126,9 @@ async def test_card_detail_windows(hass, unifi, ping):
         await page.evaluate(f"{root}.querySelector('.line[data-id=WAN3]').click()")
         await page.wait_for_function("document.querySelector('.hl-pop homelines-detail')")
         w3 = (await page.evaluate("pops()"))[-1]
-        assert {"sensor.homelines_status", "binary_sensor.homelines_phone", "sensor.homelines_cost",
-                "sensor.notfall_handy_battery", "sensor.notfall_router_leistung"} <= set(w3["values"])
-        assert not w3["controls"]
+        assert {"sensor.homelines_status", "sensor.homelines_cost", "sensor.notfall_router_leistung"} <= set(w3["values"])
+        assert w3["types"][0] == "phone" and "button.homelines_test_notify" in w3["controls"]
+        assert w3["timelines"] == ["sensor.homelines_status"]
         await page.evaluate("history.back()")
         await page.wait_for_function("!document.querySelector('.hl-pop')")
 
@@ -141,7 +144,8 @@ async def test_card_detail_windows(hass, unifi, ping):
         await page.wait_for_function("document.querySelector('.hl-pop homelines-detail')")
         out = (await page.evaluate("pops()"))[-1]
         assert out["title"] == "Ausfälle und Verlauf"
-        assert "sensor.homelines_availability_7d" in out["values"] and "binary_sensor.homelines_internet" in out["charts"]
+        assert "sensor.homelines_availability_7d" in out["values"] and "binary_sensor.homelines_internet" in out["timelines"]
+        assert "log" in out["types"] and "sensor.homelines_latency" in out["charts"]
         await page.evaluate("history.back()")
         await page.wait_for_function("!document.querySelector('.hl-pop')")
         await page.evaluate(f"{root}.querySelector('.chip[data-k=speed]').click()")
@@ -205,6 +209,7 @@ async def test_set_details_action(hass, unifi, ping):
         "lines": {"WAN2": {"values": ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"], "history": ["sensor.modem_dsl_sync"]}},
         "speed_download": "sensor.speed_down", "speed_upload": "sensor.speed_up",
         "speed_extra": ["button.speedtest_starten"], "backup_extra": ["sensor.notfall_router_leistung"],
+        "monitor_extra": ["sensor.router_latenz"],
     }, blocking=True)
     await hass.async_block_till_done()
     o = entry.options
@@ -212,6 +217,7 @@ async def test_set_details_action(hass, unifi, ping):
     assert o["details_wan2"] == ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"] and o["history_wan2"] == ["sensor.modem_dsl_sync"]
     assert o["details_wan1"] == ["sensor.alt"]  # ohne replace bleibt Vorhandenes
     assert o["speed_extra"] == ["button.speedtest_starten"] and o["phone_rx"] == OPTIONS["phone_rx"]
+    assert o["monitor_extra"] == ["sensor.router_latenz"]
     hub = hass.data["homelines"][entry.entry_id]  # nach dem Neuladen
     assert {w["id"]: w["name"] for w in hub.snapshot()["wans"]}["WAN2"] == "DSL"
 

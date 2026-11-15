@@ -142,7 +142,7 @@ Leitungen* ein („Name für WAN1“ …). Sie gelten in allen Karten.
 **Detailansichten** (ab 0.8.0): Unter *HomeLines → Konfigurieren → Detailansichten der Karte* wählst du je Leitung
 Sensoren für Werte und Verlauf (z. B. Sync und Rauschabstand des Modems), die Geschwindigkeits-Sensoren und weitere
 Werte der Notfall-Strecke. Ein Tipp auf eine Leitung in der Karte öffnet dann ein Fenster damit – bei der
-Hauptleitung samt Neueinwahl, bei der Backup-Leitung samt Handy, Verbrauch und Kosten. Die Kennzahlen öffnen
+Hauptleitung samt Neueinwahl, bei der Backup-Leitung samt Prüfliste des Notfall-Handys, Verbrauch und Kosten. Unter „Ausfälle: weitere Werte“ lässt sich z. B. die Latenz-Messung des Routers ergänzen; das Fenster „Ausfälle und Verlauf“ zeigt außerdem das Protokoll der letzten Ausfälle und eine Zeitleiste der Verbindung. Die Kennzahlen öffnen
 „Ausfälle und Verlauf“, die Geschwindigkeit ihren Verlauf. Eine eigene Dashboard-Seite mit Popups ist dafür nicht nötig;
 im einfachsten Fall genügen `type: custom:homelines-card` und `type: custom:homelines-mini` ohne weitere Einstellungen.
 
@@ -160,6 +160,7 @@ data:
   speed_download: sensor.speed_down
   speed_upload: sensor.speed_up
   backup_extra: [sensor.notfall_router_leistung]
+  monitor_extra: [sensor.router_latenz]
 ``` Für eigene Vorlagen steht der Name der aktiven Leitung
 im Attribut `name` von `sensor.homelines_active_wan`.
 

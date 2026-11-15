@@ -190,7 +190,8 @@
           "speed_download": "Geschwindigkeit: Download-Sensor",
           "speed_upload": "Geschwindigkeit: Upload-Sensor",
           "speed_extra": "Geschwindigkeit: weitere Werte",
-          "backup_extra": "Notfall-Strecke: weitere Werte"
+          "backup_extra": "Notfall-Strecke: weitere Werte",
+          "monitor_extra": "Ausfälle: weitere Werte"
         },
         "data_description": {
           "details_wan1": "Als Kacheln im Fenster der Leitung, z. B. Sync, Rauschabstand oder Status des Modems.",
@@ -204,6 +205,7 @@
           "speed_download": "Z. B. der Speedtest-Sensor des Routers. Die Mini-Karte zeigt ihn als Verlauf, wenn dort nichts anderes eingestellt ist.",
           "speed_upload": "Zweite Linie im Verlauf.",
           "speed_extra": "Z. B. Ping und letzter Lauf des Speedtests, Knopf „Speedtest starten“, Schalter für den automatischen Speedtest.",
+          "monitor_extra": "Z. B. die Latenz-Messung des Routers. Erscheint im Fenster „Ausfälle und Verlauf“, Latenzen im gemeinsamen Diagramm.",
           "backup_extra": "Z. B. Stromverbrauch des Notfall-Routers. Handy, Verbrauch und Kosten zeigt HomeLines dort von selbst."
         }
       },
@@ -650,6 +652,9 @@
         },
         "backup_extra": {
           "name": "Notfall-Strecke: weitere Werte"
+        },
+        "monitor_extra": {
+          "name": "Ausfälle: weitere Werte"
         },
         "replace": {
           "name": "Alles ersetzen",

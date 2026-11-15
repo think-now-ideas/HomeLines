@@ -190,7 +190,8 @@
           "speed_download": "Speed: download sensor",
           "speed_upload": "Speed: upload sensor",
           "speed_extra": "Speed: more values",
-          "backup_extra": "Backup line: more values"
+          "backup_extra": "Backup line: more values",
+          "monitor_extra": "Outages: more values"
         },
         "data_description": {
           "details_wan1": "Shown as tiles.",
@@ -204,6 +205,7 @@
           "speed_download": "E.g. the router's speedtest sensor. Used by the mini card by default.",
           "speed_upload": "Second line in the graph.",
           "speed_extra": "E.g. speedtest ping, last run, run button.",
+          "monitor_extra": "E.g. the router's latency sensor.",
           "backup_extra": "E.g. power of the backup router."
         }
       },
@@ -650,6 +652,9 @@
         },
         "backup_extra": {
           "name": "Backup line: more values"
+        },
+        "monitor_extra": {
+          "name": "Outages: more values"
         },
         "replace": {
           "name": "Replace all",

@@ -110,6 +110,7 @@ from .const import (
     CONF_BACKUP_EXTRA,
     CONF_SPEED_DOWN,
     CONF_SPEED_EXTRA,
+    CONF_MONITOR_EXTRA,
     CONF_SPEED_UP,
     LINE_DETAIL_KEYS,
     LINE_HISTORY_KEYS,
@@ -190,6 +191,7 @@ def details_schema(cur: dict) -> vol.Schema:
     fields[_opt(CONF_SPEED_UP, cur)] = one
     fields[_opt(CONF_SPEED_EXTRA, cur)] = multi
     fields[_opt(CONF_BACKUP_EXTRA, cur)] = multi
+    fields[_opt(CONF_MONITOR_EXTRA, cur)] = multi
     return vol.Schema(fields)
 
 
