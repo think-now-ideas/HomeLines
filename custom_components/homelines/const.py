@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "homelines"
 NAME = "HomeLines"
-VERSION = "0.8.0"
+VERSION = "0.8.1"
 
 PLATFORMS = ["binary_sensor", "button", "sensor", "switch", "time"]
 
@@ -41,6 +41,7 @@ LINE_HISTORY_KEYS = {f"history_wan{i}": f"WAN{i}" for i in range(1, 5)}
 CONF_SPEED_DOWN = "speed_download"
 CONF_SPEED_UP = "speed_upload"
 CONF_BACKUP_EXTRA = "backup_extra"
+CONF_SPEED_EXTRA = "speed_extra"
 
 # Erkennung der Hauptleitung (routerneutral)
 CONF_DETECTION = "detection"

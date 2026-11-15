@@ -189,6 +189,7 @@
           "history_wan4": "WAN4: Verlauf",
           "speed_download": "Geschwindigkeit: Download-Sensor",
           "speed_upload": "Geschwindigkeit: Upload-Sensor",
+          "speed_extra": "Geschwindigkeit: weitere Werte",
           "backup_extra": "Notfall-Strecke: weitere Werte"
         },
         "data_description": {
@@ -202,6 +203,7 @@
           "history_wan4": "Als Diagramm der letzten 7 Tage.",
           "speed_download": "Z. B. der Speedtest-Sensor des Routers. Die Mini-Karte zeigt ihn als Verlauf, wenn dort nichts anderes eingestellt ist.",
           "speed_upload": "Zweite Linie im Verlauf.",
+          "speed_extra": "Z. B. Ping und letzter Lauf des Speedtests, Knopf „Speedtest starten“, Schalter für den automatischen Speedtest.",
           "backup_extra": "Z. B. Stromverbrauch des Notfall-Routers. Handy, Verbrauch und Kosten zeigt HomeLines dort von selbst."
         }
       },

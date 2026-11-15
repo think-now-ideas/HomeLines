@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.0";
+const HL_VERSION = "0.8.1";
 
 const T = {
   de: {
@@ -711,6 +711,7 @@ function hlDetail(s, kind, wid) {
   }
   if (kind === "speed") {
     tiles([d.speed && d.speed.download, d.speed && d.speed.upload]);
+    tiles(d.speed && d.speed.extra);
     graph([d.speed && d.speed.download, d.speed && d.speed.upload], "Verlauf");
     return { title: "Geschwindigkeit", cards };
   }

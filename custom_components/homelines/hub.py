@@ -130,6 +130,7 @@ from .const import (
     ISSUE_LEGACY,
     CONF_BACKUP_EXTRA,
     CONF_SPEED_DOWN,
+    CONF_SPEED_EXTRA,
     CONF_SPEED_UP,
     LINE_DETAIL_KEYS,
     LINE_HISTORY_KEYS,
@@ -528,7 +529,8 @@ class HomeLinesHub:
                 lines[wid] = {"entities": ents, "history": hist}
         phone = [self.opt(k) for k in (CONF_PHONE_BATTERY, CONF_PHONE_SIGNAL, CONF_PHONE_NETWORK,
                                         CONF_PHONE_MOBILE_DATA, CONF_PHONE_CHARGER) if self.opt(k)]
-        return {"lines": lines, "speed": {"download": self.opt(CONF_SPEED_DOWN), "upload": self.opt(CONF_SPEED_UP)},
+        return {"lines": lines, "speed": {"download": self.opt(CONF_SPEED_DOWN), "upload": self.opt(CONF_SPEED_UP),
+                          "extra": list(self.opt(CONF_SPEED_EXTRA, []) or [])},
                 "backup": list(self.opt(CONF_BACKUP_EXTRA, []) or []), "phone": phone, "own": own}
 
     def line_names(self) -> dict[str, str]:

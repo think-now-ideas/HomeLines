@@ -189,6 +189,7 @@
           "history_wan4": "WAN4: history",
           "speed_download": "Speed: download sensor",
           "speed_upload": "Speed: upload sensor",
+          "speed_extra": "Speed: more values",
           "backup_extra": "Backup line: more values"
         },
         "data_description": {
@@ -202,6 +203,7 @@
           "history_wan4": "Shown as 7-day graph.",
           "speed_download": "E.g. the router's speedtest sensor. Used by the mini card by default.",
           "speed_upload": "Second line in the graph.",
+          "speed_extra": "E.g. speedtest ping, last run, run button.",
           "backup_extra": "E.g. power of the backup router."
         }
       },

@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.8.1 – Mehr Werte im Fenster „Geschwindigkeit“
+- Neu in *Detailansichten der Karte*: „Geschwindigkeit: weitere Werte“, z. B. Ping und letzter Lauf des Speedtests,
+  Knopf „Speedtest starten“ oder der Schalter für den automatischen Speedtest.
+- Bei „Werte“ je Leitung und bei den weiteren Werten der Notfall-Strecke lassen sich jetzt auch Schalter und Buttons
+  wählen (vorher nur Sensoren).
+
 ## 0.8.0 – Detailansichten eingebaut: eine Karte statt eigener Dashboard-Seite
 - **Neu in den Optionen: „Detailansichten der Karte“.** Je Leitung (WAN1–WAN4) wählst du Sensoren für Werte (Kacheln)
   und Verlauf (Diagramm, 7 Tage), dazu die Sensoren für Download- und Upload-Geschwindigkeit und weitere Werte der

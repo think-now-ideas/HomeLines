@@ -109,6 +109,7 @@ from .const import (
     LEGACY_DOMAIN,
     CONF_BACKUP_EXTRA,
     CONF_SPEED_DOWN,
+    CONF_SPEED_EXTRA,
     CONF_SPEED_UP,
     LINE_DETAIL_KEYS,
     LINE_HISTORY_KEYS,
@@ -178,7 +179,7 @@ def _wan_default(cur: dict, wans: list[dict]) -> str:
 
 def details_schema(cur: dict) -> vol.Schema:
     """Detailansichten der Karte: welche Sensoren zu welcher Leitung gehören."""
-    multi = ENTITY(sel.EntitySelectorConfig(domain=["sensor", "binary_sensor"], multiple=True))
+    multi = ENTITY(sel.EntitySelectorConfig(multiple=True))  # auch Schalter und Buttons, z. B. „Speedtest starten“
     graph = ENTITY(sel.EntitySelectorConfig(domain="sensor", multiple=True))
     one = ENTITY(sel.EntitySelectorConfig(domain="sensor"))
     fields: dict = {}
@@ -187,6 +188,7 @@ def details_schema(cur: dict) -> vol.Schema:
         fields[_opt(hk, cur)] = graph
     fields[_opt(CONF_SPEED_DOWN, cur)] = one
     fields[_opt(CONF_SPEED_UP, cur)] = one
+    fields[_opt(CONF_SPEED_EXTRA, cur)] = multi
     fields[_opt(CONF_BACKUP_EXTRA, cur)] = multi
     return vol.Schema(fields)
 

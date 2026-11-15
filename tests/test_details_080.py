@@ -18,6 +18,7 @@ DETAILS = {
     "details_wan2": ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"],
     "history_wan2": ["sensor.modem_dsl_sync"],
     "speed_download": "sensor.speed_down", "speed_upload": "sensor.speed_up",
+    "speed_extra": ["button.speedtest_starten"],
     "backup_extra": ["sensor.notfall_router_leistung"],
     "line_name_wan2": "DSL",
 }
@@ -65,7 +66,8 @@ async def test_snapshot_details(hass, unifi, ping):
     d = hub.snapshot()["details"]
     assert d["lines"] == {"WAN2": {"entities": ["sensor.modem_dsl_sync", "sensor.modem_dsl_snr"],
                                    "history": ["sensor.modem_dsl_sync"]}}
-    assert d["speed"] == {"download": "sensor.speed_down", "upload": "sensor.speed_up"}
+    assert d["speed"] == {"download": "sensor.speed_down", "upload": "sensor.speed_up",
+                          "extra": ["button.speedtest_starten"]}
     assert d["backup"] == ["sensor.notfall_router_leistung"]
     assert d["own"]["status"] == "sensor.homelines_status" and d["own"]["test_notify"] == "button.homelines_test_notify"
     assert "sensor.notfall_handy_battery" in d["phone"]
@@ -79,7 +81,7 @@ async def test_options_details_step(hass, unifi, ping):
     assert "details" in r["menu_options"]
     r = await hass.config_entries.options.async_configure(r["flow_id"], {"next_step_id": "details"})
     keys = {str(k) for k in r["data_schema"].schema}
-    assert {"details_wan1", "history_wan4", "speed_download", "speed_upload", "backup_extra"} <= keys
+    assert {"details_wan1", "history_wan4", "speed_download", "speed_upload", "speed_extra", "backup_extra"} <= keys
     r = await hass.config_entries.options.async_configure(r["flow_id"], {
         "details_wan2": ["sensor.modem_dsl_sync"], "speed_download": "sensor.speed_down"})
     assert entry.options["details_wan2"] == ["sensor.modem_dsl_sync"]
@@ -133,6 +135,7 @@ async def test_card_detail_windows(hass, unifi, ping):
         await page.wait_for_function("document.querySelectorAll('.hl-pop .stub').length > 0")
         sp = (await page.evaluate("pops()"))[-1]
         assert sp["title"] == "Geschwindigkeit"
+        assert {"type": "tile", "entity": "button.speedtest_starten"} in sp["cards"]
         assert sp["cards"][-1] == {"type": "history-graph", "title": "Verlauf", "hours_to_show": 168,
                                    "entities": ["sensor.speed_down", "sensor.speed_up"]}
         assert not errors, errors

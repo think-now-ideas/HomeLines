@@ -30,6 +30,7 @@ DETAILS = {
         (f"history_wan{i}", t(f"WAN{i}: Verlauf", f"WAN{i}: history")))},
     "speed_download": t("Geschwindigkeit: Download-Sensor", "Speed: download sensor"),
     "speed_upload": t("Geschwindigkeit: Upload-Sensor", "Speed: upload sensor"),
+    "speed_extra": t("Geschwindigkeit: weitere Werte", "Speed: more values"),
     "backup_extra": t("Notfall-Strecke: weitere Werte", "Backup line: more values"),
 }
 DETAILS_DESC = {
@@ -39,6 +40,8 @@ DETAILS_DESC = {
     "speed_download": t("Z. B. der Speedtest-Sensor des Routers. Die Mini-Karte zeigt ihn als Verlauf, wenn dort nichts anderes eingestellt ist.",
                         "E.g. the router's speedtest sensor. Used by the mini card by default."),
     "speed_upload": t("Zweite Linie im Verlauf.", "Second line in the graph."),
+    "speed_extra": t("Z. B. Ping und letzter Lauf des Speedtests, Knopf „Speedtest starten“, Schalter für den automatischen Speedtest.",
+                     "E.g. speedtest ping, last run, run button."),
     "backup_extra": t("Z. B. Stromverbrauch des Notfall-Routers. Handy, Verbrauch und Kosten zeigt HomeLines dort von selbst.",
                       "E.g. power of the backup router."),
 }
