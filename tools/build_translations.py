@@ -329,7 +329,7 @@ def build(lang):
                         "description": tr("Setzt Leitungsnamen und die Werte der Detailfenster in einem Schritt – dasselbe wie Konfigurieren → Leitungen und Detailansichten der Karte.",
                                           "Sets line names and detail views in one step."),
                         "fields": {"entry_id": {"name": "HomeLines"},
-                                   "line_names": {"name": tr("Leitungsnamen", "Line names"), "description": tr("Z. B. {\"WAN2\": \"DSL\"}.", "E.g. {\"WAN2\": \"DSL\"}.")},
+                                   "line_names": {"name": tr("Leitungsnamen", "Line names"), "description": tr("Je Leitung der Name, z. B. WAN2: DSL.", "Name per line, e.g. WAN2: DSL.")},
                                    "lines": {"name": tr("Werte und Verlauf je Leitung", "Values and history per line"),
                                              "description": tr("Je Leitung „values“ (Kacheln) und „history“ (Verlauf) als Liste von Entitäten.", "Per line: values and history lists.")},
                                    "speed_download": {"name": tr("Geschwindigkeit: Download", "Speed: download")},

@@ -633,7 +633,7 @@
         },
         "line_names": {
           "name": "Line names",
-          "description": "E.g. {\"WAN2\": \"DSL\"}."
+          "description": "Name per line, e.g. WAN2: DSL."
         },
         "lines": {
           "name": "Values and history per line",

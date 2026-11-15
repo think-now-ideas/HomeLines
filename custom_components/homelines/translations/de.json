@@ -633,7 +633,7 @@
         },
         "line_names": {
           "name": "Leitungsnamen",
-          "description": "Z. B. {\"WAN2\": \"DSL\"}."
+          "description": "Je Leitung der Name, z. B. WAN2: DSL."
         },
         "lines": {
           "name": "Werte und Verlauf je Leitung",

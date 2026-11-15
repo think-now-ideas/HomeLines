@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.8.3.1 – Korrektur Übersetzung
+- Hilfetext der Aktion `homelines.set_details` ohne geschweifte Klammern (Home Assistant hielt das Beispiel für einen
+  Platzhalter; die Prüfung hassfest schlug fehl). Neuer Test prüft alle Übersetzungen darauf.
+
 ## 0.8.3 – Detailansichten per Aktion setzen
 - **Neue Aktion `homelines.set_details`:** setzt Leitungsnamen, Werte und Verlauf je Leitung, Geschwindigkeit und
   weitere Werte der Notfall-Strecke in einem Schritt – praktisch beim Umstellen oder zum Übertragen auf ein zweites
