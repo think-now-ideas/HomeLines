@@ -24,6 +24,24 @@ LINES = {
     "default_group": t("Gruppe für neue Geräte", "Group for new devices"),
     **{f"line_name_wan{i}": t(f"Name für WAN{i}", f"Name for WAN{i}") for i in range(1, 5)},
 }
+DETAILS = {
+    **{k: v for i in range(1, 5) for k, v in (
+        (f"details_wan{i}", t(f"WAN{i}: Werte", f"WAN{i}: values")),
+        (f"history_wan{i}", t(f"WAN{i}: Verlauf", f"WAN{i}: history")))},
+    "speed_download": t("Geschwindigkeit: Download-Sensor", "Speed: download sensor"),
+    "speed_upload": t("Geschwindigkeit: Upload-Sensor", "Speed: upload sensor"),
+    "backup_extra": t("Notfall-Strecke: weitere Werte", "Backup line: more values"),
+}
+DETAILS_DESC = {
+    **{k: v for i in range(1, 5) for k, v in (
+        (f"details_wan{i}", t("Als Kacheln im Fenster der Leitung, z. B. Sync, Rauschabstand oder Status des Modems.", "Shown as tiles.")),
+        (f"history_wan{i}", t("Als Diagramm der letzten 7 Tage.", "Shown as 7-day graph.")))},
+    "speed_download": t("Z. B. der Speedtest-Sensor des Routers. Die Mini-Karte zeigt ihn als Verlauf, wenn dort nichts anderes eingestellt ist.",
+                        "E.g. the router's speedtest sensor. Used by the mini card by default."),
+    "speed_upload": t("Zweite Linie im Verlauf.", "Second line in the graph."),
+    "backup_extra": t("Z. B. Stromverbrauch des Notfall-Routers. Handy, Verbrauch und Kosten zeigt HomeLines dort von selbst.",
+                      "E.g. power of the backup router."),
+}
 LINES_DESC = {
     **{f"line_name_wan{i}": t("Optional. So heißt die Leitung in allen HomeLines-Karten, z. B. „Glasfaser“, „DSL“ oder „5G Backup“. Leer: Name aus dem Router.",
                               "Optional. Shown in all HomeLines cards. Empty: name from the router.") for i in range(1, 5)},
@@ -196,13 +214,18 @@ def build(lang):
     }
     opt_steps = {
         "init": {"title": tr("HomeLines-Optionen", "HomeLines options"),
-                 "menu_options": {"lines": tr("Leitungen", "Lines"), "tariff": tr("Tarif und Kosten", "Tariff and costs"),
+                 "menu_options": {"lines": tr("Leitungen", "Lines"),
+                                  "details": tr("Detailansichten der Karte", "Card detail views"), "tariff": tr("Tarif und Kosten", "Tariff and costs"),
                                   "phone": tr("Handy (Notfall-Modem)", "Phone (backup modem)"),
                                   "notify": tr("Benachrichtigungen", "Notifications"),
                                   "monitor": tr("Internet-Überwachung", "Internet monitor"),
                                   "reconnect": tr("Geplante Neueinwahl", "Scheduled reconnect"),
                                   "router": tr("Router-Anbindung", "Router connection")}},
         "lines": steps["lines"],
+        "details": form(tr("Detailansichten der Karte", "Card detail views"),
+                        tr("Ein Tipp auf eine Leitung in der HomeLines-Karte öffnet ein Fenster mit diesen Werten und Verläufen – ohne eigene Dashboard-Seite oder Popups. Neueinwahl, Ausfälle und Notfall-Strecke zeigt HomeLines dort von selbst.",
+                           "Tapping a line in the HomeLines card opens a window with these values and graphs."),
+                        L(DETAILS), L(DETAILS_DESC)),
         "monitor": form(tr("Internet-Überwachung", "Internet monitor"), tr("Pings an mehrere Ziele. Das Internet gilt erst als weg, wenn keines antwortet.", "Pings several targets."), L(MONITOR)),
         "tariff": form(tr("Tarif und Kosten", "Tariff and costs"), tr("Für Kostenrechnung, Guthaben und den Tagesflat-Timer.", "For costs, balance and day pass timer."), L(TARIFF), L(TARIFF_DESC)),
         "phone": form(tr("Handy (Notfall-Modem)", "Phone (backup modem)"),

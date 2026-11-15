@@ -107,6 +107,11 @@ from .const import (
     METHOD_PPPD_HUP,
     METHODS,
     LEGACY_DOMAIN,
+    CONF_BACKUP_EXTRA,
+    CONF_SPEED_DOWN,
+    CONF_SPEED_UP,
+    LINE_DETAIL_KEYS,
+    LINE_HISTORY_KEYS,
     LINE_NAME_KEYS,
     NAME,
     ROUTER_NONE,
@@ -169,6 +174,21 @@ def _wan_default(cur: dict, wans: list[dict]) -> str:
         if hit:
             return hit
     return ids[0]
+
+
+def details_schema(cur: dict) -> vol.Schema:
+    """Detailansichten der Karte: welche Sensoren zu welcher Leitung gehören."""
+    multi = ENTITY(sel.EntitySelectorConfig(domain=["sensor", "binary_sensor"], multiple=True))
+    graph = ENTITY(sel.EntitySelectorConfig(domain="sensor", multiple=True))
+    one = ENTITY(sel.EntitySelectorConfig(domain="sensor"))
+    fields: dict = {}
+    for (dk, _), (hk, _) in zip(LINE_DETAIL_KEYS.items(), LINE_HISTORY_KEYS.items()):
+        fields[_opt(dk, cur)] = multi
+        fields[_opt(hk, cur)] = graph
+    fields[_opt(CONF_SPEED_DOWN, cur)] = one
+    fields[_opt(CONF_SPEED_UP, cur)] = one
+    fields[_opt(CONF_BACKUP_EXTRA, cur)] = multi
+    return vol.Schema(fields)
 
 
 def lines_schema(cur: dict, wans: list[dict] | None) -> vol.Schema:
@@ -489,7 +509,7 @@ class HomeLinesOptionsFlow(OptionsFlow):
         return {**self.config_entry.data, **self.config_entry.options}
 
     async def async_step_init(self, user_input=None) -> ConfigFlowResult:
-        menu = ["lines", "tariff", "phone", "notify", "monitor", "reconnect"]
+        menu = ["lines", "details", "tariff", "phone", "notify", "monitor", "reconnect"]
         if self._cur.get(CONF_ROUTER_TYPE) != ROUTER_NONE:
             menu.append("router")
         return self.async_show_menu(step_id="init", menu_options=menu)
@@ -505,6 +525,12 @@ class HomeLinesOptionsFlow(OptionsFlow):
         if user_input is not None:
             return self._save(schema, user_input)
         return self.async_show_form(step_id="lines", data_schema=schema)
+
+    async def async_step_details(self, user_input=None) -> ConfigFlowResult:
+        schema = details_schema(self._cur)
+        if user_input is not None:
+            return self._save(schema, user_input)
+        return self.async_show_form(step_id="details", data_schema=schema)
 
     async def async_step_monitor(self, user_input=None) -> ConfigFlowResult:
         schema = monitor_schema(self._cur)

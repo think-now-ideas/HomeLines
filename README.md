@@ -135,7 +135,14 @@ Karten haben einen grafischen Editor; YAML ist nur für Sonderfälle nötig (z. 
 werden automatisch geladen, eine Ressource musst du nicht anlegen.
 
 **Leitungsnamen** wie „Glasfaser“, „DSL“ oder „5G Backup“ stellst du einmal unter *HomeLines → Konfigurieren →
-Leitungen* ein („Name für WAN1“ …). Sie gelten in allen Karten. Für eigene Vorlagen steht der Name der aktiven Leitung
+Leitungen* ein („Name für WAN1“ …). Sie gelten in allen Karten.
+
+**Detailansichten** (ab 0.8.0): Unter *HomeLines → Konfigurieren → Detailansichten der Karte* wählst du je Leitung
+Sensoren für Werte und Verlauf (z. B. Sync und Rauschabstand des Modems), die Geschwindigkeits-Sensoren und weitere
+Werte der Notfall-Strecke. Ein Tipp auf eine Leitung in der Karte öffnet dann ein Fenster damit – bei der
+Hauptleitung samt Neueinwahl, bei der Backup-Leitung samt Handy, Verbrauch und Kosten. Die Kennzahlen öffnen
+„Ausfälle und Verlauf“, die Geschwindigkeit ihren Verlauf. Eine eigene Dashboard-Seite mit Popups ist dafür nicht nötig;
+im einfachsten Fall genügen `type: custom:homelines-card` und `type: custom:homelines-mini` ohne weitere Einstellungen. Für eigene Vorlagen steht der Name der aktiven Leitung
 im Attribut `name` von `sensor.homelines_active_wan`.
 
 Die YAML-Beispiele unten zeigen alle Einstellungen:

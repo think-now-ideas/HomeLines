@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.7.1";
+const HL_VERSION = "0.8.0";
 
 const T = {
   de: {
@@ -29,6 +29,7 @@ const T = {
     noDevices: "Kein Gerät gefunden.", refresh: "Neu laden", reset: "Zurücksetzen", resetTitle: "Verbrauch zurücksetzen?",
     resetBody: "Verbrauch und Kosten starten wieder bei null. Trag dein aktuelles Guthaben ein, etwa nach dem Aufladen.", newBalance: "Aktuelles Guthaben",
     worthIt: "Ab hier lohnt sich die Tagesflat", routerError: "Router-Anbindung gestört", openOptions: "Optionen öffnen",
+    details: "Details", speed: "Geschwindigkeit",
     netMissing: "Netz nicht mehr gefunden – wird nicht an den Router geschickt", remove: "Entfernen", notSetUp: "HomeLines antwortet noch nicht – ist die Integration eingerichtet? Ich versuche es weiter …",
     connecting: "Verbinde mit HomeLines …", reconnecting: "Verbindung zu Home Assistant unterbrochen – Daten von",
     lineStates: { online: "online", offline: "offline", unavailable: "nicht erreichbar", unknown: "unbekannt" }, active: "aktiv", backup: "Backup",
@@ -226,6 +227,7 @@ class HomeLinesCard extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
+    if (this._detail && this._detail.open) this._detail.setHass(hass);
     if (!this._root) this._build();
     if (!this._feed && this.isConnected) this._subscribe();
     if (!this._infoSubs || !this._infoSubs.length) this._subscribeInfos();
@@ -294,7 +296,7 @@ class HomeLinesCard extends HTMLElement {
       let info = this._infos[w.id] || "";
       if (!info && w.backup && ph0.configured) info = ph0.reporting ? `${tr.phoneReady}${ph0.battery != null ? " · " + Math.round(ph0.battery) + " %" : ""}` : tr.phoneSilent;
       const nav = cfg.tap || cfg.navigation_path;
-      return `<div class="line ${cls}"${nav ? ` data-nav="${esc(nav)}"` : ""}>${isAct ? `<span class="tag">${tr.active}</span>` : ""}
+      return `<div class="line ${cls}"${nav ? ` data-nav="${esc(nav)}"` : ` data-a="detail" data-k="line" data-id="${esc(w.id)}"`} style="cursor:pointer">${isAct ? `<span class="tag">${tr.active}</span>` : ""}
         <span class="id">${esc(w.id)}</span><b>${esc(cfg.name || w.name)}</b><span class="st">${esc(label)}</span>${info ? `<div class="inf">${esc(info)}</div>` : ""}</div>`;
     }).join("");
 
@@ -351,7 +353,11 @@ class HomeLinesCard extends HTMLElement {
     const mo = s.monitor || {};
     const lo = mo.last_outage;
     const rc = s.reconnect || {};
-    const mon = `<p class="sec" style="margin-top:12px">${tr.monitor}</p>
+    const sp = (s.details || {}).speed || {};
+    const spv = e => { const st = e && this._hass.states[e]; return st && !isNaN(parseFloat(st.state)) ? Math.round(parseFloat(st.state)).toLocaleString("de-DE") : null; };
+    const spd = spv(sp.download), spu = spv(sp.upload);
+    const mon = `<p class="sec" style="margin-top:12px">${tr.monitor} <span class="link" data-a="detail" data-k="outages">${tr.details}</span></p>
+      ${spd != null ? `<div class="row" data-a="detail" data-k="speed" style="cursor:pointer"><span>${tr.speed}</span><span class="r">↓ ${spd}${spu != null ? ` · ↑ ${spu}` : ""} Mbit/s</span></div>` : ""}
       <div class="row"><span>${ic(mo.internet)}Internet</span><span class="r">${tr.latency} ${mo.latency != null ? mo.latency + " ms" : "–"}</span></div>
       <div class="row"><span>${tr.avail}</span><span class="r">${mo.availability_7d != null ? mo.availability_7d.toLocaleString("de-DE", { maximumFractionDigits: 2 }) + " %" : "–"}</span></div>
       <div class="row"><span>${tr.outages}</span><span class="r">${mo.outages_24h ?? 0} / ${mo.outages_7d ?? 0}</span></div>
@@ -361,10 +367,11 @@ class HomeLinesCard extends HTMLElement {
         ${rc.error && rc.result !== "ok_new_ip" && rc.result !== "ok_same_ip" ? `<div class="e" style="margin:0 0 6px">${esc(rc.error)}</div>` : ""}` : ""}`;
 
     const compact = this._config.compact === true;
-    const chips = `<div class="chips">
-      <span class="chip">${tr.latency} ${mo.latency != null ? String(mo.latency).replace(".", ",") + " ms" : "–"}</span>
-      <span class="chip">${tr.avail} ${mo.availability_7d != null ? mo.availability_7d.toLocaleString("de-DE", { maximumFractionDigits: 2 }) + " %" : "–"}</span>
-      <span class="chip">${tr.outages} ${mo.outages_24h ?? 0} / ${mo.outages_7d ?? 0}</span>
+    const speedChip = spd != null ? `<span class="chip" data-a="detail" data-k="speed" style="cursor:pointer">↓ ${spd}${spu != null ? ` · ↑ ${spu}` : ""} Mbit/s</span>` : "";
+    const chips = `<div class="chips">${speedChip}
+      <span class="chip" data-a="detail" data-k="outages" style="cursor:pointer">${tr.latency} ${mo.latency != null ? String(mo.latency).replace(".", ",") + " ms" : "–"}</span>
+      <span class="chip" data-a="detail" data-k="outages" style="cursor:pointer">${tr.avail} ${mo.availability_7d != null ? mo.availability_7d.toLocaleString("de-DE", { maximumFractionDigits: 2 }) + " %" : "–"}</span>
+      <span class="chip" data-a="detail" data-k="outages" style="cursor:pointer">${tr.outages} ${mo.outages_24h ?? 0} / ${mo.outages_7d ?? 0}</span>
       <span class="chip" data-a="ask-reset" style="cursor:pointer">${u.cost ? `${tr.cost} ${eur(u.cost)} · ` : ""}${tr.balance} ${eur(u.balance)}</span></div>`;
     if (compact && mode === "normal" && !(s.assistant && s.assistant.kind === "return")) {
       this._main.innerHTML = `
@@ -386,6 +393,12 @@ class HomeLinesCard extends HTMLElement {
       ${chain}${compact ? chips : mon}`;
     this._updateTimer();
     if (this._view.dialog === "devices") this._renderDeviceList();
+  }
+
+  _openDetail(kind, wid) {
+    if (!this._s) return;
+    const { title, cards } = hlDetail(this._s, kind, wid);
+    this._detail = hlOpenPopup(this._hass, null, null, { showCard: false, cards, title, columns: 2 });
   }
 
   _assist(s, title, hint, ret = false) {
@@ -522,6 +535,8 @@ class HomeLinesCard extends HTMLElement {
   async _onClick(e) {
     const navEl = e.target.closest("[data-nav]");
     if (navEl && !e.target.closest("[data-a]")) { hlNavigate(navEl.dataset.nav); return; }
+    const det = e.target.closest("[data-a=detail]");
+    if (det) { this._openDetail(det.dataset.k, det.dataset.id); return; }
     const el = e.target.closest("[data-a]"); if (!el) {
       if (e.target.classList?.contains("ov")) this._closeDialog();
       return;
@@ -670,7 +685,40 @@ const popCss = `
 @media (max-width:600px){.hl-pop{padding:56px 8px 16px;align-items:flex-start}.hl-pop .in{width:100%}}
 @media (max-width:600px){.hl-pop .grid>*{grid-column:1 / -1 !important}}
 @keyframes lgf{from{opacity:0}to{opacity:1}}
+.hl-pop .pt{margin:4px 40px 10px 4px;font-size:18px;font-weight:500;color:var(--primary-text-color)}
 `;
+/* Eingebaute Detailfenster (ab 0.8.0): aus den HomeLines-Optionen, ohne eigene Dashboard-Seite */
+function hlDetail(s, kind, wid) {
+  const d = s.details || {}, own = d.own || {}, cards = [];
+  const tile = e => e && cards.push({ type: "tile", entity: e });
+  const tiles = list => (list || []).forEach(tile);
+  const graph = (ents, title) => { ents = (ents || []).filter(Boolean); if (ents.length) cards.push({ type: "history-graph", title, hours_to_show: 168, entities: ents }); };
+  if (kind === "line") {
+    const w = (s.wans || []).find(x => x.id === wid) || { id: wid, name: wid };
+    const ld = (d.lines || {})[wid] || {};
+    if (w.entity_id) tile(w.entity_id);
+    tiles(ld.entities);
+    graph(ld.history, "Verlauf");
+    if (w.primary && s.reconnect && s.reconnect.configured) {
+      const rows = ["daily_reconnect", "reconnect_time", "last_reconnect", "reconnect_result", "wan_ip", "reconnect_now"].map(k => own[k]).filter(Boolean);
+      if (rows.length) cards.push({ type: "entities", title: "Neueinwahl", entities: rows });
+    }
+    if (w.backup) {
+      ["status", "phone", "devices_online", "usage", "cost", "balance"].forEach(k => tile(own[k]));
+      tiles(d.phone); tiles(d.backup);
+    }
+    return { title: w.name && w.name !== w.id ? `${w.name} (${w.id})` : w.id, cards };
+  }
+  if (kind === "speed") {
+    tiles([d.speed && d.speed.download, d.speed && d.speed.upload]);
+    graph([d.speed && d.speed.download, d.speed && d.speed.upload], "Verlauf");
+    return { title: "Geschwindigkeit", cards };
+  }
+  ["outages_24h", "outages_7d", "outages_30d", "downtime_7d", "availability_7d", "availability_30d", "latency", "packet_loss"].forEach(k => tile(own[k]));
+  graph([own.internet], "Internet in den letzten 7 Tagen");
+  return { title: "Ausfälle und Verlauf", cards };
+}
+
 /* Karten einer vorhandenen Dashboard-Seite holen, z. B. "/dashboard-beispiel/internet" */
 async function hlViewCards(hass, path) {
   const parts = String(path).replace(/^\/+/, "").split(/[/?#]/);
@@ -704,9 +752,12 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
   if (!document.getElementById("hl-pop-css")) {
     const st = document.createElement("style"); st.id = "hl-pop-css"; st.textContent = popCss; document.head.appendChild(st);
   }
+  // Jedes Fenster hat eine eigene Nummer im Browser-Verlauf, damit Fenster übereinander liegen können
+  // (z. B. Detailfenster aus der großen Karte im Popup der Mini-Karte) und „Zurück“ nur das oberste schließt.
+  const myId = (window.__hlPopSeq = (window.__hlPopSeq || 0) + 1);
   const ov = document.createElement("div");
   ov.className = "hl-pop";
-  ov.innerHTML = `<div class="in"><button class="x" aria-label="Schließen">✕</button></div>`;
+  ov.innerHTML = `<div class="in"><button class="x" aria-label="Schließen">✕</button>${opts.title ? `<p class="pt">${esc(opts.title)}</p>` : ""}</div>`;
   const inner = ov.firstChild, els = [], hashes = new Set();
   let card = null;
   if (opts.showCard !== false) {
@@ -753,12 +804,18 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
     ov.remove(); document.removeEventListener("keydown", key); window.removeEventListener("popstate", pop);
     window.removeEventListener("location-changed", loc); window.removeEventListener("hashchange", loc); ov._closed = true;
   };
-  const shut = () => { if (history.state && history.state.hlPop) history.back(); else close(); };
-  const key = e => { if (e.key === "Escape" && ov.style.display !== "none") shut(); };
-  // Zurück-Taste: zurück auf unseren Eintrag = wieder zeigen, weiter zurück = schließen
+  const mine = () => history.state && history.state.hlPop === myId;
+  const shut = () => { if (mine()) history.back(); else close(); };
+  const top = () => { const all = document.querySelectorAll("body > .hl-pop"); return all[all.length - 1] === ov; };
+  const key = e => { if (e.key === "Escape" && ov.style.display !== "none" && top()) shut(); };
+  // Zurück-Taste: zurück auf unseren Eintrag = wieder zeigen, Eintrag eines höheren Fensters = nichts tun,
+  // weiter zurück = schließen
   const pop = () => {
     if (location.hash) return;
-    if (history.state && history.state.hlPop) { byHash = false; show(true); } else close();
+    const st = history.state && history.state.hlPop;
+    if (st === myId) { byHash = false; show(true); }
+    else if (typeof st === "number" && st > myId) return;
+    else close();
   };
   // Öffnet eine Kachel ein Bubble-Popup (#hash), treten wir solange zur Seite
   let byHash = false;
@@ -769,12 +826,12 @@ function hlOpenPopup(hass, cardCfg, entryId, opts = {}) {
     }
     if (byHash) {
       byHash = false; show(true);
-      if (!(history.state && history.state.hlPop)) history.replaceState({ ...(history.state || {}), hlPop: true }, "");
+      if (!mine()) history.replaceState({ ...(history.state || {}), hlPop: myId }, "");
     }
   };
   ov.addEventListener("click", e => { if (e.target === ov || e.target.classList.contains("x")) shut(); });
   document.addEventListener("keydown", key);
-  history.pushState({ hlPop: true }, ""); window.addEventListener("popstate", pop);
+  history.pushState({ hlPop: myId }, ""); window.addEventListener("popstate", pop);
   window.addEventListener("location-changed", loc); window.addEventListener("hashchange", loc);
   document.body.appendChild(ov);
   return { card, close, setHass(h) { els.forEach(e => { e.hass = h; }); }, get open() { return !ov._closed; } };
@@ -801,7 +858,12 @@ class HomeLinesMini extends HTMLElement {
       if (st && st !== this._last[e]) { this._last[e] = st; this._pushPoint(e, st); changed = true; } });
     if (changed) this._paint();
   }
-  _ents() { return [this._c.throughput_entity, this._c.upload_entity].filter(Boolean); }
+  _ents() {
+    // Eigene Sensoren der Karte haben Vorrang, sonst die Geschwindigkeit aus den HomeLines-Optionen
+    if (this._c.throughput_entity) return [this._c.throughput_entity, this._c.upload_entity].filter(Boolean);
+    const sp = ((this._f && this._f.data && this._f.data.details) || {}).speed || {};
+    return [sp.download, sp.upload].filter(Boolean);
+  }
   connectedCallback() { if (this._hass && !this._feed) this._start(); }
   disconnectedCallback() {
     if (this._feed) { this._feed.remove(this._onFeed); this._feed = null; }
@@ -814,7 +876,15 @@ class HomeLinesMini extends HTMLElement {
   }
   _start() {
     if (!this.isConnected) return;
-    this._onFeed = this._onFeed || (f => { this._f = f; this._paint(); });
+    this._onFeed = this._onFeed || (f => {
+      this._f = f;
+      const key = this._ents().join("|");
+      if (key !== this._entsKey) {
+        this._entsKey = key; this._series = null; clearInterval(this._hist);
+        if (key) { this._loadHistory(); this._hist = setInterval(() => this._loadHistory(), 300000); }
+      }
+      this._paint();
+    });
     if (this._feed) this._feed.remove(this._onFeed);
     this._feed = hlFeed(this._hass, this._c.entry_id);
     this._feed.add(this._onFeed);
@@ -824,6 +894,7 @@ class HomeLinesMini extends HTMLElement {
     }, { type: "render_template", template: String(this._c.info) });
     clearInterval(this._hist); clearInterval(this._tick);
     this._tick = setInterval(() => this._paint(), 30000);
+    this._entsKey = this._ents().join("|");
     if (this._ents().length) { this._loadHistory(); this._hist = setInterval(() => this._loadHistory(), 300000); }
   }
   _tap() {
@@ -897,8 +968,10 @@ class HomeLinesMini extends HTMLElement {
     const mode = s.mode, mon = s.monitor || {}, c = s.counts || {}, u = s.usage || {};
     const active = (s.wans || []).find(w => w.active), lc = (this._c.card || {}).lines || {};
     const wname = w => w ? ((lc[w.id] || {}).name || w.name) : "";
-    const tp = this._c.throughput_entity && this._hass.states[this._c.throughput_entity];
-    const tpTxt = tp && !isNaN(parseFloat(tp.state)) ? `↓ ${Math.round(parseFloat(tp.state)).toLocaleString("de-DE")} ${tp.attributes.unit_of_measurement || ""}`.trim() : "";
+    const [e1, e2] = this._ents();
+    const num = e => { const st = e && this._hass.states[e]; return st && !isNaN(parseFloat(st.state)) ? st : null; };
+    const tp = num(e1), up = num(e2);
+    const tpTxt = tp ? `↓ ${Math.round(parseFloat(tp.state)).toLocaleString("de-DE")}${up ? ` · ↑ ${Math.round(parseFloat(up.state)).toLocaleString("de-DE")}` : ""} ${tp.attributes.unit_of_measurement || ""}`.trim() : "";
     const lat = mon.latency != null ? `${Math.round(mon.latency)} ms` : "";
     const stale = f.state !== "ok" ? " · Stand " + hm(new Date(f.at)) : "";
     if (s.assistant && s.assistant.kind === "return" && mode === "normal")
@@ -963,6 +1036,8 @@ const ED_HELP = {
   navigation_path: "Leer: die große HomeLines-Karte öffnet sich als Popup.",
   popup_view: "Teil der Adresse ab dem ersten „/“, z. B. /dashboard-beispiel/internet. Weitere Karten fürs Popup (popup_cards) im Code-Editor.",
   warning: "Ergebnis true/on/ja färbt die Kachel gelb.", error: "Ergebnis true/on/ja färbt die Kachel rot.",
+  tap: "Leer: eingebautes Detailfenster der Leitung (Werte unter HomeLines → Konfigurieren → Detailansichten).",
+  throughput_entity: "Leer: Geschwindigkeit aus HomeLines → Konfigurieren → Detailansichten.",
 };
 const ED_LINE_HELP = "Nur für diese Karte. Den Namen für alle Karten stellst du in HomeLines → Konfigurieren → Leitungen ein.";
 

@@ -128,6 +128,7 @@
         "title": "HomeLines options",
         "menu_options": {
           "lines": "Lines",
+          "details": "Card detail views",
           "tariff": "Tariff and costs",
           "phone": "Phone (backup modem)",
           "notify": "Notifications",
@@ -172,6 +173,36 @@
           "speedtest_switch": "Switched off during backup operation so no speedtest uses up data.",
           "primary_wan_network": "Blocked devices may only use this line.",
           "default_group": "Applies to devices HomeLines newly discovers."
+        }
+      },
+      "details": {
+        "title": "Card detail views",
+        "description": "Tapping a line in the HomeLines card opens a window with these values and graphs.",
+        "data": {
+          "details_wan1": "WAN1: values",
+          "history_wan1": "WAN1: history",
+          "details_wan2": "WAN2: values",
+          "history_wan2": "WAN2: history",
+          "details_wan3": "WAN3: values",
+          "history_wan3": "WAN3: history",
+          "details_wan4": "WAN4: values",
+          "history_wan4": "WAN4: history",
+          "speed_download": "Speed: download sensor",
+          "speed_upload": "Speed: upload sensor",
+          "backup_extra": "Backup line: more values"
+        },
+        "data_description": {
+          "details_wan1": "Shown as tiles.",
+          "history_wan1": "Shown as 7-day graph.",
+          "details_wan2": "Shown as tiles.",
+          "history_wan2": "Shown as 7-day graph.",
+          "details_wan3": "Shown as tiles.",
+          "history_wan3": "Shown as 7-day graph.",
+          "details_wan4": "Shown as tiles.",
+          "history_wan4": "Shown as 7-day graph.",
+          "speed_download": "E.g. the router's speedtest sensor. Used by the mini card by default.",
+          "speed_upload": "Second line in the graph.",
+          "backup_extra": "E.g. power of the backup router."
         }
       },
       "monitor": {

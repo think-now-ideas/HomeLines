@@ -1,5 +1,27 @@
 # Änderungen
 
+## 0.8.0 – Detailansichten eingebaut: eine Karte statt eigener Dashboard-Seite
+- **Neu in den Optionen: „Detailansichten der Karte“.** Je Leitung (WAN1–WAN4) wählst du Sensoren für Werte (Kacheln)
+  und Verlauf (Diagramm, 7 Tage), dazu die Sensoren für Download- und Upload-Geschwindigkeit und weitere Werte der
+  Notfall-Strecke (z. B. Stromverbrauch des Notfall-Routers). Alles per Auswahlliste, kein YAML.
+- **Eingebaute Detailfenster in der großen Karte:** Ein Tipp auf eine Leitung öffnet ein Fenster mit ihren Werten und
+  dem Verlauf. Bei der Hauptleitung steht dort auch die Neueinwahl (Schalter, Uhrzeit, letzte Neueinwahl, Ergebnis,
+  WAN-IP, „Jetzt neu verbinden“), bei der Backup-Leitung die Notfall-Strecke (Status, Handy meldet sich, Geräte online,
+  Verbrauch, Kosten, Guthaben, Akku/Signal/Netz des Handys). Die Kennzahlen öffnen „Ausfälle und Verlauf“
+  (Ausfälle 24 h/7/30 Tage, Ausfallzeit, Verfügbarkeit, Latenz, Paketverlust, Internet über 7 Tage), die
+  Geschwindigkeit ein eigenes Fenster mit Verlauf. Dafür sind weder Bubble Card noch Vorlagen nötig.
+- Eigene Ziele (`lines: WANx: tap:`) haben weiter Vorrang vor dem eingebauten Fenster.
+- **Geschwindigkeit in der Karte:** kompakte Karte zeigt „↓ … · ↑ … Mbit/s“ als Kennzahl, die volle Karte als Zeile.
+- **Mini-Karte ohne Einstellungen:** Ohne eigene Sensoren nimmt sie die Geschwindigkeit aus den Optionen für Verlauf
+  und zweite Zeile (jetzt mit ↓ und ↑). `type: custom:homelines-mini` reicht.
+- **Fenster übereinander:** Detailfenster lassen sich auch aus der großen Karte im Popup der Mini-Karte öffnen;
+  Zurück-Taste und Esc schließen jeweils nur das oberste Fenster.
+- Leitungen tragen im Snapshot `primary` (Hauptleitung); der Snapshot enthält die Detail-Einstellungen und die
+  Entitäts-IDs von HomeLines selbst (auch bei mehreren Einrichtungen richtig).
+- Vorhandene Karten und Dashboards funktionieren unverändert weiter.
+- Tests: `test_details_080.py` (Optionen, Snapshot, Detailfenster in Chromium, Mini-Karte mit Sensoren aus den
+  Optionen, gestapelte Fenster mit Zurück und Esc).
+
 ## 0.7.1 – Karten ohne YAML einrichten
 - **Grafische Editoren für alle drei Karten:** Große Karte, Mini-Karte und Kachel lassen sich jetzt im Dashboard-Editor
   per Formular einstellen (Sensoren aus Listen, Vorlagen mit Prüfung, Symbolauswahl). Vorhandenes YAML bleibt gültig;

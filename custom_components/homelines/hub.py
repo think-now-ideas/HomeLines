@@ -128,6 +128,11 @@ from .const import (
     EVENT_OUTAGE_STARTED,
     EVENT_RECONNECTED,
     ISSUE_LEGACY,
+    CONF_BACKUP_EXTRA,
+    CONF_SPEED_DOWN,
+    CONF_SPEED_UP,
+    LINE_DETAIL_KEYS,
+    LINE_HISTORY_KEYS,
     LINE_NAME_KEYS,
     ISSUE_WAN,
     LEGACY_DOMAIN,
@@ -493,14 +498,38 @@ class HomeLinesHub:
             lines.setdefault(wid, {"id": wid, "name": name, "state": "unknown", "entity_id": None})
         for wid, name in custom.items():
             lines.setdefault(wid, {"id": wid, "name": name, "state": "unknown", "entity_id": None})
+        primary = self.primary_wan()
         for line in lines.values():
             if line["id"] in custom:
                 line["name"] = custom[line["id"]]
             line["active"] = line["id"] == active
+            line["primary"] = line["id"] == primary
             line["backup"] = line["id"] == self.backup_wan()
             if line["active"] and line["state"] == "unknown":
                 line["state"] = "online"
         return sorted(lines.values(), key=lambda l: l["id"])
+
+    def primary_wan(self) -> str | None:
+        """Hauptleitung (z. B. WAN2): aus der UniFi-Zuordnung, sonst aus dem Status-Sensor."""
+        rec = (self.data.get("ids") or {}).get("wan") or {}
+        wid = _wan_id(rec.get("group")) if rec.get("group") else None
+        return wid or _wan_id(self.opt(CONF_PRIMARY_STATUS_ENTITY))
+
+    def details(self) -> dict:
+        """Was die Detailfenster der Karte zeigen (nur Entitäts-IDs, die Werte holt die Karte selbst)."""
+        reg = er.async_get(self.hass)
+        prefix = f"{self.entry.entry_id}_"
+        own = {e.unique_id[len(prefix):]: e.entity_id
+               for e in er.async_entries_for_config_entry(reg, self.entry.entry_id) if e.unique_id.startswith(prefix)}
+        lines = {}
+        for (dk, wid), hk in zip(LINE_DETAIL_KEYS.items(), LINE_HISTORY_KEYS):
+            ents, hist = list(self.opt(dk, []) or []), list(self.opt(hk, []) or [])
+            if ents or hist:
+                lines[wid] = {"entities": ents, "history": hist}
+        phone = [self.opt(k) for k in (CONF_PHONE_BATTERY, CONF_PHONE_SIGNAL, CONF_PHONE_NETWORK,
+                                        CONF_PHONE_MOBILE_DATA, CONF_PHONE_CHARGER) if self.opt(k)]
+        return {"lines": lines, "speed": {"download": self.opt(CONF_SPEED_DOWN), "upload": self.opt(CONF_SPEED_UP)},
+                "backup": list(self.opt(CONF_BACKUP_EXTRA, []) or []), "phone": phone, "own": own}
 
     def line_names(self) -> dict[str, str]:
         """Eigene Namen aus den Optionen, z. B. {"WAN2": "DSL"}."""
@@ -1331,6 +1360,7 @@ class HomeLinesHub:
             "networks": [{"id": n.id, "name": n.name, "group": groups.get(n.id)} for n in self.inventory.networks]
             + self.missing_networks,
             "wan_missing": self.wan_missing,
+            "details": self.details(),
             "default_group": self.opt(CONF_DEFAULT_GROUP, DEFAULT_GROUP),
             "supports_networks": self.adapter.supports_networks,
             "usage": {"reset_at": u["reset_at"], "mb": round(u["mb"], 1), "cost": round(u["cost"], 2),
