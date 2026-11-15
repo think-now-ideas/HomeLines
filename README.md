@@ -1,3 +1,5 @@
+<p align="center"><img src="custom_components/homelines/brand/logo.png" alt="HomeLines" width="420"></p>
+
 # HomeLines – Internet Monitor & Mobile Failover
 
 HomeLines für Home Assistant fasst drei Dinge in einer Integration zusammen:

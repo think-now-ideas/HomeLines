@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.8.2 – Logo
+- **HomeLines hat ein Logo:** Symbol und Schriftzug für helle und dunkle Oberflächen unter
+  `custom_components/homelines/brand/` (`icon`, `logo`, `dark_icon`, `dark_logo`, je einfach und `@2x`). Home Assistant
+  zeigt es bei der Integration unter *Geräte & Dienste* an, die README oben auf GitHub.
+- Die große Karte zeigt im Kopf das Haus-Symbol aus dem Logo statt des allgemeinen Symbols.
+
 ## 0.8.1 – Mehr Werte im Fenster „Geschwindigkeit“
 - Neu in *Detailansichten der Karte*: „Geschwindigkeit: weitere Werte“, z. B. Ping und letzter Lauf des Speedtests,
   Knopf „Speedtest starten“ oder der Schalter für den automatischen Speedtest.

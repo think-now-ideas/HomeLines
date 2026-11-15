@@ -1,5 +1,7 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.1";
+const HL_VERSION = "0.8.2";
+// Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
+const HL_LOGO = `<svg class="hllogo" viewBox="14 22 924 742" aria-hidden="true"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/></svg>`;
 
 const T = {
   de: {
@@ -62,6 +64,7 @@ ha-card{padding:16px;overflow:hidden;position:relative}
 .wans{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;padding-bottom:12px;border-bottom:1px solid var(--divider-color)}
 .wan{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:8px}
 .wan b{font-weight:500}
+.hllogo{width:34px;height:28px;flex:none}
 .lines{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
 .line{position:relative;border-radius:12px;padding:10px 12px;border:1px solid var(--divider-color);background:var(--card-background-color,transparent);min-width:0}
 .line[data-nav]{cursor:pointer}.line[data-nav]:hover{border-color:var(--secondary-text-color)}
@@ -375,7 +378,7 @@ class HomeLinesCard extends HTMLElement {
       <span class="chip" data-a="ask-reset" style="cursor:pointer">${u.cost ? `${tr.cost} ${eur(u.cost)} · ` : ""}${tr.balance} ${eur(u.balance)}</span></div>`;
     if (compact && mode === "normal" && !(s.assistant && s.assistant.kind === "return")) {
       this._main.innerHTML = `
-      <div class="hd"><div class="t"><ha-icon icon="mdi:shield-sync-outline"></ha-icon><div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
+      <div class="hd"><div class="t">${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
       <span class="badge ${badgeCls}">${tr[mode]}</span></div>
       ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}
       ${s.router_type !== "none" && this._config.show_devices !== false ? `<div class="btns" style="margin:10px 0 0">${btns.join("")}</div>` : ""}`;
@@ -384,7 +387,7 @@ class HomeLinesCard extends HTMLElement {
       return;
     }
     this._main.innerHTML = `
-      <div class="hd"><div class="t"><ha-icon icon="mdi:shield-sync-outline"></ha-icon><div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
+      <div class="hd"><div class="t">${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
       <span class="badge ${badgeCls}">${tr[mode]}</span></div>
       ${wans ? `<div class="lines">${wans}</div>` : `<div style="height:12px"></div>`}
       ${status}${btns.length ? `<div class="btns">${btns.join("")}</div>` : ""}
