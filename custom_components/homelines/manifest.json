@@ -1,0 +1,22 @@
+{
+  "domain": "homelines",
+  "name": "HomeLines",
+  "codeowners": [
+    "@think-now-ideas"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http",
+    "frontend",
+    "network"
+  ],
+  "documentation": "https://github.com/think-now-ideas/HomeLines",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/think-now-ideas/HomeLines/issues",
+  "requirements": [
+    "asyncssh>=2.14.0",
+    "icmplib>=3.0"
+  ],
+  "version": "0.7.0"
+}

@@ -1,0 +1,598 @@
+{
+  "config": {
+    "step": {
+      "legacy": {
+        "title": "LineGuard gefunden",
+        "description": "HomeLines ist der Nachfolger von LineGuard. Du kannst Einstellungen, Gerätegruppen, Zähler und Ausfallhistorie übernehmen. Danach LineGuard entfernen – HomeLines löscht dann die alte Regel im Router.",
+        "menu_options": {
+          "import_legacy": "Von LineGuard übernehmen",
+          "user": "Neu einrichten"
+        }
+      },
+      "user": {
+        "title": "HomeLines einrichten",
+        "description": "Überwacht deine Internetleitungen und steuert den mobilen Notbetrieb. Wähle, wie HomeLines Geräte am Router sperren soll.",
+        "data": {
+          "name": "Name",
+          "router_type": "Router-Anbindung"
+        },
+        "data_description": {}
+      },
+      "unifi": {
+        "title": "UniFi verbinden",
+        "description": "Den API-Schlüssel legst du in UniFi unter Einstellungen → Control Plane → Integrationen an. HomeLines legt dort eine Policy-Based Route „HomeLines Notbetrieb“ an und pflegt sie.",
+        "data": {
+          "host": "Adresse des UniFi-Routers",
+          "api_key": "API-Schlüssel",
+          "site": "Site",
+          "verify_ssl": "Zertifikat prüfen"
+        },
+        "data_description": {}
+      },
+      "switches": {
+        "title": "Schalter je Gerät",
+        "description": "Schalter, die den Internetzugang eines Geräts erlauben (an) oder sperren (aus), z. B. aus der FRITZ!Box-Integration.",
+        "data": {
+          "switch_entities": "Internetzugang-Schalter je Gerät"
+        },
+        "data_description": {}
+      },
+      "scripts": {
+        "title": "Eigene Skripte",
+        "description": "Die Skripte bekommen die Variablen devices und macs mit den zu sperrenden Geräten.",
+        "data": {
+          "script_block": "Skript zum Sperren",
+          "script_unblock": "Skript zum Freigeben",
+          "tracker_entities": "Geräte (Device Tracker)"
+        },
+        "data_description": {}
+      },
+      "lines": {
+        "title": "Leitungen",
+        "description": "Woran HomeLines erkennt, welche Leitung gerade aktiv ist.",
+        "data": {
+          "standby": "Bereitschaft der Backup-Leitung",
+          "detection": "Ausfall der Hauptleitung erkennen über",
+          "primary_status_entity": "Status-Sensor der Hauptleitung",
+          "custom_down_entity": "Eigener Sensor „Hauptleitung weg“",
+          "detect_delay": "Ausfall gilt als echt nach",
+          "active_wan_entity": "Sensor für die aktive Leitung",
+          "backup_wan": "Backup-Leitung (Mobilfunk)",
+          "wan_status_entities": "Status-Sensoren der Leitungen",
+          "speedtest_switch": "Schalter für automatischen Speedtest",
+          "primary_wan_network": "Hauptleitung für die Sperrregel",
+          "default_group": "Gruppe für neue Geräte"
+        },
+        "data_description": {
+          "standby": "Warm: Backup ist ständig verbunden, der Router schaltet selbst um. Kalt: Backup ist aus und wird im Ausfall von Hand eingeschaltet – HomeLines führt dich mit einem Assistenten durch die Schritte.",
+          "detection": "Warme Bereitschaft mit UniFi: „Aktive Leitung“. Kalte Bereitschaft (der Router kann nicht selbst umschalten) und FRITZ!Box: „Status der Hauptleitung“, z. B. „UniFi WAN2 Internet“ oder der FRITZ!Box-Sensor „Verbindung“. Ohne passenden Sensor: „Eigene Pings“.",
+          "primary_status_entity": "An = Hauptleitung verbunden. Wird bei „Aktive Leitung“ zusätzlich genutzt, falls gesetzt.",
+          "custom_down_entity": "An = Hauptleitung weg. Für eigene Template-Sensoren.",
+          "detect_delay": "Kurze Aussetzer wie die Zwangstrennung werden ignoriert. Leer: 0 s bei warmer, 180 s bei kalter Bereitschaft.",
+          "active_wan_entity": "Zum Beispiel „UniFi Active WAN ID“ aus der UniFi-WAN-Integration.",
+          "backup_wan": "So, wie der Sensor die Mobilfunkleitung nennt, etwa WAN3.",
+          "wan_status_entities": "Für die Anzeige oben in der Karte, ein Sensor je Leitung.",
+          "speedtest_switch": "Wird im Notbetrieb ausgeschaltet, damit kein Speedtest das Datenvolumen verbraucht.",
+          "primary_wan_network": "Geräte, die gesperrt sind, dürfen nur über diese Leitung ins Internet.",
+          "default_group": "Gilt für Geräte, die HomeLines neu im Netz entdeckt."
+        }
+      },
+      "reconnect": {
+        "title": "Geplante Neueinwahl",
+        "description": "Optional: Verlegt die Zwangstrennung des Providers auf eine ruhige Uhrzeit. Dafür muss SSH am Router aktiv sein (UniFi → Einstellungen → Control Plane → Konsole → SSH).",
+        "data": {
+          "reconnect_enabled": "Tägliche Neueinwahl aktivieren",
+          "ssh_host": "Router-Adresse für SSH",
+          "ssh_port": "SSH-Port",
+          "ssh_user": "SSH-Benutzer",
+          "ssh_password": "SSH-Passwort",
+          "ppp_interface": "PPP-Schnittstelle",
+          "reconnect_method": "Methode",
+          "reconnect_time": "Uhrzeit",
+          "reconnect_entity": "Auslöser in HA (nur bei Methode „HA-Button oder Skript“)",
+          "wan_ip_entity": "Sensor mit der öffentlichen IP (zur Erfolgskontrolle)"
+        },
+        "data_description": {
+          "reconnect_entity": "z. B. der Button „Neu verbinden“ der FRITZ!Box-Integration oder ein eigenes Skript.",
+          "wan_ip_entity": "Optional. Ändert sich die IP oder fällt die Leitung kurz weg, gilt die Neueinwahl als erfolgreich.",
+          "ssh_host": "Nur für die SSH-Methoden."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Router nicht erreichbar. Adresse prüfen.",
+      "invalid_auth": "API-Schlüssel abgelehnt.",
+      "no_wan": "Keine WAN-Leitung gefunden.",
+      "ssh_missing": "Für die Neueinwahl Adresse und SSH-Passwort eintragen.",
+      "ssh_auth": "SSH-Benutzer oder Passwort falsch.",
+      "ssh_connect": "SSH nicht erreichbar. Ist SSH am Router aktiviert?",
+      "invalid_interface": "Ungültiger Schnittstellenname.",
+      "entity_missing": "Bitte den Auslöser wählen.",
+      "interface_not_found": "Diese PPP-Schnittstelle gibt es auf dem Router nicht."
+    },
+    "abort": {
+      "already_configured": "Dieser Router ist schon eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HomeLines-Optionen",
+        "menu_options": {
+          "lines": "Leitungen",
+          "tariff": "Tarif und Kosten",
+          "phone": "Handy (Notfall-Modem)",
+          "notify": "Benachrichtigungen",
+          "monitor": "Internet-Überwachung",
+          "reconnect": "Geplante Neueinwahl",
+          "router": "Router-Anbindung"
+        }
+      },
+      "lines": {
+        "title": "Leitungen",
+        "description": "Woran HomeLines erkennt, welche Leitung gerade aktiv ist.",
+        "data": {
+          "standby": "Bereitschaft der Backup-Leitung",
+          "detection": "Ausfall der Hauptleitung erkennen über",
+          "primary_status_entity": "Status-Sensor der Hauptleitung",
+          "custom_down_entity": "Eigener Sensor „Hauptleitung weg“",
+          "detect_delay": "Ausfall gilt als echt nach",
+          "active_wan_entity": "Sensor für die aktive Leitung",
+          "backup_wan": "Backup-Leitung (Mobilfunk)",
+          "wan_status_entities": "Status-Sensoren der Leitungen",
+          "speedtest_switch": "Schalter für automatischen Speedtest",
+          "primary_wan_network": "Hauptleitung für die Sperrregel",
+          "default_group": "Gruppe für neue Geräte"
+        },
+        "data_description": {
+          "standby": "Warm: Backup ist ständig verbunden, der Router schaltet selbst um. Kalt: Backup ist aus und wird im Ausfall von Hand eingeschaltet – HomeLines führt dich mit einem Assistenten durch die Schritte.",
+          "detection": "Warme Bereitschaft mit UniFi: „Aktive Leitung“. Kalte Bereitschaft (der Router kann nicht selbst umschalten) und FRITZ!Box: „Status der Hauptleitung“, z. B. „UniFi WAN2 Internet“ oder der FRITZ!Box-Sensor „Verbindung“. Ohne passenden Sensor: „Eigene Pings“.",
+          "primary_status_entity": "An = Hauptleitung verbunden. Wird bei „Aktive Leitung“ zusätzlich genutzt, falls gesetzt.",
+          "custom_down_entity": "An = Hauptleitung weg. Für eigene Template-Sensoren.",
+          "detect_delay": "Kurze Aussetzer wie die Zwangstrennung werden ignoriert. Leer: 0 s bei warmer, 180 s bei kalter Bereitschaft.",
+          "active_wan_entity": "Zum Beispiel „UniFi Active WAN ID“ aus der UniFi-WAN-Integration.",
+          "backup_wan": "So, wie der Sensor die Mobilfunkleitung nennt, etwa WAN3.",
+          "wan_status_entities": "Für die Anzeige oben in der Karte, ein Sensor je Leitung.",
+          "speedtest_switch": "Wird im Notbetrieb ausgeschaltet, damit kein Speedtest das Datenvolumen verbraucht.",
+          "primary_wan_network": "Geräte, die gesperrt sind, dürfen nur über diese Leitung ins Internet.",
+          "default_group": "Gilt für Geräte, die HomeLines neu im Netz entdeckt."
+        }
+      },
+      "monitor": {
+        "title": "Internet-Überwachung",
+        "description": "Pings an mehrere Ziele. Das Internet gilt erst als weg, wenn keines antwortet.",
+        "data": {
+          "targets": "Ping-Ziele (kommagetrennt)",
+          "router_ip": "IP-Adresse des Routers (für die Ursache)",
+          "interval": "Prüfintervall",
+          "emergency_interval": "Prüfintervall im Notbetrieb",
+          "ping_count": "Pings je Ziel",
+          "failures_before_offline": "Fehlversuche bis „offline“"
+        },
+        "data_description": {}
+      },
+      "tariff": {
+        "title": "Tarif und Kosten",
+        "description": "Für Kostenrechnung, Guthaben und den Tagesflat-Timer.",
+        "data": {
+          "provider": "Anbieter",
+          "price_per_mb": "Preis ohne Tagesflat",
+          "included_mb": "Inklusiv-Volumen",
+          "dayflat_price": "Preis der Tagesflat",
+          "dayflat_hours": "Dauer der Tagesflat",
+          "buffer_minutes": "Sicherheitspuffer",
+          "start_balance": "Startguthaben",
+          "booking_url": "Link zum Buchen der Tagesflat"
+        },
+        "data_description": {
+          "buffer_minutes": "So viel früher schaltet HomeLines zurück, bevor die Tagesflat endet.",
+          "start_balance": "Guthaben beim letzten Zurücksetzen des Zählers.",
+          "booking_url": "Wird in der Karte als Knopf angezeigt, z. B. die Aufladeseite deines Anbieters"
+        }
+      },
+      "phone": {
+        "title": "Handy (Notfall-Modem)",
+        "description": "Sensoren aus der Home-Assistant-App des Handys am Notfall-Router. Mobile Rx/Tx zählen die Kosten.",
+        "data": {
+          "phone_rx": "Empfangene Daten (Mobile Rx GB)",
+          "phone_tx": "Gesendete Daten (Mobile Tx GB)",
+          "phone_mobile_data": "Mobile Daten an/aus",
+          "phone_network": "Netztyp (z. B. Data network type)",
+          "phone_signal": "Signalstärke",
+          "phone_operator": "Netzbetreiber (SIM 1)",
+          "phone_battery": "Akkustand",
+          "phone_charger": "Ladeart (Charger type)",
+          "phone_wifi": "WLAN-Verbindung (Wi-Fi connection)",
+          "phone_stale_minutes": "Handy gilt als stumm nach",
+          "phone_notify": "Weckruf über (App-Benachrichtigung des Handys)",
+          "phone_wake_minutes": "Wecken, wenn still seit"
+        },
+        "data_description": {
+          "phone_notify": "z. B. notify.mobile_app_notfall_handy. HomeLines bittet die App damit, alle Sensoren sofort zu senden – nur wenn das Handy länger still war und sofort beim Notbetrieb. Leer = kein Weckruf.",
+          "phone_wake_minutes": "Kein erneutes Wecken innerhalb dieser Zeit."
+        }
+      },
+      "notify": {
+        "title": "Benachrichtigungen",
+        "description": "Empfänger bisher: {targets}",
+        "menu_options": {
+          "notify_add": "Empfänger hinzufügen",
+          "notify_pick": "Empfänger bearbeiten oder löschen",
+          "notify_messages": "Welche Meldung an wen"
+        }
+      },
+      "notify_add": {
+        "title": "Empfänger hinzufügen",
+        "description": "Neue Empfänger bekommen zunächst alle Meldungen. Unter „Welche Meldung an wen“ kannst du das danach einschränken.",
+        "data": {
+          "label": "Name",
+          "service": "Benachrichtigungsdienst",
+          "recipient": "Empfänger (optional)",
+          "sms": "Als kurze Textnachricht (für SMS)",
+          "remove": "Diesen Empfänger löschen"
+        },
+        "data_description": {
+          "label": "Wie der Empfänger in HomeLines heißt, z. B. „SMS an Alex“.",
+          "service": "HA-App, E-Mail (je Empfänger eine Entität der SMTP-Integration), SMS-Dienst, Telegram … Ohne Internet funktionieren: HA-App mit lokaler Push im Heim-WLAN, „persistent_notification.create“ (Meldung in HA) und Skripte (z. B. Ansage oder blinkendes Licht; sie bekommen title, message und text).",
+          "recipient": "Nur nötig, wenn der Dienst die Nummer bei jeder Nachricht braucht, z. B. +49 123 4567890. Mehrere mit Komma trennen.",
+          "sms": "Titel und Text werden zu einer Zeile zusammengefasst."
+        }
+      },
+      "notify_pick": {
+        "title": "Empfänger wählen",
+        "description": "",
+        "data": {
+          "target": "Empfänger"
+        },
+        "data_description": {}
+      },
+      "notify_edit": {
+        "title": "Empfänger bearbeiten",
+        "description": "",
+        "data": {
+          "label": "Name",
+          "service": "Benachrichtigungsdienst",
+          "recipient": "Empfänger (optional)",
+          "sms": "Als kurze Textnachricht (für SMS)",
+          "remove": "Diesen Empfänger löschen"
+        },
+        "data_description": {
+          "label": "Wie der Empfänger in HomeLines heißt, z. B. „SMS an Alex“.",
+          "service": "HA-App, E-Mail (je Empfänger eine Entität der SMTP-Integration), SMS-Dienst, Telegram … Ohne Internet funktionieren: HA-App mit lokaler Push im Heim-WLAN, „persistent_notification.create“ (Meldung in HA) und Skripte (z. B. Ansage oder blinkendes Licht; sie bekommen title, message und text).",
+          "recipient": "Nur nötig, wenn der Dienst die Nummer bei jeder Nachricht braucht, z. B. +49 123 4567890. Mehrere mit Komma trennen.",
+          "sms": "Titel und Text werden zu einer Zeile zusammengefasst."
+        }
+      },
+      "notify_messages": {
+        "title": "Welche Meldung an wen",
+        "description": "Für jede Meldung die Empfänger ankreuzen. Keiner angekreuzt heißt: Meldung aus. Home Assistant muss in der Gruppe „Immer“ sein, damit Meldungen im Notbetrieb durchkommen.",
+        "data": {
+          "emergency": "Notbetrieb beginnt",
+          "flat_warning": "Tagesflat endet in 15 Minuten",
+          "flat_expired": "Zurück im Notbetrieb (Freigabe abgelaufen)",
+          "restored": "Hauptleitung wieder da",
+          "backup_down": "Backup-Leitung ausgefallen / wieder bereit",
+          "phone_silent": "Notfall-Handy meldet sich nicht",
+          "reconnect_failed": "Neueinwahl fehlgeschlagen",
+          "backup_down_minutes": "Backup-Leitung gilt als ausgefallen nach"
+        },
+        "data_description": {}
+      },
+      "reconnect": {
+        "title": "Geplante Neueinwahl",
+        "description": "Optional: Verlegt die Zwangstrennung des Providers auf eine ruhige Uhrzeit. Dafür muss SSH am Router aktiv sein (UniFi → Einstellungen → Control Plane → Konsole → SSH).",
+        "data": {
+          "reconnect_enabled": "Tägliche Neueinwahl aktivieren",
+          "ssh_host": "Router-Adresse für SSH",
+          "ssh_port": "SSH-Port",
+          "ssh_user": "SSH-Benutzer",
+          "ssh_password": "SSH-Passwort",
+          "ppp_interface": "PPP-Schnittstelle",
+          "reconnect_method": "Methode",
+          "reconnect_time": "Uhrzeit",
+          "reconnect_entity": "Auslöser in HA (nur bei Methode „HA-Button oder Skript“)",
+          "wan_ip_entity": "Sensor mit der öffentlichen IP (zur Erfolgskontrolle)"
+        },
+        "data_description": {
+          "reconnect_entity": "z. B. der Button „Neu verbinden“ der FRITZ!Box-Integration oder ein eigenes Skript.",
+          "wan_ip_entity": "Optional. Ändert sich die IP oder fällt die Leitung kurz weg, gilt die Neueinwahl als erfolgreich.",
+          "ssh_host": "Nur für die SSH-Methoden."
+        }
+      },
+      "router": {
+        "title": "Router-Anbindung",
+        "description": "",
+        "data": {
+          "host": "Adresse des UniFi-Routers",
+          "api_key": "API-Schlüssel",
+          "site": "Site",
+          "verify_ssl": "Zertifikat prüfen",
+          "switch_entities": "Internetzugang-Schalter je Gerät",
+          "script_block": "Skript zum Sperren",
+          "script_unblock": "Skript zum Freigeben",
+          "tracker_entities": "Geräte (Device Tracker)"
+        },
+        "data_description": {}
+      }
+    },
+    "error": {
+      "cannot_connect": "Router nicht erreichbar. Adresse prüfen.",
+      "invalid_auth": "API-Schlüssel abgelehnt.",
+      "no_wan": "Keine WAN-Leitung gefunden.",
+      "ssh_missing": "Für die Neueinwahl Adresse und SSH-Passwort eintragen.",
+      "ssh_auth": "SSH-Benutzer oder Passwort falsch.",
+      "ssh_connect": "SSH nicht erreichbar. Ist SSH am Router aktiviert?",
+      "invalid_interface": "Ungültiger Schnittstellenname.",
+      "entity_missing": "Bitte den Auslöser wählen.",
+      "interface_not_found": "Diese PPP-Schnittstelle gibt es auf dem Router nicht."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status",
+        "state": {
+          "normal": "Normalbetrieb",
+          "emergency": "Notbetrieb",
+          "dayflat": "Tagesflat aktiv"
+        }
+      },
+      "active_wan": {
+        "name": "Aktive Leitung"
+      },
+      "restore_at": {
+        "name": "Rückschaltung"
+      },
+      "dayflat_end": {
+        "name": "Tagesflat endet"
+      },
+      "devices_online": {
+        "name": "Geräte online"
+      },
+      "usage": {
+        "name": "Mobilfunk-Verbrauch"
+      },
+      "cost": {
+        "name": "Mobilfunk-Kosten"
+      },
+      "balance": {
+        "name": "Guthaben (geschätzt)"
+      },
+      "latency": {
+        "name": "Latenz"
+      },
+      "packet_loss": {
+        "name": "Paketverlust"
+      },
+      "outages_24h": {
+        "name": "Ausfälle 24 h"
+      },
+      "outages_7d": {
+        "name": "Ausfälle 7 Tage"
+      },
+      "outages_30d": {
+        "name": "Ausfälle 30 Tage"
+      },
+      "downtime_7d": {
+        "name": "Ausfallzeit 7 Tage"
+      },
+      "availability_7d": {
+        "name": "Verfügbarkeit 7 Tage"
+      },
+      "availability_30d": {
+        "name": "Verfügbarkeit 30 Tage"
+      },
+      "last_outage": {
+        "name": "Letzter Ausfall"
+      },
+      "last_outage_duration": {
+        "name": "Dauer letzter Ausfall"
+      },
+      "last_check": {
+        "name": "Letzte Überprüfung"
+      },
+      "wan_ip": {
+        "name": "WAN-IP"
+      },
+      "last_reconnect": {
+        "name": "Letzte Neueinwahl"
+      },
+      "reconnect_result": {
+        "name": "Ergebnis Neueinwahl",
+        "state": {
+          "ok_new_ip": "Erfolgreich, neue IP",
+          "ok_same_ip": "Erfolgreich, gleiche IP",
+          "no_effect": "Keine Wirkung",
+          "error": "Fehler",
+          "triggered": "Ausgelöst"
+        }
+      }
+    },
+    "binary_sensor": {
+      "internet": {
+        "name": "Internet"
+      },
+      "router": {
+        "name": "Router"
+      },
+      "emergency": {
+        "name": "Notbetrieb"
+      },
+      "phone": {
+        "name": "Notfall-Handy meldet sich"
+      },
+      "router_link": {
+        "name": "Router-Anbindung gestört"
+      }
+    },
+    "button": {
+      "activate_dayflat": {
+        "name": "Tagesflat freischalten"
+      },
+      "restrict": {
+        "name": "Wieder einschränken"
+      },
+      "reset_usage": {
+        "name": "Verbrauch zurücksetzen"
+      },
+      "reconnect_now": {
+        "name": "Jetzt neu verbinden"
+      },
+      "test_notify": {
+        "name": "Testmeldung senden"
+      }
+    },
+    "switch": {
+      "daily_reconnect": {
+        "name": "Tägliche Neueinwahl"
+      }
+    },
+    "time": {
+      "reconnect_time": {
+        "name": "Uhrzeit Neueinwahl"
+      }
+    }
+  },
+  "selector": {
+    "router_type": {
+      "options": {
+        "unifi": "UniFi",
+        "switches": "Schalter je Gerät (z. B. FRITZ!Box)",
+        "scripts": "Eigene Skripte",
+        "none": "Keine Sperre, nur Überwachung"
+      }
+    },
+    "group": {
+      "options": {
+        "always": "Immer",
+        "dayflat": "Mit Tagesflat",
+        "never": "Nie"
+      }
+    },
+    "group_inherit": {
+      "options": {
+        "always": "Immer",
+        "dayflat": "Mit Tagesflat",
+        "never": "Nie",
+        "inherit": "Erben"
+      }
+    },
+    "method": {
+      "options": {
+        "pppd_hup": "SSH: PPPoE-Dienst neu verbinden (UniFi, empfohlen)",
+        "ip_link": "SSH: Schnittstelle aus/an",
+        "ha_action": "HA-Button oder Skript (z. B. FRITZ!Box)"
+      }
+    },
+    "standby": {
+      "options": {
+        "warm": "Warm – Backup ständig verbunden, automatische Umschaltung",
+        "cold": "Kalt – Backup aus, im Ausfall von Hand einschalten"
+      }
+    },
+    "detection": {
+      "options": {
+        "active_wan": "Aktive Leitung (z. B. UniFi Active WAN ID)",
+        "primary_off": "Status der Hauptleitung (Binärsensor)",
+        "custom": "Eigener Sensor",
+        "monitor": "Eigene Pings von HomeLines"
+      }
+    }
+  },
+  "exceptions": {
+    "not_in_emergency": {
+      "message": "Freischalten geht nur im Notbetrieb."
+    },
+    "booked_in_future": {
+      "message": "Die Buchungszeit liegt in der Zukunft."
+    },
+    "flat_expired": {
+      "message": "Diese Tagesflat ist schon abgelaufen."
+    },
+    "unknown_entry": {
+      "message": "HomeLines ist nicht eingerichtet."
+    }
+  },
+  "services": {
+    "activate_dayflat": {
+      "name": "Tagesflat freischalten",
+      "description": "Gibt die Gruppe „Mit Tagesflat“ frei.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "booked_at": {
+          "name": "Gebucht um",
+          "description": "Ohne Angabe: jetzt."
+        }
+      }
+    },
+    "restrict": {
+      "name": "Wieder einschränken",
+      "description": "Zurück auf Notbetrieb.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        }
+      }
+    },
+    "set_group": {
+      "name": "Gruppe setzen",
+      "description": "Ordnet Geräte (MAC) oder Netze einer Gruppe zu.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "kind": {
+          "name": "Art"
+        },
+        "targets": {
+          "name": "Ziele"
+        },
+        "group": {
+          "name": "Gruppe"
+        }
+      }
+    },
+    "reset_usage": {
+      "name": "Verbrauch zurücksetzen",
+      "description": "Setzt Verbrauch und Kosten auf null, z. B. nach dem Aufladen.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "start_balance": {
+          "name": "Neues Guthaben"
+        }
+      }
+    },
+    "test_notify": {
+      "name": "Testmeldung senden",
+      "description": "Schickt eine Testmeldung an alle Empfänger.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        }
+      }
+    },
+    "reconnect": {
+      "name": "Neu verbinden",
+      "description": "Löst sofort eine PPPoE-Neueinwahl aus.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        }
+      }
+    }
+  },
+  "issues": {
+    "legacy_running": {
+      "title": "LineGuard läuft noch",
+      "description": "HomeLines hat die Einrichtung von LineGuard übernommen. Entferne jetzt LineGuard unter Einstellungen → Geräte & Dienste und lösche den Ordner custom_components/lineguard (bzw. deinstalliere LineGuard). HomeLines räumt danach die alte Regel im Router auf."
+    },
+    "primary_wan_missing": {
+      "title": "Hauptleitung im Router nicht gefunden",
+      "description": "Die Leitung „{name}“ für die Sperrregel gibt es in UniFi nicht mehr, vermutlich wurde sie neu angelegt. HomeLines konnte sie auch über Name und WAN-Gruppe nicht zuordnen. Wähle sie unter HomeLines → Konfigurieren → Leitungen → „Hauptleitung für die Sperrregel“ neu aus."
+    }
+  }
+}

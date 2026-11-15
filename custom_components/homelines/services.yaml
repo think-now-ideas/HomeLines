@@ -1,0 +1,38 @@
+activate_dayflat:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }
+    booked_at:
+      selector: { datetime: {} }
+restrict:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }
+set_group:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }
+    kind:
+      required: true
+      default: device
+      selector: { select: { options: [device, network] } }
+    targets:
+      required: true
+      selector: { text: { multiple: true } }
+    group:
+      required: true
+      selector: { select: { options: [always, dayflat, never, inherit], translation_key: group_inherit } }
+reset_usage:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }
+    start_balance:
+      selector: { number: { min: 0, max: 1000, step: 0.01, unit_of_measurement: "€", mode: box } }
+reconnect:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }
+test_notify:
+  fields:
+    entry_id:
+      selector: { config_entry: { integration: homelines } }

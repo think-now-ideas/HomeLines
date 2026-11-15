@@ -1,0 +1,598 @@
+{
+  "config": {
+    "step": {
+      "legacy": {
+        "title": "LineGuard found",
+        "description": "HomeLines succeeds LineGuard. You can take over settings, device groups, counters and outage history. Remove LineGuard afterwards.",
+        "menu_options": {
+          "import_legacy": "Take over from LineGuard",
+          "user": "Set up from scratch"
+        }
+      },
+      "user": {
+        "title": "Set up HomeLines",
+        "description": "Monitors your internet lines and controls cellular backup. Choose how HomeLines blocks devices at your router.",
+        "data": {
+          "name": "Name",
+          "router_type": "Router connection"
+        },
+        "data_description": {}
+      },
+      "unifi": {
+        "title": "Connect UniFi",
+        "description": "Create the API key in UniFi under Settings → Control Plane → Integrations. HomeLines creates and maintains a policy-based route “HomeLines Notbetrieb”.",
+        "data": {
+          "host": "UniFi router address",
+          "api_key": "API key",
+          "site": "Site",
+          "verify_ssl": "Verify certificate"
+        },
+        "data_description": {}
+      },
+      "switches": {
+        "title": "Switch per device",
+        "description": "Switches that allow (on) or block (off) a device’s internet access, e.g. from the FRITZ!Box integration.",
+        "data": {
+          "switch_entities": "Internet access switch per device"
+        },
+        "data_description": {}
+      },
+      "scripts": {
+        "title": "Custom scripts",
+        "description": "Scripts receive the variables devices and macs with the devices to block.",
+        "data": {
+          "script_block": "Script to block",
+          "script_unblock": "Script to unblock",
+          "tracker_entities": "Devices (device trackers)"
+        },
+        "data_description": {}
+      },
+      "lines": {
+        "title": "Lines",
+        "description": "How HomeLines tells which line is active.",
+        "data": {
+          "standby": "Backup line standby",
+          "detection": "Detect main line failure via",
+          "primary_status_entity": "Main line status sensor",
+          "custom_down_entity": "Custom “main line down” sensor",
+          "detect_delay": "Failure counts as real after",
+          "active_wan_entity": "Active line sensor",
+          "backup_wan": "Backup line (cellular)",
+          "wan_status_entities": "Line status sensors",
+          "speedtest_switch": "Automatic speedtest switch",
+          "primary_wan_network": "Primary line for the block rule",
+          "default_group": "Group for new devices"
+        },
+        "data_description": {
+          "standby": "Warm: backup always connected, router fails over itself. Cold: backup off, switched on by hand with a guided assistant.",
+          "detection": "UniFi: active line. FRITZ!Box: main line status. Without a sensor: own pings.",
+          "primary_status_entity": "On = main line connected.",
+          "custom_down_entity": "On = main line down.",
+          "detect_delay": "Short dropouts are ignored. Empty: 0 s warm, 180 s cold.",
+          "active_wan_entity": "For example “UniFi Active WAN ID” from the UniFi WAN integration.",
+          "backup_wan": "As the sensor names it, e.g. WAN3.",
+          "wan_status_entities": "Shown at the top of the card, one per line.",
+          "speedtest_switch": "Switched off during backup operation so no speedtest uses up data.",
+          "primary_wan_network": "Blocked devices may only use this line.",
+          "default_group": "Applies to devices HomeLines newly discovers."
+        }
+      },
+      "reconnect": {
+        "title": "Scheduled reconnect",
+        "description": "Optional: moves the provider’s forced disconnect to a quiet time. Requires SSH on the router.",
+        "data": {
+          "reconnect_enabled": "Enable daily reconnect",
+          "ssh_host": "Router address for SSH",
+          "ssh_port": "SSH port",
+          "ssh_user": "SSH user",
+          "ssh_password": "SSH password",
+          "ppp_interface": "PPP interface",
+          "reconnect_method": "Method",
+          "reconnect_time": "Time",
+          "reconnect_entity": "HA trigger (method “HA button or script”)",
+          "wan_ip_entity": "Public IP sensor (to check success)"
+        },
+        "data_description": {
+          "reconnect_entity": "e.g. the FRITZ!Box “Reconnect” button.",
+          "wan_ip_entity": "Optional.",
+          "ssh_host": "SSH methods only."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Router not reachable.",
+      "invalid_auth": "API key rejected.",
+      "no_wan": "No WAN line found.",
+      "ssh_missing": "Enter address and SSH password.",
+      "ssh_auth": "Wrong SSH user or password.",
+      "ssh_connect": "SSH not reachable.",
+      "invalid_interface": "Invalid interface name.",
+      "entity_missing": "Please choose the trigger.",
+      "interface_not_found": "PPP interface not found on router."
+    },
+    "abort": {
+      "already_configured": "Already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HomeLines options",
+        "menu_options": {
+          "lines": "Lines",
+          "tariff": "Tariff and costs",
+          "phone": "Phone (backup modem)",
+          "notify": "Notifications",
+          "monitor": "Internet monitor",
+          "reconnect": "Scheduled reconnect",
+          "router": "Router connection"
+        }
+      },
+      "lines": {
+        "title": "Lines",
+        "description": "How HomeLines tells which line is active.",
+        "data": {
+          "standby": "Backup line standby",
+          "detection": "Detect main line failure via",
+          "primary_status_entity": "Main line status sensor",
+          "custom_down_entity": "Custom “main line down” sensor",
+          "detect_delay": "Failure counts as real after",
+          "active_wan_entity": "Active line sensor",
+          "backup_wan": "Backup line (cellular)",
+          "wan_status_entities": "Line status sensors",
+          "speedtest_switch": "Automatic speedtest switch",
+          "primary_wan_network": "Primary line for the block rule",
+          "default_group": "Group for new devices"
+        },
+        "data_description": {
+          "standby": "Warm: backup always connected, router fails over itself. Cold: backup off, switched on by hand with a guided assistant.",
+          "detection": "UniFi: active line. FRITZ!Box: main line status. Without a sensor: own pings.",
+          "primary_status_entity": "On = main line connected.",
+          "custom_down_entity": "On = main line down.",
+          "detect_delay": "Short dropouts are ignored. Empty: 0 s warm, 180 s cold.",
+          "active_wan_entity": "For example “UniFi Active WAN ID” from the UniFi WAN integration.",
+          "backup_wan": "As the sensor names it, e.g. WAN3.",
+          "wan_status_entities": "Shown at the top of the card, one per line.",
+          "speedtest_switch": "Switched off during backup operation so no speedtest uses up data.",
+          "primary_wan_network": "Blocked devices may only use this line.",
+          "default_group": "Applies to devices HomeLines newly discovers."
+        }
+      },
+      "monitor": {
+        "title": "Internet monitor",
+        "description": "Pings several targets.",
+        "data": {
+          "targets": "Ping targets (comma separated)",
+          "router_ip": "Router IP (to tell the cause)",
+          "interval": "Check interval",
+          "emergency_interval": "Interval during backup operation",
+          "ping_count": "Pings per target",
+          "failures_before_offline": "Failures before offline"
+        },
+        "data_description": {}
+      },
+      "tariff": {
+        "title": "Tariff and costs",
+        "description": "For costs, balance and day pass timer.",
+        "data": {
+          "provider": "Provider",
+          "price_per_mb": "Price without day pass",
+          "included_mb": "Included data",
+          "dayflat_price": "Day pass price",
+          "dayflat_hours": "Day pass duration",
+          "buffer_minutes": "Safety buffer",
+          "start_balance": "Starting balance",
+          "booking_url": "Link to book the day pass"
+        },
+        "data_description": {
+          "buffer_minutes": "HomeLines switches back this much earlier than the day pass ends.",
+          "start_balance": "Balance at the last counter reset.",
+          "booking_url": "Shown as a button in the card."
+        }
+      },
+      "phone": {
+        "title": "Phone (backup modem)",
+        "description": "Sensors from the Home Assistant app on the backup phone.",
+        "data": {
+          "phone_rx": "Received data (Mobile Rx GB)",
+          "phone_tx": "Sent data (Mobile Tx GB)",
+          "phone_mobile_data": "Mobile data on/off",
+          "phone_network": "Network type",
+          "phone_signal": "Signal strength",
+          "phone_operator": "Operator (SIM 1)",
+          "phone_battery": "Battery level",
+          "phone_charger": "Charger type",
+          "phone_wifi": "Wi-Fi connection",
+          "phone_stale_minutes": "Phone counts as silent after",
+          "phone_notify": "Wake-up via (phone's app notification)",
+          "phone_wake_minutes": "Wake when silent for"
+        },
+        "data_description": {
+          "phone_notify": "Asks the app to send all sensors now – only when the phone was quiet and immediately on emergency.",
+          "phone_wake_minutes": "No repeated wake-up within this time."
+        }
+      },
+      "notify": {
+        "title": "Notifications",
+        "description": "Recipients so far: {targets}",
+        "menu_options": {
+          "notify_add": "Add recipient",
+          "notify_pick": "Edit or remove recipient",
+          "notify_messages": "Which message to whom"
+        }
+      },
+      "notify_add": {
+        "title": "Add recipient",
+        "description": "New recipients get all messages at first.",
+        "data": {
+          "label": "Name",
+          "service": "Notification service",
+          "recipient": "Recipient (optional)",
+          "sms": "As short text (for SMS)",
+          "remove": "Remove this recipient"
+        },
+        "data_description": {
+          "label": "How the recipient is called in HomeLines.",
+          "service": "HA app, email (one SMTP entity per recipient), SMS service, Telegram … Custom names can be typed.",
+          "recipient": "Only if the service needs the recipient per message, e.g. +49 123 4567890. Separate several with commas.",
+          "sms": "Title and text are merged into one line."
+        }
+      },
+      "notify_pick": {
+        "title": "Choose recipient",
+        "description": "",
+        "data": {
+          "target": "Recipient"
+        },
+        "data_description": {}
+      },
+      "notify_edit": {
+        "title": "Edit recipient",
+        "description": "",
+        "data": {
+          "label": "Name",
+          "service": "Notification service",
+          "recipient": "Recipient (optional)",
+          "sms": "As short text (for SMS)",
+          "remove": "Remove this recipient"
+        },
+        "data_description": {
+          "label": "How the recipient is called in HomeLines.",
+          "service": "HA app, email (one SMTP entity per recipient), SMS service, Telegram … Custom names can be typed.",
+          "recipient": "Only if the service needs the recipient per message, e.g. +49 123 4567890. Separate several with commas.",
+          "sms": "Title and text are merged into one line."
+        }
+      },
+      "notify_messages": {
+        "title": "Which message to whom",
+        "description": "Tick recipients per message. None ticked means off.",
+        "data": {
+          "emergency": "Backup operation starts",
+          "flat_warning": "Day pass ends in 15 minutes",
+          "flat_expired": "Back to backup operation",
+          "restored": "Main line restored",
+          "backup_down": "Backup line down / ready again",
+          "phone_silent": "Backup phone not reporting",
+          "reconnect_failed": "Reconnect failed",
+          "backup_down_minutes": "Backup line counts as down after"
+        },
+        "data_description": {}
+      },
+      "reconnect": {
+        "title": "Scheduled reconnect",
+        "description": "Optional: moves the provider’s forced disconnect to a quiet time. Requires SSH on the router.",
+        "data": {
+          "reconnect_enabled": "Enable daily reconnect",
+          "ssh_host": "Router address for SSH",
+          "ssh_port": "SSH port",
+          "ssh_user": "SSH user",
+          "ssh_password": "SSH password",
+          "ppp_interface": "PPP interface",
+          "reconnect_method": "Method",
+          "reconnect_time": "Time",
+          "reconnect_entity": "HA trigger (method “HA button or script”)",
+          "wan_ip_entity": "Public IP sensor (to check success)"
+        },
+        "data_description": {
+          "reconnect_entity": "e.g. the FRITZ!Box “Reconnect” button.",
+          "wan_ip_entity": "Optional.",
+          "ssh_host": "SSH methods only."
+        }
+      },
+      "router": {
+        "title": "Router connection",
+        "description": "",
+        "data": {
+          "host": "UniFi router address",
+          "api_key": "API key",
+          "site": "Site",
+          "verify_ssl": "Verify certificate",
+          "switch_entities": "Internet access switch per device",
+          "script_block": "Script to block",
+          "script_unblock": "Script to unblock",
+          "tracker_entities": "Devices (device trackers)"
+        },
+        "data_description": {}
+      }
+    },
+    "error": {
+      "cannot_connect": "Router not reachable.",
+      "invalid_auth": "API key rejected.",
+      "no_wan": "No WAN line found.",
+      "ssh_missing": "Enter address and SSH password.",
+      "ssh_auth": "Wrong SSH user or password.",
+      "ssh_connect": "SSH not reachable.",
+      "invalid_interface": "Invalid interface name.",
+      "entity_missing": "Please choose the trigger.",
+      "interface_not_found": "PPP interface not found on router."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status",
+        "state": {
+          "normal": "Normal",
+          "emergency": "Backup operation",
+          "dayflat": "Day pass active"
+        }
+      },
+      "active_wan": {
+        "name": "Active line"
+      },
+      "restore_at": {
+        "name": "Switch back at"
+      },
+      "dayflat_end": {
+        "name": "Day pass ends"
+      },
+      "devices_online": {
+        "name": "Devices online"
+      },
+      "usage": {
+        "name": "Cellular usage"
+      },
+      "cost": {
+        "name": "Cellular costs"
+      },
+      "balance": {
+        "name": "Balance (estimated)"
+      },
+      "latency": {
+        "name": "Latency"
+      },
+      "packet_loss": {
+        "name": "Packet loss"
+      },
+      "outages_24h": {
+        "name": "Outages 24 h"
+      },
+      "outages_7d": {
+        "name": "Outages 7 days"
+      },
+      "outages_30d": {
+        "name": "Outages 30 days"
+      },
+      "downtime_7d": {
+        "name": "Downtime 7 days"
+      },
+      "availability_7d": {
+        "name": "Availability 7 days"
+      },
+      "availability_30d": {
+        "name": "Availability 30 days"
+      },
+      "last_outage": {
+        "name": "Last outage"
+      },
+      "last_outage_duration": {
+        "name": "Last outage duration"
+      },
+      "last_check": {
+        "name": "Last check"
+      },
+      "wan_ip": {
+        "name": "WAN IP"
+      },
+      "last_reconnect": {
+        "name": "Last reconnect"
+      },
+      "reconnect_result": {
+        "name": "Reconnect result",
+        "state": {
+          "ok_new_ip": "Success, new IP",
+          "ok_same_ip": "Success, same IP",
+          "no_effect": "No effect",
+          "error": "Error",
+          "triggered": "Triggered"
+        }
+      }
+    },
+    "binary_sensor": {
+      "internet": {
+        "name": "Internet"
+      },
+      "router": {
+        "name": "Router"
+      },
+      "emergency": {
+        "name": "Backup operation"
+      },
+      "phone": {
+        "name": "Backup phone reporting"
+      },
+      "router_link": {
+        "name": "Router connection problem"
+      }
+    },
+    "button": {
+      "activate_dayflat": {
+        "name": "Activate day pass"
+      },
+      "restrict": {
+        "name": "Restrict again"
+      },
+      "reset_usage": {
+        "name": "Reset usage"
+      },
+      "reconnect_now": {
+        "name": "Reconnect now"
+      },
+      "test_notify": {
+        "name": "Send test message"
+      }
+    },
+    "switch": {
+      "daily_reconnect": {
+        "name": "Daily reconnect"
+      }
+    },
+    "time": {
+      "reconnect_time": {
+        "name": "Reconnect time"
+      }
+    }
+  },
+  "selector": {
+    "router_type": {
+      "options": {
+        "unifi": "UniFi",
+        "switches": "Switch per device (e.g. FRITZ!Box)",
+        "scripts": "Custom scripts",
+        "none": "No blocking, monitor only"
+      }
+    },
+    "group": {
+      "options": {
+        "always": "Always",
+        "dayflat": "With day pass",
+        "never": "Never"
+      }
+    },
+    "group_inherit": {
+      "options": {
+        "always": "Always",
+        "dayflat": "With day pass",
+        "never": "Never",
+        "inherit": "Inherit"
+      }
+    },
+    "method": {
+      "options": {
+        "pppd_hup": "SSH: restart PPPoE session (UniFi)",
+        "ip_link": "SSH: interface down/up",
+        "ha_action": "HA button or script (e.g. FRITZ!Box)"
+      }
+    },
+    "standby": {
+      "options": {
+        "warm": "Warm – always connected",
+        "cold": "Cold – off, switched on by hand"
+      }
+    },
+    "detection": {
+      "options": {
+        "active_wan": "Active line sensor",
+        "primary_off": "Main line status",
+        "custom": "Custom sensor",
+        "monitor": "HomeLines’ own pings"
+      }
+    }
+  },
+  "exceptions": {
+    "not_in_emergency": {
+      "message": "Only possible during backup operation."
+    },
+    "booked_in_future": {
+      "message": "Booking time is in the future."
+    },
+    "flat_expired": {
+      "message": "This day pass has already expired."
+    },
+    "unknown_entry": {
+      "message": "HomeLines is not set up."
+    }
+  },
+  "services": {
+    "activate_dayflat": {
+      "name": "Activate day pass",
+      "description": "Allows group “With day pass”.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "booked_at": {
+          "name": "Booked at",
+          "description": "Default: now."
+        }
+      }
+    },
+    "restrict": {
+      "name": "Restrict again",
+      "description": "Back to backup operation.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        }
+      }
+    },
+    "set_group": {
+      "name": "Set group",
+      "description": "Assigns devices or networks to a group.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "kind": {
+          "name": "Kind"
+        },
+        "targets": {
+          "name": "Targets"
+        },
+        "group": {
+          "name": "Group"
+        }
+      }
+    },
+    "reset_usage": {
+      "name": "Reset usage",
+      "description": "Resets usage and costs.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        },
+        "start_balance": {
+          "name": "New balance"
+        }
+      }
+    },
+    "test_notify": {
+      "name": "Send test message",
+      "description": "Sends a test message to all recipients.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        }
+      }
+    },
+    "reconnect": {
+      "name": "Reconnect",
+      "description": "Triggers a PPPoE reconnect now.",
+      "fields": {
+        "entry_id": {
+          "name": "HomeLines"
+        }
+      }
+    }
+  },
+  "issues": {
+    "legacy_running": {
+      "title": "LineGuard is still running",
+      "description": "HomeLines has taken over the LineGuard setup. Remove LineGuard under Settings → Devices & services and delete custom_components/lineguard. HomeLines then removes the old router rule."
+    },
+    "primary_wan_missing": {
+      "title": "Primary line not found on router",
+      "description": "The line “{name}” used for the block rule no longer exists in UniFi. Choose it again under HomeLines → Configure → Lines."
+    }
+  }
+}
