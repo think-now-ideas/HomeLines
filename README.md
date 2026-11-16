@@ -147,6 +147,28 @@ Hauptleitung samt Neueinwahl, bei der Backup-Leitung samt Prüfliste des Notfall
 „Ausfälle und Verlauf“, die Geschwindigkeit ihren Verlauf. Eine eigene Dashboard-Seite mit Popups ist dafür nicht nötig;
 im einfachsten Fall genügen `type: custom:homelines-card` und `type: custom:homelines-mini` ohne weitere Einstellungen.
 
+**Fenster selbst zusammenstellen** (ab 0.9.0): Jedes Fenster – Leitungen, Notfall-Strecke, Geschwindigkeit,
+Ausfälle und die eigenen Kacheln – lässt sich direkt im Fenster anpassen. Oben rechts im Fenster auf
+**✎ Fenster anpassen** tippen (nur für Administratoren sichtbar). Das Fenster besteht dann aus Bausteinen, die du mit
+↑ ↓ ordnest und mit ✎ einstellst:
+
+| Baustein | Einstellungen |
+|---|---|
+| Werte | Entitäten, Kacheln oder Liste, Warnfarben als Satz („Rot, wenn ein Wert unter 3“) |
+| Grafik | Linie, Fläche, Balken oder An/Aus-Streifen; 24 Stunden, 7 oder 30 Tage; alle Werte zusammen oder je Wert eine Grafik; Farbe je Wert; Grenzlinie („Linie bei 6 dB – Bereich darunter rot“); Min, Max und Ø |
+| Schalter und Aktionen | Schalter, Uhrzeit, Knöpfe, Auswahl, Zahl, Zeitpunkte |
+| Protokoll | Ausfälle, Notbetrieb oder letzte Neueinwahl, als Liste oder Zeitleiste |
+| Hinweistext | neutral, gelb oder rot |
+| Prüfliste Notfall-Handy | eingebaut |
+
+Entitäten wählst du aus einer Liste mit Vorschlägen, Suche nach Name oder Bereich und Filter nach Bereich. Fehlt eine
+Entität (umbenannt, Gerät entfernt), steht im Fenster „Wert fehlt“ und im Editor „neu wählen“.
+**+ FRITZ!Box-Vorlage** fügt Bausteine für Telefonie, Heizung (DECT), WLAN-Geräte und Router hinzu; HomeLines sucht
+die Werte dafür über die Integrationen *FRITZ!Box Tools*, *FRITZ!SmartHome* und *Ping*. Angepasste Fenster speichert
+die Integration, sie gelten für alle HomeLines-Karten. **Eingebautes Fenster** stellt den Ausgangszustand wieder her.
+Fenster eigener Kacheln (`tiles:` bzw. `custom:homelines-tile`) werden über den Kachelnamen zugeordnet; wer den Namen
+ändern will, ohne das Fenster zu verlieren, setzt `window: mein-fenster` in der Kachel.
+
 Statt im Formular lassen sich Namen und Detailansichten auch in einem Schritt per Aktion setzen
 (*Entwicklerwerkzeuge → Aktionen*, ab 0.8.3):
 
@@ -162,7 +184,9 @@ data:
   speed_upload: sensor.speed_up
   backup_extra: [sensor.notfall_router_leistung]
   monitor_extra: [sensor.router_latenz]
-``` Für eigene Vorlagen steht der Name der aktiven Leitung
+```
+
+Für eigene Vorlagen steht der Name der aktiven Leitung
 im Attribut `name` von `sensor.homelines_active_wan`.
 
 Fertige Beispiele (Seite, Mini-Karte, Aktion für die Detailansichten) liegen in [`examples/`](examples/).

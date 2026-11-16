@@ -1,6 +1,8 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.8.8";
+const HL_VERSION = "0.9.0";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
+/* Logo mit Schriftzug (ab 0.9.0): Schrift in currentColor, passt zu hell und dunkel */
+const HL_WORD = `<svg class="hlword" viewBox="14 22 2400 742" role="img" aria-label="HomeLines"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/><g fill="currentColor"><path d="M859.31,442.82v108.35h135.71v-108.35h17.51v245.88h-17.51v-122.94h-135.71v122.94h-17.51v-245.88H859.31Z"/><path d="M1114.31,692.71c-45.24,0-80.26-35.38-80.26-90.1,0-59.83,39.4-93.03,82.81-93.03,48.52,0,81.35,36.48,81.35,90.11,0,64.94-44.87,93.02-83.54,93.02H1114.31ZM1115.4,678.12c36.48,0,65.3-32.83,65.3-77.7,0-32.1-17.87-76.25-64.2-76.25s-64.94,39.77-64.94,77.34c0,43.78,27.73,76.61,63.48,76.61H1115.4Z"/><path d="M1218.65,555.55c0-16.05-.37-28.09-1.46-41.96h16.41l1.1,30.65h.73c11.31-20.07,28.09-34.66,56.91-34.66,24.07,0,42.68,16.05,50.34,37.94h.73c4.74-10.21,11.31-18.24,17.88-23.71,11.3-9.12,22.98-14.23,41.58-14.23,17.15,0,57.28,9.49,57.28,75.88v103.24h-17.51v-101.78c0-39.4-15.32-62.75-45.6-62.75-21.89,0-39.04,16.42-45.97,34.66-1.46,5.11-2.92,10.95-2.92,17.51v112.36h-17.51v-109.8c0-31.38-14.96-54.73-43.41-54.73-23.35,0-41.95,18.97-48.52,39.4-1.46,5.11-2.55,10.95-2.55,17.15v107.98h-17.51V555.55Z"/><path d="M1496.99,599.32c0,55.82,30.65,78.07,66.76,78.07,25.54,0,38.67-5.1,48.52-9.85l4.38,13.5c-6.57,3.65-24.44,11.31-55.09,11.31-50.34,0-81.71-36.48-81.71-87.92,0-58.37,33.56-94.85,78.8-94.85,57.27,0,68.21,53.99,68.21,79.17,0,4.74,0,7.29-.73,10.57H1496.99ZM1608.62,585.46c.37-24.44-9.85-61.29-52.16-61.29-38.67,0-55.09,34.3-58.37,61.29H1608.62Z"/><path d="M1659.51,442.82h44.87v208.31h101.06v37.57h-145.93V442.82Z"/><path d="M1850.34,485.5c-14.95,0-24.8-10.94-24.8-24.07,0-13.87,10.21-24.44,25.17-24.44s24.81,10.57,25.17,24.44c0,13.13-9.85,24.07-25.17,24.07H1850.34ZM1828.09,688.7v-177.66h44.87v177.66H1828.09Z"/><path d="M1912.69,563.94c0-20.43-.73-37.58-1.46-52.9h39.04l2.18,26.63h1.1c8.02-13.86,27.36-30.64,56.91-30.64,31.01,0,63.11,20.06,63.11,76.24v105.43h-44.87v-100.32c0-25.54-9.49-44.87-33.93-44.87-17.87,0-30.28,12.77-35.02,26.27-1.46,3.64-2.19,9.12-2.19,14.22v104.7h-44.87V563.94Z"/><path d="M2145.11,612.46c1.09,32.1,26.27,45.96,54.72,45.96,20.8,0,35.39-3.28,49.25-8.02l6.57,30.64c-15.33,6.57-36.48,11.31-62.02,11.31-57.64,0-91.57-35.39-91.57-89.74,0-49.25,29.92-95.58,86.83-95.58s76.61,47.42,76.61,86.46c0,8.39-.73,14.95-1.46,18.97H2145.11ZM2223.18,581.08c.36-16.41-6.93-43.41-36.85-43.41-27.72,0-39.4,25.17-41.22,43.41H2223.18Z"/><path d="M2291.29,647.11c9.85,6.21,29.18,13.14,45.23,13.14,19.7,0,28.46-8.39,28.46-20.07s-7.3-17.87-29.19-25.9c-34.65-11.67-48.88-30.64-48.88-51.8,0-31.37,25.9-55.45,67.12-55.45,19.7,0,36.85,4.74,47.43,10.58l-9.12,31.37c-7.3-4.38-21.89-10.21-37.58-10.21s-24.8,8.02-24.8,18.97,8.39,16.41,31.01,24.8c32.46,11.31,47.06,27.73,47.42,54,0,32.46-25.17,55.81-72.23,55.81-21.52,0-40.86-5.11-53.99-12.4L2291.29,647.11Z"/></g></svg>`;
 const HL_LOGO = `<svg class="hllogo" viewBox="14 22 924 742" aria-hidden="true"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/></svg>`;
 
 const T = {
@@ -65,6 +67,7 @@ ha-card{padding:16px;overflow:hidden;position:relative}
 .wan{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:8px}
 .wan b{font-weight:500}
 .hllogo{width:34px;height:28px;flex:none}
+.hlword{height:44px;width:auto;flex:none;display:block;color:var(--primary-text-color)}
 .lines{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
 .line{position:relative;border-radius:12px;padding:10px 12px;border:1px solid var(--divider-color);background:var(--card-background-color,transparent);min-width:0}
 .line[data-nav]{cursor:pointer}.line[data-nav]:hover{border-color:var(--secondary-text-color)}
@@ -141,6 +144,17 @@ input[type=search]{width:100%}
 `;
 
 function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+function hlHead(title, sub) {
+  // Standardtitel: Logo mit Schriftzug; eigener Titel: Haus + Titel
+  return title === "HomeLines" ? `<div>${HL_WORD}<p class="sub">${sub}</p></div>`
+    : `${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div>`;
+}
+/* Zahl mit Einheit (ab 0.9.0): Euro immer mit zwei Nachkommastellen */
+function hlNum(v, u, decimals) {
+  const money = /^(€|EUR)$/i.test(u || "");
+  const d = money ? 2 : decimals ?? (Math.abs(v) >= 100 ? 0 : 1);
+  return `${v.toLocaleString("de-DE", { minimumFractionDigits: money ? 2 : 0, maximumFractionDigits: d })}${u ? " " + u : ""}`;
+}
 function eur(v) { return (Number(v) || 0).toLocaleString("de-DE", { style: "currency", currency: "EUR" }); }
 function p2(n) { return String(n).padStart(2, "0"); }
 function hm(d) { return `${p2(d.getHours())}:${p2(d.getMinutes())}`; }
@@ -400,7 +414,7 @@ class HomeLinesCard extends HTMLElement {
       <span class="chip" data-a="ask-reset" style="cursor:pointer">${u.cost ? `${tr.cost} ${eur(u.cost)} · ` : ""}${tr.balance} ${eur(u.balance)}</span></div>`;
     if (compact && mode === "normal" && !(s.assistant && s.assistant.kind === "return")) {
       this._main.innerHTML = `
-      <div class="hd"><div class="t">${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
+      <div class="hd"><div class="t">${hlHead(title, sub)}</div>
       <span class="badge ${badgeCls}">${tr[mode]}</span></div>
       ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}${this._ov(s)}
       ${s.router_type !== "none" && this._config.show_devices !== false ? `<div class="btns" style="margin:10px 0 0">${btns.join("")}</div>` : ""}`;
@@ -409,7 +423,7 @@ class HomeLinesCard extends HTMLElement {
       return;
     }
     this._main.innerHTML = `
-      <div class="hd"><div class="t">${HL_LOGO}<div><p class="ttl">${esc(title)}</p><p class="sub">${sub}</p></div></div>
+      <div class="hd"><div class="t">${hlHead(title, sub)}</div>
       <span class="badge ${badgeCls}">${tr[mode]}</span></div>
       ${wans ? `<div class="lines">${wans}</div>` : `<div style="height:12px"></div>`}
       ${status}${btns.length ? `<div class="btns">${btns.join("")}</div>` : ""}
@@ -447,7 +461,7 @@ class HomeLinesCard extends HTMLElement {
   _openDetail(kind, wid) {
     if (!this._s) return;
     const spec = hlDetail(this._s, kind, wid);
-    const el = document.createElement("homelines-detail"); el.state = this._s; el.spec = spec; this._detailEl = el;
+    const el = document.createElement("homelines-detail"); el.hass = this._hass; el.open(this._s, kind, wid); this._detailEl = el;
     this._detail = hlOpenPopup(this._hass, null, null, { showCard: false, content: el, title: spec.title });
   }
 
@@ -657,7 +671,7 @@ class HomeLinesTile extends HTMLElement {
     const first = !this._hass; this._hass = h; if (!this.shadowRoot) this._build(); if (first) this._sub();
     if (this._pop && this._pop.open) this._pop.setHass(h);
     const key = (this._c.entities || []).map(e => h.states[e] && h.states[e].state).join("|");
-    if (key !== this._key) { this._key = key; this._paint(); }
+    if (key !== this._key && !this._edit) { this._key = key; this._paint(); }
   }
   connectedCallback() { if (this._hass && !(this._subs || []).length) this._sub(); }
   /* Ohne Vorlagen (ab 0.8.4): Text und Farbe aus den gewählten Entitäten */
@@ -668,7 +682,7 @@ class HomeLinesTile extends HTMLElement {
     const bad = sts.filter(st => !st || ["unavailable", "unknown"].includes(st.state)).length;
     const nums = sts.map(st => st ? parseFloat(st.state) : NaN).filter(v => !isNaN(v));
     const unit = c.unit ?? ((sts.find(st => st && st.attributes.unit_of_measurement) || { attributes: {} }).attributes.unit_of_measurement || "");
-    const f = v => v.toLocaleString("de-DE", { maximumFractionDigits: c.decimals ?? (Math.abs(v) >= 100 ? 0 : 1) });
+    const f = v => hlNum(v, unit, c.decimals).replace(unit ? " " + unit : /$^/, "");
     const mode = c.combine || (ents.length > 1 ? "sum" : "single");
     let val = null, text;
     if (mode === "list") text = ents.map(e => hlFmt(h, e) ?? "–").join(" · ");
@@ -691,7 +705,7 @@ class HomeLinesTile extends HTMLElement {
       if (c.navigation_path || ta.navigation_path) hlNavigate(c.navigation_path || ta.navigation_path);
       else if ((c.entities || []).length) {
         const el = document.createElement("homelines-detail");
-        el.spec = hlDetail({}, "entities", { title: c.name, entities: c.entities, hours: Number(c.hours) || 24 });
+        el.hass = this._hass; el.open(null, "entities", { title: c.name, key: c.window, entities: c.entities, hours: Number(c.hours) || 24 });
         this._pop = hlOpenPopup(this._hass, null, null, { showCard: false, content: el, title: c.name });
       }
       else if (c.entity) this.dispatchEvent(new CustomEvent("hass-more-info", { bubbles: true, composed: true, detail: { entityId: c.entity } }));
@@ -784,7 +798,7 @@ const popCss = `
 function hlFmt(hass, e) {
   const st = e && hass.states[e]; if (!st || ["unavailable", "unknown"].includes(st.state)) return null;
   const v = parseFloat(st.state), u = st.attributes.unit_of_measurement || "";
-  if (!isNaN(v) && /^-?[\d.]+$/.test(st.state)) return `${v.toLocaleString("de-DE", { maximumFractionDigits: Math.abs(v) >= 100 ? 0 : 1 })}${u ? " " + u : ""}`;
+  if (!isNaN(v) && /^-?[\d.]+$/.test(st.state)) return hlNum(v, u);
   if (e.startsWith("button.")) return null;
   return st.state;
 }
@@ -833,7 +847,7 @@ function hlOverviewEntities(s) {
    controls  – Schalter und Knöpfe (HA-Liste)
    phone     – Prüfliste Notfall-Handy, log – Ausfall-Protokoll, hint – Hinweis */
 const HL_CTL = /^(button|switch|input_[a-z]+|time|select|number|script|automation)\./;
-function hlDetail(s, kind, wid) {
+function hlDetailDefault(s, kind, wid) {
   const d = s.details || {}, own = d.own || {}, blocks = [];
   const uniq = arr => [...new Set((arr || []).filter(Boolean))];
   const vals = arr => uniq(arr).filter(e => !HL_CTL.test(e));
@@ -882,6 +896,117 @@ function hlDetail(s, kind, wid) {
   push("chart", { title: "Paketverlust – 30 Tage", entities: uniq([own.packet_loss]), hours: 720 });
   push("controls", { title: "Bedienung", entities: ctls(d.monitor) });
   return { title: "Ausfälle und Verlauf", blocks };
+}
+
+/* ================================================================ Fenster-Baukasten (ab 0.9.0)
+   Jedes Fenster ist eine Liste von Bausteinen. Hat der Nutzer ein Fenster angepasst, speichert die
+   Integration es unter einem Schlüssel (Leitung: WAN2, „speed“, „outages“, eigene Kachel: „t-strom“).
+   Sonst zeigt HomeLines das eingebaute Fenster wie bisher. */
+const HL_NAMED = { blue: "#4469d0", orange: "#e8b33f", red: "#e9735a", green: "#5fb7a0", purple: "#9b6ad6", teal: "#4fa7d8", pink: "#c75c8a", gray: "#8a9099" };
+const HL_COLOR_N = { blue: "Blau", orange: "Gelb", red: "Rot", green: "Grün", purple: "Lila", teal: "Türkis", pink: "Rosa", gray: "Grau" };
+const HL_BLK = { values: ["mdi:view-grid-outline", "Werte"], chart: ["mdi:chart-line", "Grafik"], actions: ["mdi:gesture-tap-button", "Schalter und Aktionen"],
+  log: ["mdi:format-list-bulleted", "Protokoll"], text: ["mdi:information-outline", "Hinweistext"], phone: ["mdi:cellphone-check", "Prüfliste Notfall-Handy"] };
+const HL_BLK_D = { values: "aktuelle Werte, mit Warnfarben", chart: "Linie, Fläche, Balken oder An/Aus-Streifen", actions: "Schalter, Uhrzeit, Knöpfe",
+  log: "Ausfälle, Notbetrieb, Neueinwahl", text: "kurzer Hinweis, neutral, gelb oder rot", phone: "Kabel, Mobilfunk, mobile Daten" };
+const HL_HOURS = { "24h": 24, "7d": 168, "30d": 720 };
+const HL_RANGE_N = [["24h", "24 h"], ["7d", "7 Tage"], ["30d", "30 Tage"]];
+const HL_KIND_N = [["line", "Linie"], ["area", "Fläche"], ["bar", "Balken"], ["strip", "An/Aus-Streifen"]];
+const HL_WHEN_N = [["unavail", "nicht erreichbar ist"], ["below", "unter"], ["above", "über"], ["is", "gleich"], ["isnot", "nicht gleich"]];
+const HL_LOG_N = [["outages", "Ausfälle"], ["switch", "Notbetrieb (Umschaltungen)"], ["reconnect", "Letzte Neueinwahl"]];
+const HL_GRP_N = { all: "Wert", phone: "Rufnummer", battery: "Batterie", power: "Steckdose", connectivity: "Gerät", temperature: "Fühler" };
+const hlRangeOf = h => (h >= 720 ? "30d" : h >= 168 ? "7d" : "24h");
+function hlSlug(n) {
+  return String(n || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 36) || "kachel";
+}
+function hlWinKey(kind, wid) {
+  if (kind === "line") return String(wid);
+  if (kind === "entities") return (wid && wid.key) || `t-${hlSlug(wid && wid.title)}`;
+  return kind;   // speed, outages
+}
+function hlFromStored(list) {
+  return (list || []).map(b => {
+    const ents = b.ents || [];
+    if (b.t === "values") return { type: "values", title: b.title, entities: ents, rules: b.rules || [], style: b.style };
+    if (b.t === "chart") return b.kind === "strip" ? { type: "timeline", title: b.title, entities: ents, hours: HL_HOURS[b.range] || 24 }
+      : { type: "chart", title: b.title, entities: ents, hours: HL_HOURS[b.range] || 24, kind: b.kind, mode: b.mode, colors: b.colors || {}, limit: b.limit, stats: b.stats };
+    if (b.t === "actions") return { type: "controls", title: b.title, entities: ents };
+    if (b.t === "log") return { type: "log", title: b.title, src: b.src, n: b.n, style: b.style };
+    if (b.t === "text") return { type: "hint", text: b.text, tone: b.tone };
+    if (b.t === "phone") return { type: "phone" };
+    return null;
+  }).filter(Boolean);
+}
+const HL_NOLIMIT = () => ({ on: false, v: "", dir: "below", c: "warn" });
+function hlToStored(blocks) {
+  return (blocks || []).map(b => {
+    const ents = [...(b.entities || [])];
+    if (b.type === "values") return { t: "values", title: b.title || "", ents, rules: b.rules || [], style: b.style || "tiles" };
+    if (b.type === "chart") return { t: "chart", title: b.title || "", ents, kind: b.kind || "line", range: hlRangeOf(b.hours || 24), mode: b.mode || "together",
+      colors: { ...(b.colors || {}) }, limit: { ...HL_NOLIMIT(), ...(b.limit || {}) }, stats: !!b.stats };
+    if (b.type === "timeline") return { t: "chart", title: b.title || "", ents, kind: "strip", range: hlRangeOf(b.hours || 24), mode: "together", colors: {}, limit: HL_NOLIMIT(), stats: false };
+    if (b.type === "controls") return { t: "actions", title: b.title || "", ents };
+    if (b.type === "log") return { t: "log", title: b.title || "Ausfälle", src: b.src || "outages", n: b.n || 20, style: b.style || "list" };
+    if (b.type === "hint") return { t: "text", text: b.text || "", tone: b.tone || "info" };
+    if (b.type === "phone") return { t: "phone", title: "" };
+    return null;
+  }).filter(Boolean);
+}
+function hlDetail(s, kind, wid) {
+  const st = s || {}, def = hlDetailDefault(st, kind, wid), key = hlWinKey(kind, wid);
+  const own = (st.windows || {})[key];
+  return { ...def, key, kind, wid, custom: !!own, blocks: own ? hlFromStored(own) : def.blocks, defaults: def.blocks };
+}
+/* Warnfarben als Sätze: „Rot, wenn eine Rufnummer nicht gleich registered“ */
+function hlGrp(h, e) {
+  const st = h && h.states[e], dc = st && st.attributes.device_class;
+  if (/rufnummer|phone_number|_number_\d+_status/.test(e)) return "phone";
+  return dc || "other";
+}
+function hlRuleHit(h, r, e) {
+  if (r.grp && r.grp !== "all" && hlGrp(h, e) !== r.grp) return null;
+  const st = h && h.states[e]; if (!st) return null;
+  const na = ["unavailable", "unknown"].includes(st.state);
+  if (r.when === "unavail") return na;
+  if (na) return false;
+  const n = parseFloat(st.state), v = parseFloat(String(r.v).replace(",", "."));
+  if (r.when === "below") return !isNaN(n) && n < v;
+  if (r.when === "above") return !isNaN(n) && n > v;
+  if (r.when === "is") return String(st.state) === String(r.v);
+  if (r.when === "isnot") return String(st.state) !== String(r.v);
+  return false;
+}
+function hlLevel(h, rules, ents) {
+  let lvl = "";
+  for (const r of rules || []) {
+    const res = ents.map(e => hlRuleHit(h, r, e)).filter(x => x !== null);
+    const hit = res.length && (r.any === "all" ? res.every(Boolean) : res.some(Boolean));
+    if (hit) { if (r.c === "err") return "err"; lvl = "warn"; }
+  }
+  return lvl;
+}
+/* FRITZ!Box-Vorlage: sucht die Werte über die Integrationen, nicht über feste Namen */
+function hlFritzTemplate(h) {
+  const reg = (h && h.entities) || {}, all = Object.keys((h && h.states) || {});
+  const plat = e => (reg[e] && reg[e].platform) || "";
+  const sorted = a => a.sort((x, y) => x.localeCompare(y, "de", { numeric: true }));
+  const phones = sorted(all.filter(e => e.startsWith("sensor.") && /rufnummer_?\d*_status$|phone_number_?\d*_status$/.test(e)));
+  const dect = sorted(all.filter(e => plat(e) === "fritzbox" && e.startsWith("sensor.") && (/_batterie$|_battery$/.test(e) || (h.states[e].attributes.device_class === "battery"))));
+  const ping = sorted(all.filter(e => plat(e) === "ping" && e.startsWith("binary_sensor.")));
+  const fritz = all.filter(e => plat(e) === "fritz");
+  const router = [
+    ...fritz.filter(e => e.startsWith("sensor.") && h.states[e].attributes.device_class === "temperature"),
+    ...fritz.filter(e => /letzter_neustart|last_restart|uptime/.test(e)),
+    ...fritz.filter(e => e.startsWith("update.")),
+  ];
+  const blocks = [];
+  if (phones.length) blocks.push({ t: "values", title: "Telefonie", ents: phones, rules: [{ c: "err", any: "any", grp: "all", when: "isnot", v: "registered" }], style: "list" });
+  if (dect.length) blocks.push({ t: "values", title: "Heizung (DECT)", ents: dect, rules: [{ c: "err", any: "any", grp: "all", when: "unavail", v: "" }, { c: "warn", any: "any", grp: "all", when: "below", v: "20" }], style: "list" });
+  if (ping.length) blocks.push({ t: "values", title: "WLAN-Geräte", ents: ping, rules: [{ c: "err", any: "any", grp: "all", when: "is", v: "off" }], style: "list" });
+  if (router.length) blocks.push({ t: "values", title: "Router", ents: [...new Set(router)].slice(0, 6), rules: [], style: "tiles" });
+  const temp = router.find(e => h.states[e].attributes.device_class === "temperature");
+  if (temp) blocks.push({ t: "chart", title: "CPU-Temperatur", ents: [temp], kind: "line", range: "7d", mode: "together", colors: {}, limit: { on: true, v: "80", dir: "above", c: "warn" }, stats: true });
+  return blocks;
 }
 
 function hlMoreInfo(entityId) {
@@ -966,7 +1091,64 @@ const detailCss = `
 .hld .hld-sw.on{background:var(--switch-checked-track-color,var(--primary-color,#03a9f4))}.hld .hld-sw.on::after{left:18px}
 .hld .hld-b{margin-left:auto;border:0;background:none;color:var(--primary-color,#03a9f4);font:inherit;font-weight:500;cursor:pointer;padding:6px 8px;border-radius:6px}
 .hld .hld-b:hover{background:var(--secondary-background-color)}
-.hld .hld-in{margin-left:auto;font:inherit;padding:4px 6px;border:1px solid var(--divider-color);border-radius:6px;background:var(--card-background-color,#fff);color:var(--primary-text-color);max-width:50%}`;
+.hld .hld-in{margin-left:auto;font:inherit;padding:4px 6px;border:1px solid var(--divider-color);border-radius:6px;background:var(--card-background-color,#fff);color:var(--primary-text-color);max-width:50%}
+.hld .hld-v.warn{border-color:var(--hl-warn,#f29d0b);background:color-mix(in srgb,var(--hl-warn,#f29d0b) 14%,var(--card-background-color,#fff))}
+.hld .hld-v.err{border-color:var(--hl-err,#db4437);background:color-mix(in srgb,var(--hl-err,#db4437) 10%,var(--card-background-color,#fff))}
+.hld .hld-v.miss{border-style:dashed;border-color:var(--hl-err,#db4437)}
+.hld .hld-hint.warn{background:color-mix(in srgb,var(--hl-warn,#f29d0b) 14%,var(--card-background-color,#fff));color:var(--primary-text-color)}
+.hld .hld-hint.err{background:color-mix(in srgb,var(--hl-err,#db4437) 10%,var(--card-background-color,#fff));color:var(--primary-text-color)}
+.hld .hld-stats{font-size:12px;color:var(--secondary-text-color);margin-top:6px;font-variant-numeric:tabular-nums}
+.hld .hld-tools{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:-4px 0 4px;font-size:12px;color:var(--secondary-text-color)}
+.hld .hld-tlv>div{border-left:2px solid var(--divider-color);padding:0 0 10px 14px;position:relative;font-size:14px;margin-left:5px}
+.hld .hld-tlv>div::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--hl-ok,#2e7d32)}
+.hld .hld-tlv>div.err::before{background:var(--hl-err,#db4437)}.hld .hld-tlv>div.warn::before{background:var(--hl-warn,#f29d0b)}
+.hld .hld-tlv small{display:block;color:var(--secondary-text-color);font-size:12px}
+.hle .hle-b{border:1.5px dashed var(--divider-color);border-radius:14px;padding:6px 8px 2px;margin-bottom:10px;background:color-mix(in srgb,var(--primary-color,#03a9f4) 3%,transparent)}
+.hle .hle-b.sel{border:2px solid var(--primary-color,#03a9f4)}
+.hle .hle-h{display:flex;align-items:center;gap:8px;font-size:14px;min-height:36px}.hle .hle-h ha-icon{--mdc-icon-size:18px;color:var(--secondary-text-color)}
+.hle .hle-h b{font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hle .hle-tools{margin-left:auto;display:flex;gap:2px;flex:none}
+.hle .hle-ib{width:34px;height:34px;border:0;border-radius:8px;background:none;color:var(--secondary-text-color);cursor:pointer;font:inherit;font-size:16px;flex:none}
+.hle .hle-ib:hover{background:var(--secondary-background-color)}.hle .hle-ib:disabled{opacity:.3;cursor:default}
+.hle .hle-ib.on{background:var(--primary-color,#03a9f4);color:#fff}
+.hle .hle-miss{font-size:11px;background:var(--hl-err,#db4437);color:#fff;border-radius:9px;padding:1px 7px;flex:none}
+.hle .hle-form{background:var(--card-background-color,#fff);border:1px solid var(--divider-color);border-radius:12px;padding:10px 12px;margin:4px 0 8px;display:grid;gap:10px}
+.hle .hle-p{opacity:.95}
+.hle .hle-p>.hld-t:first-child,.hle .hle-p>.hld-box>.hld-t:first-child{display:none}
+.hle .hle-form>*,.hle .hle-f{min-width:0}
+.hle .hle-f{display:grid;gap:4px;font-size:12px;color:var(--secondary-text-color)}
+.hle .hle-in{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--divider-color);border-radius:8px;background:var(--card-background-color,#fff);color:var(--primary-text-color);min-width:0;box-sizing:border-box;width:100%}
+.hle .hle-in.sm{width:auto;padding:4px 6px}.hle .hle-in.num{width:76px}
+.hle textarea.hle-in{resize:vertical}
+.hle .hle-sub{font-size:12px;color:var(--secondary-text-color);text-transform:uppercase;letter-spacing:.05em}
+.hle .hle-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:14px}.hle .hle-row>span:first-child{min-width:110px;color:var(--secondary-text-color)}
+.hle .hle-seg{display:inline-flex;flex-wrap:wrap;background:var(--secondary-background-color);border-radius:10px;padding:3px;gap:2px}
+.hle .hle-seg button{border:0;background:none;padding:5px 10px;border-radius:8px;cursor:pointer;color:var(--secondary-text-color);font:inherit;font-size:13px}
+.hle .hle-seg button.on{background:var(--card-background-color,#fff);color:var(--primary-text-color);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.hle .hle-ents{display:grid;gap:6px}
+.hle .hle-ent{display:flex;align-items:center;gap:4px;border:1px solid var(--divider-color);border-radius:10px;padding:5px 6px 5px 10px;font-size:14px}
+.hle .hle-ent.miss{border-color:var(--hl-err,#db4437)}.hle .hle-ent.miss b{color:var(--hl-err,#db4437);font-weight:500}
+.hle .hle-ent .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}.hle .hle-ent small{display:block;font-size:12px;color:var(--secondary-text-color);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hle .hle-cols{display:flex;gap:4px;margin-top:4px}.hle .hle-cols button{width:20px;height:20px;border-radius:50%;border:2px solid transparent;padding:0;cursor:pointer}
+.hle .hle-cols button.on{border-color:var(--primary-text-color)}
+.hle .hle-left{margin-left:0;justify-self:start;padding-left:2px}
+.hle .hle-rule{display:flex;flex-wrap:wrap;align-items:center;gap:6px;border:1px solid var(--divider-color);border-radius:10px;padding:6px 8px;font-size:14px}
+.hle .hle-hint{font-size:12px;color:var(--secondary-text-color)}
+.hle .hle-bar{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+.hle .hle-add{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:6px 0 10px}
+.hle .hle-add button{display:flex;gap:10px;align-items:flex-start;text-align:left;border:1px solid var(--divider-color);border-radius:12px;background:var(--card-background-color,#fff);padding:10px;cursor:pointer;font:inherit;color:var(--primary-text-color)}
+.hle .hle-add small{display:block;color:var(--secondary-text-color);font-size:12px}.hle .hle-add b{font-weight:500}
+.hle .hle-foot{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border-top:1px solid var(--divider-color);padding-top:10px;margin-top:6px}
+.hle .hle-pri{border:0;border-radius:8px;background:var(--primary-color,#03a9f4);color:var(--text-primary-color,#fff);font:inherit;font-weight:500;padding:8px 16px;cursor:pointer}
+.hle-ov{position:fixed;inset:0;z-index:1002;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding:6vh 10px;overflow:auto}
+.hle-dlg{background:var(--card-background-color,#fff);color:var(--primary-text-color);border-radius:16px;width:min(560px,100%);padding:12px 14px 14px;display:grid;gap:8px;box-sizing:border-box}
+.hle-dh{display:flex;align-items:center}.hle-dh b{flex:1;font-size:17px;font-weight:500}
+.hle-chips{display:flex;flex-wrap:wrap;gap:6px}.hle-chips button{border:1px solid var(--divider-color);border-radius:16px;padding:3px 10px;background:none;cursor:pointer;font:inherit;font-size:13px;color:var(--primary-text-color)}
+.hle-chips button.on{background:var(--primary-color,#03a9f4);border-color:var(--primary-color,#03a9f4);color:#fff}
+.hle-list{display:grid;gap:4px;max-height:50vh;overflow:auto}
+.hle-pi{display:flex;gap:8px;text-align:left;border:1px solid var(--divider-color);border-radius:10px;padding:7px 10px;background:none;cursor:pointer;font:inherit;font-size:14px;color:var(--primary-text-color)}
+.hle-pi>span:first-child{flex:1;min-width:0}.hle-pi small{display:block;color:var(--secondary-text-color);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hle-pi .r{color:var(--secondary-text-color);white-space:nowrap}.hle-pi.used{opacity:.5}`;
 
 const HL_TOGGLE = new Set(["switch", "input_boolean", "light", "fan", "automation", "siren", "humidifier"]);
 const HL_CTL_ICON = { switch: "mdi:toggle-switch-variant", input_boolean: "mdi:toggle-switch-variant", button: "mdi:gesture-tap-button",
@@ -988,13 +1170,22 @@ function hlWhen(h, iso) {
   return `${date} ${time}${rel ? ` (${rel})` : ""}`;
 }
 class HomeLinesDetail extends HTMLElement {
-  set spec(v) { this._spec = v; this._series = null; this._key = null; this._paint(); this._load(); }
-  set state(v) { this._s = v; this._paint(); }
+  set spec(v) { this._kind = undefined; this._setSpec(v); }
+  set state(v) {
+    this._s = v;
+    if (this._edit) return;   // während der Bearbeitung nicht neu zeichnen
+    if (this._kind !== undefined && !this._edit && this._spec) {
+      const n = hlDetail(v, this._kind, this._wid);
+      if (JSON.stringify(n.blocks) !== JSON.stringify(this._spec.blocks)) { this._setSpec(n); return; }
+      this._spec.custom = n.custom;
+    }
+    this._paint();
+  }
   set hass(h) {
     const first = !this._hass; this._hass = h;
-    if (first) this._load();
+    if (first) { this._load(); this._sub(); }
     const key = this._ents().map(e => h.states[e] && h.states[e].state).join("|");
-    if (key !== this._key) { this._key = key; this._paint(); }
+    if (key !== this._key && !this._edit) { this._key = key; this._paint(); }
   }
   _ents() { return ((this._spec || {}).blocks || []).flatMap(b => b.entities || []); }
   _name(e) { const st = this._hass && this._hass.states[e]; return hlCleanName((st && st.attributes.friendly_name) || e); }
@@ -1005,11 +1196,11 @@ class HomeLinesDetail extends HTMLElement {
     try { if (h.formatEntityState) return h.formatEntityState(st); } catch (err) { /* ältere HA */ }
     return hlFmt(h, e) ?? st.state;
   }
-  async _load() {
+  async _load(blocks) {
     const sp = this._spec, h = this._hass;
     if (!sp || !h || !h.callWS) return;
     const need = {};
-    sp.blocks.filter(b => b.type === "chart" || b.type === "timeline").forEach(b => b.entities.forEach(e => { need[e] = Math.max(need[e] || 0, b.hours || 24); }));
+    (blocks || sp.blocks).filter(b => b.type === "chart" || b.type === "timeline").forEach(b => b.entities.forEach(e => { need[e] = Math.max(need[e] || 0, b.hours || 24); }));
     const byHours = {};
     Object.entries(need).forEach(([e, hrs]) => { (byHours[hrs] = byHours[hrs] || []).push(e); });
     this._series = this._series || {};
@@ -1018,8 +1209,8 @@ class HomeLinesDetail extends HTMLElement {
         const r = await h.callWS({ type: "history/history_during_period", entity_ids: ents,
           start_time: new Date(Date.now() - hrs * 3600000).toISOString(), minimal_response: true, no_attributes: true,
           significant_changes_only: false });
-        ents.forEach(e => { this._series[e] = ((r && r[e]) || []).map(x => [(x.lu || x.lc || 0) * 1000, x.s]); });
-      } catch (err) { ents.forEach(e => { this._series[e] = this._series[e] || []; }); }
+        ents.forEach(e => { this._series[e] = ((r && r[e]) || []).map(x => [(x.lu || x.lc || 0) * 1000, x.s]); (this._hrs = this._hrs || {})[e] = Number(hrs); });
+      } catch (err) { ents.forEach(e => { this._series[e] = this._series[e] || []; (this._hrs = this._hrs || {})[e] = Number(hrs); }); }
     }));
     this._paint();
   }
@@ -1041,43 +1232,80 @@ class HomeLinesDetail extends HTMLElement {
     const ents = b.entities.filter(e => h.states[e]);
     const numeric = ents.filter(e => !e.startsWith("binary_sensor.") && !isNaN(parseFloat(h.states[e].state)));
     if (!numeric.length) return "";
-    // Gleiche Einheit → ein Diagramm
+    // Gleiche Einheit → ein Diagramm; „je Wert eine Grafik“ → jede Entität einzeln
     const groups = {};
-    numeric.forEach(e => { const u = h.states[e].attributes.unit_of_measurement || ""; (groups[u] = groups[u] || []).push(e); });
-    return Object.entries(groups).map(([u, list]) => {
+    numeric.forEach(e => { const k = b.mode === "separate" ? e : (h.states[e].attributes.unit_of_measurement || ""); (groups[k] = groups[k] || []).push(e); });
+    const color = e => (b.colors && HL_NAMED[b.colors[e]]) || HL_COLORS[numeric.indexOf(e) % HL_COLORS.length];
+    const lv = b.limit && b.limit.on ? parseFloat(String(b.limit.v).replace(",", ".")) : NaN;
+    const lim = isNaN(lv) ? null : lv, limCol = b.limit && b.limit.c === "err" ? "var(--hl-err,#db4437)" : "var(--hl-warn,#f29d0b)";
+    const beyond = v => lim != null && (b.limit.dir === "above" ? v > lim : v < lim);
+    const valAt = (pts, t) => { let v = null; for (const p of pts) { if (p[0] <= t) v = p[1]; else break; } return v; };
+    return Object.entries(groups).map(([, list]) => {
+      const u = h.states[list[0]].attributes.unit_of_measurement || "";
       const series = list.map(e => this._pts(e, hrs).map(p => [p[0], parseFloat(p[1])]).filter(p => !isNaN(p[1])));
       const first = Math.min(...series.map(s => (s[0] || [t1])[0]));
-      const t0 = Math.min(t1 - 600000, Math.max(t1 - hrs * 3600000, first));
-      const all = series.flat().map(p => p[1]);
+      const t0 = b.kind === "bar" ? t1 - hrs * 3600000 : Math.min(t1 - 600000, Math.max(t1 - hrs * 3600000, first));
+      const all = series.flat().map(p => p[1]); if (lim != null) all.push(lim);
       let lo = Math.min(...all), hi = Math.max(...all);
-      if (lo > 0 && lo < hi - lo) lo = 0;  // weit auseinander: ab null zeichnen
+      if ((lo > 0 && lo < hi - lo) || b.kind === "bar" || b.kind === "area") lo = Math.min(0, lo);
       if (!isFinite(lo) || !isFinite(hi)) return "";
       if (hi - lo < 1e-9) { if (lo === 0) hi = 1; else { lo -= Math.abs(lo) * 0.1 || 1; hi += Math.abs(hi) * 0.1 || 1; } }
       const X = t => (t - t0) / (t1 - t0) * 100, Y = v => 96 - (v - lo) / (hi - lo) * 92;
-      const paths = series.map((pts, i) => {
-        // Stufenverlauf; je ~0,25 % Breite höchstens ein Minimum und ein Maximum (Spitzen bleiben sichtbar)
-        let d = "", lastX = -1, lastY = null, mn = null, mx = null;
-        const flush = x => { if (mn == null) return; d += ` L${x.toFixed(2)},${Y(mn).toFixed(2)} L${x.toFixed(2)},${Y(mx).toFixed(2)}`; };
-        pts.forEach((p, k) => {
-          const x = X(p[0]);
-          if (k === 0) { d = `M${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; lastX = x; lastY = p[1]; return; }
-          if (x - lastX < 0.25) { mn = Math.min(mn ?? p[1], p[1]); mx = Math.max(mx ?? p[1], p[1]); lastY = p[1]; return; }
-          flush(lastX); mn = mx = null;
-          d += ` L${x.toFixed(2)},${Y(lastY).toFixed(2)} L${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; lastX = x; lastY = p[1];
+      let paths = "";
+      if (lim != null) {
+        const y = Y(lim);
+        paths += b.limit.dir === "above" ? `<rect x="0" y="0" width="100" height="${y.toFixed(2)}" fill="${limCol}" opacity=".08"/>`
+          : `<rect x="0" y="${y.toFixed(2)}" width="100" height="${(100 - y).toFixed(2)}" fill="${limCol}" opacity=".08"/>`;
+        paths += `<line x1="0" x2="100" y1="${y.toFixed(2)}" y2="${y.toFixed(2)}" stroke="${limCol}" stroke-width="1.2" stroke-dasharray="4 3" vector-effect="non-scaling-stroke"/>`;
+      }
+      if (b.kind === "bar") {
+        const n = hrs <= 24 ? 24 : hrs <= 168 ? 28 : 30, bw = 100 / n, w = bw * 0.8 / list.length, base = Y(Math.max(lo, 0));
+        series.forEach((pts, i) => {
+          for (let k = 0; k < n; k++) {
+            const a = t0 + k * (t1 - t0) / n, z = a + (t1 - t0) / n;
+            const s = [0, 1, 2, 3, 4, 5].map(j => valAt(pts, a + (j + 0.5) * (z - a) / 6)).filter(v => v != null);
+            if (!s.length) continue;
+            const v = s.reduce((x, y) => x + y, 0) / s.length, y = Y(v);
+            paths += `<rect x="${(k * bw + bw * 0.1 + i * w).toFixed(2)}" y="${Math.min(y, base).toFixed(2)}" width="${w.toFixed(2)}" height="${Math.abs(base - y).toFixed(2)}" fill="${beyond(v) ? limCol : color(list[i])}"/>`;
+          }
         });
-        flush(lastX); d += ` L100,${Y(lastY ?? 0).toFixed(2)}`;
-        return `<path d="${d}" fill="none" stroke="${HL_COLORS[i % HL_COLORS.length]}" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
-      }).join("");
-      const f = v => v.toLocaleString("de-DE", { maximumFractionDigits: Math.abs(v) >= 100 ? 0 : 1 });
+      } else {
+        paths += series.map((pts, i) => {
+          // Stufenverlauf; je ~0,25 % Breite höchstens ein Minimum und ein Maximum (Spitzen bleiben sichtbar)
+          let d = "", lastX = -1, lastY = null, mn = null, mx = null, x0 = 0;
+          const flush = x => { if (mn == null) return; d += ` L${x.toFixed(2)},${Y(mn).toFixed(2)} L${x.toFixed(2)},${Y(mx).toFixed(2)}`; };
+          pts.forEach((p, k) => {
+            const x = X(p[0]);
+            if (k === 0) { d = `M${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; lastX = x0 = x; lastY = p[1]; return; }
+            if (x - lastX < 0.25) { mn = Math.min(mn ?? p[1], p[1]); mx = Math.max(mx ?? p[1], p[1]); lastY = p[1]; return; }
+            flush(lastX); mn = mx = null;
+            d += ` L${x.toFixed(2)},${Y(lastY).toFixed(2)} L${x.toFixed(2)},${Y(p[1]).toFixed(2)}`; lastX = x; lastY = p[1];
+          });
+          if (!d) return "";
+          flush(lastX); d += ` L100,${Y(lastY ?? 0).toFixed(2)}`;
+          const fill = b.kind === "area" ? `<path d="${d} L100,${Y(Math.max(lo, 0)).toFixed(2)} L${x0.toFixed(2)},${Y(Math.max(lo, 0)).toFixed(2)} Z" fill="${color(list[i])}" opacity=".16"/>` : "";
+          return `${fill}<path d="${d}" fill="none" stroke="${color(list[i])}" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+        }).join("");
+      }
+      const f = v => hlNum(v, u);
       const names = this._names(list);
       const span = hrs >= 48 ? Math.round(hrs / 24) + " Tage" : hrs + " Stunden";
       const multi = Object.keys(groups).length > 1;
-      const title = b.title && !multi ? b.title : list.length === 1 && multi ? `${this._name(list[0])} – ${span}` : `${multi ? u || "Werte" : "Verlauf"} – ${span}`;
+      const title = b.title && !multi ? b.title : list.length === 1 && multi ? `${b.title ? b.title + ": " : ""}${this._name(list[0])} – ${span}` : `${multi ? u || "Werte" : "Verlauf"} – ${span}`;
+      // Min, Max und Ø (zeitlich gewichtet) über den Zeitraum
+      const stats = b.stats ? list.map((e, i) => {
+        const pts = series[i]; if (!pts.length) return "";
+        let sum = 0, dur = 0;
+        pts.forEach((p, k) => { const z = k + 1 < pts.length ? pts[k + 1][0] : t1, dt = Math.max(0, z - Math.max(p[0], t0)); sum += p[1] * dt; dur += dt; });
+        const vals = pts.map(p => p[1]);
+        return `<div>${list.length > 1 ? `${esc(names[i])}: ` : ""}Min ${esc(f(Math.min(...vals)))} · Max ${esc(f(Math.max(...vals)))} · Ø ${esc(f(dur ? sum / dur : vals[0]))}</div>`;
+      }).join("") : "";
       return `<div class="hld-box hld-c"><div class="hld-t">${esc(title)}</div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color)"><span>${f(hi)}${u ? " " + esc(u) : ""}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color)"><span>${esc(f(hi))}</span>${lim != null ? `<span style="color:${limCol}">Grenze ${esc(f(lim))}</span>` : ""}</div>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none">${paths}</svg>
-        <div style="font-size:11px;color:var(--secondary-text-color)">${f(lo)}${u ? " " + esc(u) : ""}</div>${this._axis(hrs, t0)}
-        <div class="hld-leg">${list.map((e, i) => `<span data-e="${esc(e)}"><i style="background:${HL_COLORS[i % HL_COLORS.length]}"></i>${esc(names[i])} <b>${esc(this._val(e) ?? "–")}</b></span>`).join("")}</div></div>`;
+        <div style="font-size:11px;color:var(--secondary-text-color)">${esc(f(lo))}</div>${this._axis(hrs, t0)}
+        <div class="hld-leg">${list.map((e, i) => `<span data-e="${esc(e)}"><i style="background:${color(e)}"></i>${esc(names[i])} <b>${esc(this._val(e) ?? "–")}</b></span>`).join("")}</div>
+        ${stats ? `<div class="hld-stats">${stats}</div>` : ""}</div>`;
     }).join("");
   }
   _timeline(b) {
@@ -1125,11 +1353,29 @@ class HomeLinesDetail extends HTMLElement {
       ph.wifi ? "WLAN verbunden" : "WLAN aus", ph.wifi_name && ph.wifi ? ph.wifi_name : ""]);
     return `<div class="hld-box"><div class="hld-t">Notfall-Handy</div>${rows.map(r => `<div class="hld-row">${dot(r[0])}<span>${esc(r[1])}</span><span class="r">${esc(r[2])}</span></div>`).join("")}</div>`;
   }
-  _log() {
-    const rec = ((this._s || {}).monitor || {}).recent || [];
-    if (!rec.length) return `<div class="hld-box"><div class="hld-t">Protokoll</div><div class="hld-empty">Keine Ausfälle aufgezeichnet.</div></div>`;
-    return `<div class="hld-box"><div class="hld-t">Protokoll</div><table><tr><th></th><th>Beginn</th><th>Dauer</th><th>Ursache</th></tr>
-      ${rec.slice(0, 20).map(o => `<tr><td><span class="dot ${o.cause === "internet" ? "err" : "warn"}"></span></td><td>${esc(o.start)}</td><td>${esc(o.duration)}</td><td>${esc(HL_CAUSE[o.cause] || o.cause || "")}</td></tr>`).join("")}</table></div>`;
+  _log(b = {}) {
+    const s = this._s || {}, h = this._hass, n = b.n || 20, src = b.src || "outages";
+    const title = b.title || (src === "switch" ? "Notbetrieb" : src === "reconnect" ? "Neueinwahl" : "Protokoll");
+    const box = inner => `<div class="hld-box"><div class="hld-t">${esc(title)}</div>${inner}</div>`;
+    let rows = [];
+    if (src === "outages") {
+      const rec = (s.monitor || {}).recent || [];
+      if (b.style !== "timeline") {
+        if (!rec.length) return box(`<div class="hld-empty">Keine Ausfälle aufgezeichnet.</div>`);
+        return box(`<table><tr><th></th><th>Beginn</th><th>Dauer</th><th>Ursache</th></tr>
+          ${rec.slice(0, n).map(o => `<tr><td><span class="dot ${o.cause === "internet" ? "err" : "warn"}"></span></td><td>${esc(o.start)}</td><td>${esc(o.duration)}</td><td>${esc(HL_CAUSE[o.cause] || o.cause || "")}</td></tr>`).join("")}</table>`);
+      }
+      rows = rec.slice(0, n).map(o => [o.cause === "internet" ? "err" : "warn", o.start, `${o.duration} · ${HL_CAUSE[o.cause] || o.cause || ""}`]);
+    } else if (src === "switch") {
+      rows = (s.emergencies || []).slice().reverse().slice(0, n).map(x => ["err", hlWhen(h, x.start),
+        `Notbetrieb bis ${x.end ? hlWhen(h, x.end) : "jetzt"}${x.flat ? " · mit Tagesflat" : ""}`]);
+    } else if (src === "reconnect") {
+      const r = s.reconnect || {};
+      if (r.last) rows = [[r.error ? "err" : "ok", hlWhen(h, r.last), [r.result, r.ip].filter(Boolean).join(" · ") || "–"]];
+    }
+    if (!rows.length) return box(`<div class="hld-empty">Noch keine Einträge.</div>`);
+    if (b.style === "timeline") return box(`<div class="hld-tlv">${rows.map(([c, t, d]) => `<div class="${c}"><small>${esc(t)}</small>${esc(d)}</div>`).join("")}</div>`);
+    return box(rows.map(([c, t, d]) => `<div class="hld-row"><span class="dot ${c}"></span><span>${esc(d)}</span><span class="r">${esc(t)}</span></div>`).join(""));
   }
   /* Bedienzeilen (Schalter, Knöpfe, Uhrzeit, Auswahl, Zahl, Zeitpunkt) zeichnet HomeLines selbst.
      Die HA-Liste („entities“) bleibt in diesem Fenster seit HA 2026 teils leer: Schalter und Zeitangaben holen
@@ -1166,37 +1412,257 @@ class HomeLinesDetail extends HTMLElement {
     if (a === "select") return h.callService(dom, "select_option", { entity_id: e, option: el.value });
     if (a === "number" && el.value !== "") return h.callService(dom, "set_value", { entity_id: e, value: Number(el.value) });
   }
+  /* ---------------------------------------------------------------- ab 0.9.0: Fenster öffnen, anpassen, speichern */
+  open(s, kind, wid) { this._kind = kind; this._wid = wid; if (s) this._s = s; this._setSpec(hlDetail(this._s || {}, kind, wid)); this._sub(); }
+  _setSpec(v) { this._spec = v; this._series = null; this._hrs = {}; this._key = null; this._root = null; this._slots = null; this.innerHTML = ""; this._paint(); this._load(); }
+  connectedCallback() { this._sub(); }
+  disconnectedCallback() { if (this._feed) { this._feed.remove(this._fl); this._feed = null; } }
+  _sub() {
+    if (this._kind === undefined || this._feed || !this._hass || !this._hass.connection || !this.isConnected) return;
+    this._fl = f => { if (f.data && f.data !== this._s) this.state = f.data; };
+    this._feed = hlFeed(this._hass, (this._s || {}).entry_id); this._feed.add(this._fl);
+  }
+  _admin() { const u = this._hass && this._hass.user; return !!(u && u.is_admin) && this._kind !== undefined; }
+  _bind() {
+    if (this._bound) return; this._bound = true;
+    this.addEventListener("click", ev => {
+      const ed = ev.target.closest("[data-ed]"); if (ed) { this._edClick(ed, ev); return; }
+      if (this._edit) return;
+      const c = ev.target.closest("[data-act]"); if (c) { if (c.tagName === "BUTTON") this._act(c, ev); return; }
+      const t = ev.target.closest("[data-e]"); if (t) hlMoreInfo(t.dataset.e); });
+    this.addEventListener("change", ev => {
+      const f = ev.target.closest("[data-f]"); if (f && this._edit) { this._edSet(f.dataset.f, f.value, f.dataset.i); return; }
+      const c = ev.target.closest("[data-act]"); if (c && !this._edit) this._act(c, ev); });
+    this.addEventListener("input", ev => {
+      if (ev.target.dataset.pq !== undefined && this._edit && this._edit.pick) { this._edit.pick.q = ev.target.value; this._paintPick(); }
+    });
+  }
+  _startEdit() { this._edit = { draft: hlToStored(this._spec.blocks), sel: null, add: false, pick: null, err: "" }; this._paint(); }
+  _cur() { return this._edit.draft[this._edit.sel]; }
+  _edSet(path, val, i) {
+    const E = this._edit, b = E.draft[i != null ? Number(i) : E.sel]; if (!b) return;
+    const ks = path.split("."); let o = b;
+    ks.slice(0, -1).forEach(k => { o = o[k]; });
+    const last = ks[ks.length - 1];
+    o[last] = typeof o[last] === "number" ? Number(val) : val;
+    this._paint();
+  }
+  async _save(reset) {
+    const E = this._edit, msg = { type: "homelines/set_windows", key: this._spec.key };
+    if (!reset) msg.blocks = E.draft;
+    if (this._s && this._s.entry_id) msg.entry_id = this._s.entry_id;
+    try {
+      const w = await this._hass.callWS(msg);
+      this._s = { ...(this._s || {}), windows: w }; this._edit = null;
+      this._setSpec(hlDetail(this._s, this._kind, this._wid));
+    } catch (e) { E.err = `Speichern ging nicht: ${e.message || e}`; this._paint(); }
+  }
+  _edClick(el, ev) {
+    const a = el.dataset.ed, E = this._edit, i = el.dataset.i != null ? Number(el.dataset.i) : null;
+    if (a === "start") return this._startEdit();
+    if (!E) return;
+    const d = E.draft;
+    if (a === "cancel") { this._edit = null; this._setSpec(hlDetail(this._s || {}, this._kind, this._wid)); return; }
+    if (a === "save") return this._save(false);
+    if (a === "reset") return this._save(true);
+    if (a === "sel") E.sel = E.sel === i ? null : i;
+    else if (a === "up" || a === "down") { const j = a === "up" ? i - 1 : i + 1; if (j < 0 || j >= d.length) return; [d[i], d[j]] = [d[j], d[i]]; if (E.sel === i) E.sel = j; }
+    else if (a === "rm") { d.splice(i, 1); E.sel = null; }
+    else if (a === "addopen") E.add = !E.add;
+    else if (a === "add") {
+      const t = el.dataset.v;
+      const nb = { values: { t, title: "Werte", ents: [], rules: [], style: "tiles" },
+        chart: { t, title: "Grafik", ents: [], kind: "line", range: "24h", mode: "together", colors: {}, limit: HL_NOLIMIT(), stats: false },
+        actions: { t, title: "Bedienung", ents: [] }, log: { t, title: "Protokoll", src: "outages", n: 5, style: "timeline" },
+        text: { t, text: "", tone: "info" }, phone: { t, title: "" } }[t];
+      d.push(nb); E.add = false; E.sel = d.length - 1;
+    }
+    else if (a === "fritz") { const f = hlFritzTemplate(this._hass); if (!f.length) { E.err = "Keine FRITZ!Box-Werte gefunden (Integrationen FRITZ!Box Tools, FRITZ!SmartHome oder Ping)."; } else { E.draft = d.concat(f); E.sel = null; E.err = ""; } }
+    else if (a === "setv") { this._edSet(el.dataset.f, el.dataset.v, el.dataset.bi); return; }
+    else if (a === "flip") { const b = d[Number(el.dataset.bi)], ks = el.dataset.f.split("."); let o = b; ks.slice(0, -1).forEach(k => { o = o[k]; }); o[ks[ks.length - 1]] = !o[ks[ks.length - 1]]; }
+    else if (a === "erm") { const b = d[Number(el.dataset.bi)]; const e = b.ents.splice(i, 1)[0]; if (b.colors) delete b.colors[e]; }
+    else if (a === "eup" || a === "edown") { const l = d[Number(el.dataset.bi)].ents, j = a === "eup" ? i - 1 : i + 1; if (j < 0 || j >= l.length) return; [l[i], l[j]] = [l[j], l[i]]; }
+    else if (a === "color") { const b = d[Number(el.dataset.bi)]; b.colors = { ...(b.colors || {}), [el.dataset.e]: el.dataset.v }; }
+    else if (a === "radd") d[Number(el.dataset.bi)].rules.push({ c: "warn", any: "any", grp: "all", when: "unavail", v: "" });
+    else if (a === "rrm") d[Number(el.dataset.bi)].rules.splice(i, 1);
+    else if (a === "pick") { E.pick = { bi: Number(el.dataset.bi), rep: i, q: "", area: "", tab: "sug" }; }
+    else if (a === "ptab") { E.pick.tab = el.dataset.v; this._paintPick(); return; }
+    else if (a === "parea") { E.pick.area = el.dataset.v; this._paintPick(); return; }
+    else if (a === "pclose") { if (el.dataset.self && ev.target !== el) return; E.pick = null; }
+    else if (a === "choose") {
+      const P = E.pick, l = d[P.bi].ents, e = el.dataset.v;
+      if (P.rep != null) l[P.rep] = e; else if (!l.includes(e)) l.push(e);
+      E.pick = null;
+    }
+    else return;
+    this._paint();
+  }
+  /* Auswahl von Entitäten: eigene Liste (HAs Auswahl braucht die HA-Oberfläche, unser Fenster liegt außerhalb) */
+  _area(e) {
+    const h = this._hass, r = (h.entities || {})[e]; if (!r) return "";
+    const id = r.area_id || (r.device_id && h.devices && h.devices[r.device_id] && h.devices[r.device_id].area_id);
+    return (id && h.areas && h.areas[id] && h.areas[id].name) || "";
+  }
+  _fits(b, e) {
+    const h = this._hass, st = h.states[e], dom = e.split(".")[0];
+    if (b.t === "chart") return b.kind === "strip" ? ["binary_sensor", "switch", "input_boolean"].includes(dom) || !isNaN(parseFloat(st.state)) === false
+      : !isNaN(parseFloat(st.state)) && dom !== "binary_sensor";
+    if (b.t === "actions") return HL_CTL.test(e) || ["switch", "input_boolean", "light", "time", "select", "number"].includes(dom) || st.attributes.device_class === "timestamp";
+    const have = (b.ents || []).filter(x => h.states[x]);
+    if (!have.length) return true;
+    const g = new Set(have.map(x => hlGrp(h, x)));
+    return g.has(hlGrp(h, e)) || have.some(x => x.split(".")[0] === dom && (h.states[x].attributes.unit_of_measurement || "") === (st.attributes.unit_of_measurement || "") && (st.attributes.unit_of_measurement || ""));
+  }
+  _pickHtml() {
+    const E = this._edit, P = E.pick, h = this._hass, b = E.draft[P.bi];
+    const all = Object.keys(h.states).filter(e => !e.startsWith("update.") || b.t === "values").sort();
+    const sug = all.filter(e => this._fits(b, e));
+    let list = P.tab === "sug" ? sug : all;
+    // gleiche Einheit wie die schon gewählten Werte zuerst
+    const units = new Set((b.ents || []).filter(e => h.states[e]).map(e => h.states[e].attributes.unit_of_measurement || ""));
+    if (units.size) list = [...list].sort((x, y) => (units.has(h.states[y].attributes.unit_of_measurement || "") ? 1 : 0) - (units.has(h.states[x].attributes.unit_of_measurement || "") ? 1 : 0));
+    const areas = [...new Set(list.map(e => this._area(e)).filter(Boolean))].sort((x, y) => x.localeCompare(y, "de"));
+    if (P.area) list = list.filter(e => this._area(e) === P.area);
+    const q = (P.q || "").toLowerCase().trim();
+    if (q) list = list.filter(e => e.includes(q) || this._name(e).toLowerCase().includes(q) || this._area(e).toLowerCase().includes(q));
+    const cur = b.ents || [], more = list.length > 150;
+    return `<div class="hle-ov" data-ed="pclose" data-self="1"><div class="hle-dlg" role="dialog" aria-label="Entität wählen">
+      <div class="hle-dh"><b>${P.rep != null ? "Fehlenden Wert ersetzen" : "Entität wählen"}</b><button class="hle-ib" data-ed="pclose" aria-label="Schließen">✕</button></div>
+      ${P.rep != null ? `<div class="hld-box hld-hint err">Bisher: ${esc(cur[P.rep])} – gibt es nicht mehr.</div>` : ""}
+      <div class="hle-seg"><button class="${P.tab === "sug" ? "on" : ""}" data-ed="ptab" data-v="sug">Vorschläge (${sug.length})</button><button class="${P.tab === "all" ? "on" : ""}" data-ed="ptab" data-v="all">Alle (${all.length})</button></div>
+      <input class="hle-in" data-pq placeholder="Suchen: Name, Bereich oder Teil der ID" value="${esc(P.q || "")}" aria-label="Suchen">
+      ${areas.length ? `<div class="hle-chips"><button class="${!P.area ? "on" : ""}" data-ed="parea" data-v="">Alle Bereiche</button>${areas.map(a => `<button class="${P.area === a ? "on" : ""}" data-ed="parea" data-v="${esc(a)}">${esc(a)}</button>`).join("")}</div>` : ""}
+      <div class="hle-list">${list.slice(0, 150).map(e => `<button class="hle-pi${cur.includes(e) ? " used" : ""}" data-ed="choose" data-v="${esc(e)}"><span><span>${esc(this._name(e))}</span><small>${esc(this._area(e) || "ohne Bereich")} · ${esc(e)}</small></span><span class="r">${esc(this._val(e) ?? "–")}</span></button>`).join("") || `<div class="hld-empty">Nichts gefunden.</div>`}
+      ${more ? `<div class="hld-empty">Weitere ${list.length - 150} – bitte die Suche nutzen.</div>` : ""}</div></div></div>`;
+  }
+  _paintPick() {
+    const host = this.querySelector(".hle-pickhost"); if (!host) return;
+    const had = this.querySelector("[data-pq]"), pos = had ? had.selectionStart : null;
+    host.innerHTML = this._edit.pick ? this._pickHtml() : "";
+    const inp = this.querySelector("[data-pq]"); if (inp) { inp.focus(); if (pos != null) inp.setSelectionRange(pos, pos); }
+  }
+  _seg(bi, f, opts, cur) {
+    return `<span class="hle-seg">${opts.map(([k, n]) => `<button class="${String(cur) === String(k) ? "on" : ""}" data-ed="setv" data-bi="${bi}" data-f="${f}" data-v="${k}">${esc(n)}</button>`).join("")}</span>`;
+  }
+  _sel(bi, f, opts, cur, label) {
+    return `<select class="hle-in sm" data-f="${f}" data-i="${bi}" aria-label="${esc(label || f)}">${opts.map(([k, n]) => `<option value="${esc(k)}"${String(k) === String(cur) ? " selected" : ""}>${esc(n)}</option>`).join("")}</select>`;
+  }
+  _sw(bi, f, on, label) { return `<button class="hld-sw${on ? " on" : ""}" data-ed="flip" data-bi="${bi}" data-f="${f}" role="switch" aria-checked="${!!on}" aria-label="${esc(label)}" style="margin-left:0"></button>`; }
+  _entsForm(bi, b, colors) {
+    const h = this._hass;
+    return `<div class="hle-ents">${b.ents.map((e, k) => {
+      const miss = !h.states[e];
+      const cols = colors && !miss ? `<span class="hle-cols">${Object.keys(HL_NAMED).map(c => `<button class="${(b.colors[e] || Object.keys(HL_NAMED)[k % 8]) === c ? "on" : ""}" style="background:${HL_NAMED[c]}" data-ed="color" data-bi="${bi}" data-e="${esc(e)}" data-v="${c}" aria-label="${HL_COLOR_N[c]}"></button>`).join("")}</span>` : "";
+      return `<div class="hle-ent${miss ? " miss" : ""}"><span class="n">${miss ? `<b>Wert fehlt – neu wählen</b><small>${esc(e)} gibt es nicht mehr</small>` : `${esc(this._name(e))}<small>${esc(this._area(e) ? this._area(e) + " · " : "")}${esc(this._val(e) ?? "nicht verfügbar")}</small>`}${cols}</span>
+        ${miss ? `<button class="hld-b" data-ed="pick" data-bi="${bi}" data-i="${k}">neu wählen</button>` : `<button class="hle-ib" data-ed="eup" data-bi="${bi}" data-i="${k}" ${k === 0 ? "disabled" : ""} aria-label="nach oben">↑</button><button class="hle-ib" data-ed="edown" data-bi="${bi}" data-i="${k}" ${k === b.ents.length - 1 ? "disabled" : ""} aria-label="nach unten">↓</button>`}
+        <button class="hle-ib" data-ed="erm" data-bi="${bi}" data-i="${k}" aria-label="entfernen">✕</button></div>`; }).join("")}</div>
+      <button class="hld-b hle-left" data-ed="pick" data-bi="${bi}">+ Entität hinzufügen</button>`;
+  }
+  _rulesForm(bi, b) {
+    const h = this._hass, grps = ["all", ...new Set(b.ents.filter(e => h.states[e]).map(e => hlGrp(h, e)).filter(g => HL_GRP_N[g]))];
+    return `${b.rules.map((r, k) => `<div class="hle-rule"><span class="dot ${r.c}"></span>
+        ${this._sel(bi, `rules.${k}.c`, [["warn", "Gelb"], ["err", "Rot"]], r.c, "Farbe")}<span>wenn</span>
+        ${this._sel(bi, `rules.${k}.any`, [["any", "ein/e"], ["all", "alle"]], r.any, "eine oder alle")}
+        ${grps.length > 1 ? this._sel(bi, `rules.${k}.grp`, grps.map(g => [g, HL_GRP_N[g]]), r.grp, "Art") : "<span>Wert</span>"}
+        ${this._sel(bi, `rules.${k}.when`, HL_WHEN_N, r.when, "Bedingung")}
+        ${r.when !== "unavail" ? `<input class="hle-in sm num" data-f="rules.${k}.v" data-i="${bi}" value="${esc(r.v)}" aria-label="Vergleichswert">` : ""}
+        <button class="hle-ib" data-ed="rrm" data-bi="${bi}" data-i="${k}" aria-label="Warnfarbe entfernen">✕</button></div>`).join("")}
+      <button class="hld-b hle-left" data-ed="radd" data-bi="${bi}">+ Warnfarbe</button>
+      <div class="hle-hint">Rot hat Vorrang vor Gelb.</div>`;
+  }
+  _form(bi) {
+    const b = this._edit.draft[bi], title = b.t === "text" || b.t === "phone" ? "" :
+      `<label class="hle-f">Überschrift<input class="hle-in" data-f="title" data-i="${bi}" value="${esc(b.title || "")}"></label>`;
+    if (b.t === "values") return `${title}<div class="hle-sub">Werte</div>${this._entsForm(bi, b)}
+      <div class="hle-row"><span>Darstellung</span>${this._seg(bi, "style", [["tiles", "Kacheln"], ["list", "Liste"]], b.style)}</div>
+      <div class="hle-sub">Warnfarben je Wert</div>${this._rulesForm(bi, b)}`;
+    if (b.t === "chart") return `${title}
+      <div class="hle-row"><span>Art</span>${this._seg(bi, "kind", HL_KIND_N, b.kind)}</div>
+      <div class="hle-row"><span>Zeitraum</span>${this._seg(bi, "range", HL_RANGE_N, b.range)}</div>
+      ${b.kind !== "strip" ? `<div class="hle-row"><span>Mehrere Werte</span>${this._seg(bi, "mode", [["together", "zusammen"], ["separate", "je Wert eine Grafik"]], b.mode)}</div>` : ""}
+      <div class="hle-sub">Werte${b.kind !== "strip" ? " und Farben" : ""}</div>${this._entsForm(bi, b, b.kind !== "strip")}
+      ${b.kind !== "strip" ? `<div class="hle-sub">Grenzlinie</div><div class="hle-rule">${this._sw(bi, "limit.on", b.limit.on, "Grenzlinie")}<span>Linie bei</span>
+        <input class="hle-in sm num" data-f="limit.v" data-i="${bi}" value="${esc(b.limit.v)}" aria-label="Grenzwert"><span>– Bereich</span>
+        ${this._sel(bi, "limit.dir", [["below", "darunter"], ["above", "darüber"]], b.limit.dir, "Richtung")}${this._sel(bi, "limit.c", [["warn", "gelb"], ["err", "rot"]], b.limit.c, "Farbe")}</div>
+        <div class="hle-row"><span>Min, Max und Ø zeigen</span>${this._sw(bi, "stats", b.stats, "Min Max Durchschnitt")}</div>` : `<div class="hle-hint">Grün = an/online, Rot = aus/offline.</div>`}`;
+    if (b.t === "actions") return `${title}<div class="hle-sub">Bedienelemente</div>${this._entsForm(bi, b)}
+      <div class="hle-hint">HomeLines zeichnet passend: Schalter, Uhrzeit, „Drücken“, Auswahl, Zahl oder Zeitpunkt.</div>`;
+    if (b.t === "log") return `${title}<div class="hle-row"><span>Was</span>${this._sel(bi, "src", HL_LOG_N, b.src, "Quelle")}</div>
+      <div class="hle-row"><span>Einträge</span>${this._sel(bi, "n", [[3, "3"], [5, "5"], [10, "10"], [20, "20"]], b.n, "Anzahl")}</div>
+      <div class="hle-row"><span>Darstellung</span>${this._seg(bi, "style", [["timeline", "Zeitleiste"], ["list", "Liste"]], b.style)}</div>`;
+    if (b.t === "text") return `<label class="hle-f">Text<textarea class="hle-in" data-f="text" data-i="${bi}" rows="3">${esc(b.text)}</textarea></label>
+      <div class="hle-row"><span>Farbe</span>${this._seg(bi, "tone", [["info", "neutral"], ["warn", "gelb"], ["err", "rot"]], b.tone)}</div>`;
+    return `<div class="hle-hint">Eingebaut: zeigt Kabel, Mobilfunk und mobile Daten des Notfall-Handys. Keine Einstellungen.</div>`;
+  }
+  _paintEdit() {
+    const E = this._edit, d = E.draft, sp = hlFromStored(d);
+    const have = this._hrs || {}, miss = sp.filter(b => b.type === "chart" || b.type === "timeline").some(b => b.entities.some(e => (have[e] || 0) < (b.hours || 24)));
+    if (miss && !this._loading) { this._loading = true; this._load(sp).finally(() => { this._loading = false; }); }
+    const blocks = d.map((b, i) => {
+      const miss = (b.ents || []).filter(e => !this._hass.states[e]).length;
+      return `<div class="hle-b${E.sel === i ? " sel" : ""}">
+        <div class="hle-h"><ha-icon icon="${HL_BLK[b.t][0]}"></ha-icon><b>${esc(b.title || HL_BLK[b.t][1])}</b>${miss ? `<span class="hle-miss">${miss} Wert fehlt</span>` : ""}
+          <span class="hle-tools"><button class="hle-ib${E.sel === i ? " on" : ""}" data-ed="sel" data-i="${i}" aria-label="Baustein bearbeiten">✎</button>
+          <button class="hle-ib" data-ed="up" data-i="${i}" ${i === 0 ? "disabled" : ""} aria-label="nach oben">↑</button>
+          <button class="hle-ib" data-ed="down" data-i="${i}" ${i === d.length - 1 ? "disabled" : ""} aria-label="nach unten">↓</button>
+          <button class="hle-ib" data-ed="rm" data-i="${i}" aria-label="Baustein löschen">✕</button></span></div>
+        ${E.sel === i ? `<div class="hle-form">${this._form(i)}</div>` : ""}
+        <div class="hle-p">${this._blockHtml(sp[i], true) || `<div class="hld-empty">Noch leer – ✎ antippen.</div>`}</div></div>`;
+    }).join("");
+    const add = E.add ? `<div class="hle-add">${Object.keys(HL_BLK).map(t => `<button data-ed="add" data-v="${t}"><ha-icon icon="${HL_BLK[t][0]}"></ha-icon><span><b>${HL_BLK[t][1]}</b><small>${HL_BLK_D[t]}</small></span></button>`).join("")}</div>` : "";
+    this.innerHTML = `<style>${detailCss}</style><div class="hld hle">
+      <div class="hld-box hld-hint">Fenster anpassen: Bausteine mit ↑ ↓ ordnen, mit ✎ einstellen. Gilt für alle HomeLines-Karten.</div>
+      ${E.err ? `<div class="hld-box hld-hint err">${esc(E.err)}</div>` : ""}
+      ${blocks || `<div class="hld-empty">Das Fenster ist leer.</div>`}
+      <div class="hle-bar"><button class="hld-b" data-ed="addopen">+ Baustein</button><button class="hld-b" data-ed="fritz">+ FRITZ!Box-Vorlage</button></div>${add}
+      <div class="hle-foot">${this._spec.custom ? `<button class="hld-b" data-ed="reset">Eingebautes Fenster</button>` : ""}<span style="flex:1"></span>
+        <button class="hld-b" data-ed="cancel">Abbrechen</button><button class="hle-pri" data-ed="save">Speichern</button></div>
+      <div class="hle-pickhost">${E.pick ? this._pickHtml() : ""}</div></div>`;
+    const inp = this.querySelector("[data-pq]"); if (inp) inp.focus();
+  }
+  _values(b) {
+    const h = this._hass, names = this._names(b.entities), lv = e => hlLevel(h, b.rules, [e]);
+    const t = b.title ? `<div class="hld-t">${esc(b.title)}</div>` : "";
+    if (b.style === "list") return `<div class="hld-box">${t}${b.entities.map((e, k) => { const v = this._val(e), miss = !h.states[e];
+      const l = miss ? "err" : lv(e) || (v == null ? "mut" : "ok");
+      return `<div class="hld-row" data-e="${esc(e)}" style="cursor:pointer"><span class="dot ${l}"></span><span>${esc(miss ? e : names[k])}</span><span class="r">${esc(v ?? (miss ? "Wert fehlt" : "nicht verfügbar"))}</span></div>`; }).join("")}</div>`;
+    return `${b.title ? `<div class="hld-t" style="margin:2px 2px 6px">${esc(b.title)}</div>` : ""}<div class="hld-vals">${b.entities.map((e, k) => { const v = this._val(e), miss = !h.states[e];
+      return `<div class="hld-v${v == null ? " na" : ""} ${miss ? "miss" : lv(e)}" data-e="${esc(e)}"><div class="hld-n">${esc(miss ? e : names[k])}</div><div class="hld-x">${esc(v ?? (miss ? "Wert fehlt" : "nicht verfügbar"))}</div></div>`; }).join("")}</div>`;
+  }
+  _blockHtml(b, editing) {
+    if (!b) return "";
+    if (b.type === "values") return b.entities.length ? this._values(b) : "";
+    if (b.type === "chart") return this._chart(b);
+    if (b.type === "timeline") return this._timeline(b);
+    if (b.type === "phone") return this._phone() || (editing ? `<div class="hld-empty">Notfall-Handy ist nicht eingerichtet.</div>` : "");
+    if (b.type === "log") return this._log(b);
+    if (b.type === "controls") return b.entities.length ? this._controls(b) : "";
+    if (b.type === "hint") return b.text ? `<div class="hld-box hld-hint ${b.tone === "warn" || b.tone === "err" ? b.tone : ""}">${esc(b.text)}</div>` : "";
+    return "";
+  }
   _paint() {
     const sp = this._spec, h = this._hass;
     if (!sp || !h) return;
+    this._bind();
+    if (this._edit) { this._paintEdit(); return; }
     if (!this._root) {
-      this.innerHTML = `<style>${detailCss}</style><div class="hld"></div>`;
+      const tools = this._admin() ? `<div class="hld-tools">${sp.custom ? `<span>angepasst</span>` : ""}<button class="hld-b" data-ed="start">✎ Fenster anpassen</button></div>` : "";
+      this.innerHTML = `<style>${detailCss}</style><div class="hld">${tools}</div>`;
       this._root = this.querySelector(".hld");
-      this.addEventListener("click", ev => {
-        const c = ev.target.closest("[data-act]"); if (c) { if (c.tagName === "BUTTON") this._act(c, ev); return; }
-        const t = ev.target.closest("[data-e]"); if (t) hlMoreInfo(t.dataset.e); });
-      this.addEventListener("change", ev => { const c = ev.target.closest("[data-act]"); if (c) this._act(c, ev); });
       // Feste Reihenfolge der Bausteine
       this._slots = sp.blocks.map(b => { const d = document.createElement("div"); d.dataset.type = b.type; this._root.appendChild(d); return d; });
+      if (!sp.blocks.length) this._root.insertAdjacentHTML("beforeend", `<div class="hld-empty">Dieses Fenster ist leer.</div>`);
     }
     sp.blocks.forEach((b, i) => {
       const slot = this._slots[i];
-      if (b.type === "values") {
-        const names = this._names(b.entities);
-        slot.innerHTML = `<div class="hld-vals">${b.entities.map((e, k) => { const v = this._val(e);
-          return `<div class="hld-v${v == null ? " na" : ""}" data-e="${esc(e)}"><div class="hld-n">${esc(names[k])}</div><div class="hld-x">${esc(v ?? "nicht verfügbar")}</div></div>`; }).join("")}</div>`;
-      }
-      else if (b.type === "chart") slot.innerHTML = this._chart(b);
-      else if (b.type === "timeline") slot.innerHTML = this._timeline(b);
-      else if (b.type === "phone") slot.innerHTML = this._phone();
-      else if (b.type === "log") slot.innerHTML = this._log();
-      else if (b.type === "controls") {   // nicht neu zeichnen, während jemand eine Uhrzeit, Zahl oder Auswahl eingibt
+      if (b.type === "controls") {   // nicht neu zeichnen, während jemand eine Uhrzeit, Zahl oder Auswahl eingibt
         const f = document.activeElement;
-        if (!(f && slot.contains(f) && /^(INPUT|SELECT)$/.test(f.tagName))) slot.innerHTML = this._controls(b);
+        if (f && slot.contains(f) && /^(INPUT|SELECT)$/.test(f.tagName)) return;
       }
-      else if (b.type === "hint") slot.innerHTML = `<div class="hld-box hld-hint">${esc(b.text)}</div>`;
+      slot.innerHTML = this._blockHtml(b);
     });
   }
+
 }
 if (!customElements.get("homelines-detail")) customElements.define("homelines-detail", HomeLinesDetail);
 

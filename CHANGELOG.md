@@ -1,5 +1,16 @@
 # Änderungen
 
+## 0.9.0 – Fenster selbst zusammenstellen, Logo mit Schriftzug
+- **Fenster-Baukasten:** Jedes Fenster (Leitungen, Notfall-Strecke, Geschwindigkeit, Ausfälle, eigene Kacheln) lässt sich direkt im Fenster mit **✎ Fenster anpassen** zusammenstellen – ohne YAML. Bausteine: Werte, Grafik, Schalter und Aktionen, Protokoll, Hinweistext, Prüfliste Notfall-Handy; Reihenfolge mit ↑ ↓.
+- **Grafiken einstellbar:** Linie, Fläche, Balken oder An/Aus-Streifen; 24 Stunden, 7 oder 30 Tage; Werte zusammen oder je Wert eine Grafik; Farbe je Wert; Grenzlinie mit farbigem Bereich; Min, Max und Ø (zeitlich gewichtet).
+- **Warnfarben je Wert** als Satz („Gelb, wenn ein Wert unter 20“); fehlende Entitäten werden als „Wert fehlt“ markiert und lassen sich im Editor neu wählen.
+- **Eigene Auswahl für Entitäten** mit Vorschlägen passend zum Baustein, Suche nach Name, Bereich oder ID und Filter nach Bereich.
+- **FRITZ!Box-Vorlage:** Telefonie, Heizung (DECT), WLAN-Geräte und Router, gefunden über die Integrationen FRITZ!Box Tools, FRITZ!SmartHome und Ping.
+- Angepasste Fenster speichert die Integration (neuer Befehl `homelines/set_windows`, nur für Administratoren, Eingaben werden geprüft); sie gelten für alle Karten. „Eingebautes Fenster“ stellt den Ausgangszustand wieder her.
+- **Logo mit Schriftzug** im Kopf der großen Karte; der Schriftzug passt sich hellem und dunklem Design an. Mit eigenem Titel bleibt es beim Haus mit Titel.
+- **Euro-Beträge** immer mit zwei Nachkommastellen (z. B. 12,40 €), auch in Werten, Kacheln und Grafiken.
+- README: Abschnitt „Fenster selbst zusammenstellen“; Formatfehler im Beispiel zu `homelines.set_details` behoben.
+
 ## 0.8.8 – Schalter und Zeitpunkte im Detailfenster wieder sichtbar
 - **Fehler behoben:** Im Detailfenster der Leitung (Abschnitt „Neueinwahl“) fehlten seit neueren Home-Assistant-Versionen der Schalter „Tägliche Neueinwahl“ und die Uhrzeit bei „Letzte Neueinwahl“. Die HA-Liste holt sich diese Angaben inzwischen aus der HA-Oberfläche, und das HomeLines-Fenster liegt außerhalb davon.
 - HomeLines zeichnet die Bedienzeilen jetzt selbst – Schalter, „Drücken“, Uhrzeit, Auswahl, Zahl und Zeitpunkte („heute 22:42 (vor 3 Minuten)“) – wie seit 0.8.5 schon Werte und Verläufe. Antippen von Symbol oder Name öffnet weiter das HA-Detailfenster.

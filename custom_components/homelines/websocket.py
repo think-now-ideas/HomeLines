@@ -23,7 +23,7 @@ def _hub(hass, msg):
 @callback
 def async_register_websocket(hass: HomeAssistant) -> None:
     for handler in (ws_entries, ws_subscribe, ws_activate, ws_restrict, ws_set_group, ws_preview,
-                    ws_reset, ws_refresh, ws_dismiss):
+                    ws_reset, ws_refresh, ws_dismiss, ws_set_windows):
         websocket_api.async_register_command(hass, handler)
 
 
@@ -128,3 +128,20 @@ async def ws_refresh(hass, connection, msg):
 async def ws_dismiss(hass, connection, msg):
     await _hub(hass, msg).async_dismiss_return()
     connection.send_result(msg["id"])
+
+
+@websocket_api.require_admin
+@websocket_api.websocket_command({vol.Required("type"): "homelines/set_windows",
+                                  vol.Optional("entry_id"): str,
+                                  vol.Optional("windows"): dict,
+                                  vol.Optional("key"): str,
+                                  vol.Optional("blocks"): vol.Any(list, None)})
+@websocket_api.async_response
+async def ws_set_windows(hass, connection, msg):
+    """Fenster speichern (ab 0.9.0). Ohne „blocks“ wird das Fenster auf das eingebaute zurückgesetzt."""
+    hub = _hub(hass, msg)
+    if hub is None:
+        connection.send_error(msg["id"], "not_found", "HomeLines ist nicht eingerichtet")
+        return
+    await hub.async_set_windows(msg.get("windows"), msg.get("key"), msg.get("blocks"))
+    connection.send_result(msg["id"], hub.windows())

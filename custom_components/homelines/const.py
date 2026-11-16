@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "homelines"
 NAME = "HomeLines"
-VERSION = "0.8.8"
+VERSION = "0.9.0"
 
 PLATFORMS = ["binary_sensor", "button", "sensor", "switch", "time"]
 

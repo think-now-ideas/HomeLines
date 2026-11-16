@@ -157,6 +157,7 @@ from .const import (
     SIGNAL_UPDATE,
     STORAGE_VERSION,
 )
+from .windows import clean_windows
 from .monitor import CAUSE_INTERNET, CAUSE_LOCAL, CAUSE_UNKNOWN, OutageLog, Pinger, fmt_duration
 from .reconnect import SSHClient, SSHError, SSHHostKeyError, fingerprint
 from .router import BaseAdapter, Inventory, RouterError, create_adapter
@@ -705,6 +706,26 @@ class HomeLinesHub:
     async def async_dismiss_return(self) -> None:
         self.data["mode"]["return_pending"] = False
         self._save()
+        self._push()
+
+    # ------------------------------------------------------------------ Fenster (ab 0.9.0)
+    def windows(self) -> dict:
+        """Eigene Fenster aus Bausteinen; fehlt ein Fenster, zeigt die Karte das eingebaute."""
+        return self.data.get("windows") or {}
+
+    async def async_set_windows(self, windows: dict | None, key: str | None = None,
+                                blocks: list | None = None) -> None:
+        """Alle Fenster ersetzen (windows) oder ein einzelnes setzen/zurücksetzen (key + blocks/None)."""
+        cur = dict(self.windows())
+        if windows is not None:
+            cur = {k: v for k, v in windows.items()}
+        if key is not None:
+            if blocks is None:
+                cur.pop(key, None)
+            else:
+                cur[key] = blocks
+        self.data["windows"] = clean_windows(cur)
+        await self._store.async_save(self._stored())
         self._push()
 
     def _planned(self) -> bool:
@@ -1448,6 +1469,7 @@ class HomeLinesHub:
             + self.missing_networks,
             "wan_missing": self.wan_missing,
             "details": self.details(),
+            "windows": self.windows(),
             "default_group": self.opt(CONF_DEFAULT_GROUP, DEFAULT_GROUP),
             "supports_networks": self.adapter.supports_networks,
             "usage": {"reset_at": u["reset_at"], "mb": round(u["mb"], 1), "cost": round(u["cost"], 2),
