@@ -326,6 +326,7 @@
           "backup_down": "Backup line down / ready again",
           "phone_silent": "Backup phone not reporting",
           "reconnect_failed": "Reconnect failed",
+          "tile_alert": "Tile warning colour (yellow/red and back to normal)",
           "backup_down_minutes": "Backup line counts as down after"
         },
         "data_description": {}

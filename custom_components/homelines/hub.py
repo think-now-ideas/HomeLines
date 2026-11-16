@@ -69,6 +69,7 @@ from .const import (
     MSG_FLAT_EXPIRED,
     MSG_FLAT_WARNING,
     MSG_PHONE_SILENT,
+    MSG_TILE_ALERT,
     MSG_RECONNECT_FAILED,
     MSG_RESTORED,
     CONF_PHONE_BATTERY,
@@ -157,7 +158,7 @@ from .const import (
     SIGNAL_UPDATE,
     STORAGE_VERSION,
 )
-from .windows import clean_layout, clean_windows
+from .windows import clean_layout, clean_windows, tile_level
 from .monitor import CAUSE_INTERNET, CAUSE_LOCAL, CAUSE_UNKNOWN, OutageLog, Pinger, fmt_duration
 from .reconnect import SSHClient, SSHError, SSHHostKeyError, fingerprint
 from .router import BaseAdapter, Inventory, RouterError, create_adapter
@@ -405,6 +406,9 @@ class HomeLinesHub:
             ir.async_delete_issue(self.hass, DOMAIN, issue)
 
     async def async_stop(self) -> None:
+        if getattr(self, "_alert_unsub", None):
+            self._alert_unsub()
+            self._alert_unsub = None
         for u in self._unsubs:
             u()
         self._unsubs.clear()
@@ -424,7 +428,45 @@ class HomeLinesHub:
     def _push(self) -> None:
         async_dispatcher_send(self.hass, SIGNAL_UPDATE.format(self.entry.entry_id))
 
+    # ------------------------------------------------------------------ Warnfarben melden (ab 0.9.2)
+    def _alert_tiles(self) -> list[dict]:
+        return [r for r in (self.layout() or {}).get("rows", [])
+                if r.get("kind") == "tile" and any(x.get("notify") for x in r.get("rules", []))]
+
+    def _track_alerts(self) -> None:
+        """Kacheln mit „dann auch benachrichtigen“ beobachten. Erste Auswertung still (kein Melden beim Start)."""
+        if getattr(self, "_alert_unsub", None):
+            self._alert_unsub()
+            self._alert_unsub = None
+        tiles = self._alert_tiles()
+        self._alert_state = {r["id"]: self._tile_level(r)[0] for r in tiles}
+        ents = sorted({e for r in tiles for e in r.get("entities", [])})
+        if ents:
+            self._alert_unsub = async_track_state_change_event(self.hass, ents, self._on_alert_event)
+
+    def _tile_level(self, r: dict) -> tuple[str, list[str]]:
+        rules = [x for x in r.get("rules", []) if x.get("notify")]
+        return tile_level(self.hass.states.get, rules, r.get("entities", []))
+
+    @callback
+    def _on_alert_event(self, _event: Event) -> None:
+        self.hass.async_create_task(self._check_alerts())
+
+    async def _check_alerts(self) -> None:
+        rank = {"": 0, "warn": 1, "err": 2}
+        for r in self._alert_tiles():
+            lvl, why = self._tile_level(r)
+            prev = self._alert_state.get(r["id"], "")
+            self._alert_state[r["id"]] = lvl
+            if rank[lvl] > rank[prev]:
+                await self.notify(MSG_TILE_ALERT, f"HomeLines: {r['name']} {'rot' if lvl == 'err' else 'gelb'}",
+                                  "; ".join(why) or r["name"])
+            elif not lvl and prev:
+                await self.notify(MSG_TILE_ALERT, f"HomeLines: {r['name']} wieder in Ordnung",
+                                  f"{r['name']}: keine Warnfarbe mehr.")
+
     def _track_entities(self) -> None:
+        self._track_alerts()
         wan_ents = [e for e in [self.opt(CONF_ACTIVE_WAN_ENTITY), self.opt(CONF_PRIMARY_STATUS_ENTITY),
                                 self.opt(CONF_CUSTOM_DOWN_ENTITY), *self.opt(CONF_WAN_STATUS_ENTITIES, [])] if e]
         if wan_ents:
@@ -721,6 +763,7 @@ class HomeLinesHub:
         if layout is not None:
             self.data["layout"] = clean_layout(layout)
             await self._store.async_save(self._stored())
+            self._track_alerts()
         names = {wid: str(n).strip()[:40] for wid, n in (line_names or {}).items() if re.match(r"^WAN[1-4]$", str(wid))}
         opts = dict(self.entry.options)
         changed = False

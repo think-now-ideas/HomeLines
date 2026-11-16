@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.9.1";
+const HL_VERSION = "0.9.2";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
 /* Logo mit Schriftzug (ab 0.9.0): Schrift in currentColor, passt zu hell und dunkel */
 const HL_WORD = `<svg class="hlword" viewBox="14 22 2400 742" role="img" aria-label="HomeLines"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/><g fill="currentColor"><path d="M859.31,442.82v108.35h135.71v-108.35h17.51v245.88h-17.51v-122.94h-135.71v122.94h-17.51v-245.88H859.31Z"/><path d="M1114.31,692.71c-45.24,0-80.26-35.38-80.26-90.1,0-59.83,39.4-93.03,82.81-93.03,48.52,0,81.35,36.48,81.35,90.11,0,64.94-44.87,93.02-83.54,93.02H1114.31ZM1115.4,678.12c36.48,0,65.3-32.83,65.3-77.7,0-32.1-17.87-76.25-64.2-76.25s-64.94,39.77-64.94,77.34c0,43.78,27.73,76.61,63.48,76.61H1115.4Z"/><path d="M1218.65,555.55c0-16.05-.37-28.09-1.46-41.96h16.41l1.1,30.65h.73c11.31-20.07,28.09-34.66,56.91-34.66,24.07,0,42.68,16.05,50.34,37.94h.73c4.74-10.21,11.31-18.24,17.88-23.71,11.3-9.12,22.98-14.23,41.58-14.23,17.15,0,57.28,9.49,57.28,75.88v103.24h-17.51v-101.78c0-39.4-15.32-62.75-45.6-62.75-21.89,0-39.04,16.42-45.97,34.66-1.46,5.11-2.92,10.95-2.92,17.51v112.36h-17.51v-109.8c0-31.38-14.96-54.73-43.41-54.73-23.35,0-41.95,18.97-48.52,39.4-1.46,5.11-2.55,10.95-2.55,17.15v107.98h-17.51V555.55Z"/><path d="M1496.99,599.32c0,55.82,30.65,78.07,66.76,78.07,25.54,0,38.67-5.1,48.52-9.85l4.38,13.5c-6.57,3.65-24.44,11.31-55.09,11.31-50.34,0-81.71-36.48-81.71-87.92,0-58.37,33.56-94.85,78.8-94.85,57.27,0,68.21,53.99,68.21,79.17,0,4.74,0,7.29-.73,10.57H1496.99ZM1608.62,585.46c.37-24.44-9.85-61.29-52.16-61.29-38.67,0-55.09,34.3-58.37,61.29H1608.62Z"/><path d="M1659.51,442.82h44.87v208.31h101.06v37.57h-145.93V442.82Z"/><path d="M1850.34,485.5c-14.95,0-24.8-10.94-24.8-24.07,0-13.87,10.21-24.44,25.17-24.44s24.81,10.57,25.17,24.44c0,13.13-9.85,24.07-25.17,24.07H1850.34ZM1828.09,688.7v-177.66h44.87v177.66H1828.09Z"/><path d="M1912.69,563.94c0-20.43-.73-37.58-1.46-52.9h39.04l2.18,26.63h1.1c8.02-13.86,27.36-30.64,56.91-30.64,31.01,0,63.11,20.06,63.11,76.24v105.43h-44.87v-100.32c0-25.54-9.49-44.87-33.93-44.87-17.87,0-30.28,12.77-35.02,26.27-1.46,3.64-2.19,9.12-2.19,14.22v104.7h-44.87V563.94Z"/><path d="M2145.11,612.46c1.09,32.1,26.27,45.96,54.72,45.96,20.8,0,35.39-3.28,49.25-8.02l6.57,30.64c-15.33,6.57-36.48,11.31-62.02,11.31-57.64,0-91.57-35.39-91.57-89.74,0-49.25,29.92-95.58,86.83-95.58s76.61,47.42,76.61,86.46c0,8.39-.73,14.95-1.46,18.97H2145.11ZM2223.18,581.08c.36-16.41-6.93-43.41-36.85-43.41-27.72,0-39.4,25.17-41.22,43.41H2223.18Z"/><path d="M2291.29,647.11c9.85,6.21,29.18,13.14,45.23,13.14,19.7,0,28.46-8.39,28.46-20.07s-7.3-17.87-29.19-25.9c-34.65-11.67-48.88-30.64-48.88-51.8,0-31.37,25.9-55.45,67.12-55.45,19.7,0,36.85,4.74,47.43,10.58l-9.12,31.37c-7.3-4.38-21.89-10.21-37.58-10.21s-24.8,8.02-24.8,18.97,8.39,16.41,31.01,24.8c32.46,11.31,47.06,27.73,47.42,54,0,32.46-25.17,55.81-72.23,55.81-21.52,0-40.86-5.11-53.99-12.4L2291.29,647.11Z"/></g></svg>`;
@@ -527,7 +527,16 @@ class HomeLinesCard extends HTMLElement {
     const pos = i => { const n = E.layout.rows.length; return `<div class="hlfr"><span>Position</span><button class="hlib" data-ce="up" ${i === 0 ? "disabled" : ""} aria-label="nach oben">↑</button><button class="hlib" data-ce="down" ${i === n - 1 ? "disabled" : ""} aria-label="nach unten">↓</button><small>${i + 1}. von ${n}</small></div>`; };
     const win = (key, label) => `<button class="hlwide" data-ce="win" data-v="${esc(key)}"><span>🗔 ${label || "Fenster bearbeiten (beim Antippen)"}</span><span>›</span></button>`;
     let title = "Bearbeiten", body = "";
-    if (!sel) body = `<p class="hlhint">Tippe auf ein ✎ in der Karte. Hier erscheinen dann nur die Einstellungen dieses Teils. Fenster stellst du über ihre Kachel oder Leitung ein.</p>`;
+    if (!sel) {
+      const L = E.load;
+      body = `<p class="hlhint">Tippe auf ein ✎ in der Karte. Hier erscheinen dann nur die Einstellungen dieses Teils. Fenster stellst du über ihre Kachel oder Leitung ein.</p>
+        <div class="hlsub">Einstellungen sichern und laden</div>
+        <div class="hlfr"><button class="hllink" data-ce="export">Sichern (Datei)</button><button class="hllink" data-ce="showjson">${E.json ? "Text ausblenden" : "Als Text zeigen"}</button>
+          <label class="hllink">Laden …<input type="file" accept=".json,application/json" data-cf="import" hidden></label><span></span></div>
+        ${E.json ? `<textarea class="hlin" readonly rows="6" aria-label="Einstellungen als Text">${esc(E.json)}</textarea><small class="hlhint">Zum Markieren und Kopieren, z. B. am iPad.</small>` : ""}
+        ${L ? `<div class="hlwhy warn"><b>${esc(L.name)}</b>: ${(L.data.layout && L.data.layout.rows || []).length} Zeilen und Kacheln, ${Object.keys(L.data.windows || {}).length} Fenster. Den Aufbau aller HomeLines-Karten und alle Fenster damit ersetzen?
+          <div class="hlfr" style="margin-top:6px"><button class="hlpri" data-ce="loadok">Ersetzen</button><button class="hllink" data-ce="loadno">Abbrechen</button><span></span></div></div>` : ""}`;
+    }
     else if (sel === "head") { title = "Kopf"; body = `<label class="hlf">Titel<input class="hlin" data-cf="title" value="${esc(E.layout.title)}" placeholder="leer = Logo mit Schriftzug"></label>`; }
     else if (sel.startsWith("line:")) {
       const id = sel.slice(5), shown = !E.layout.hide_lines.includes(id);
@@ -560,8 +569,10 @@ class HomeLinesCard extends HTMLElement {
             <select class="hlin sm" data-cf="rule:${k}:grp">${["all", ...new Set(r.entities.filter(e => h.states[e]).map(e => hlGrp(h, e)).filter(g => HL_GRP_N[g]))].map(g => `<option value="${g}"${x.grp === g ? " selected" : ""}>${HL_GRP_N[g]}</option>`).join("")}</select>
             <select class="hlin sm" data-cf="rule:${k}:when">${HL_WHEN_N.map(([w, n]) => `<option value="${w}"${x.when === w ? " selected" : ""}>${n}</option>`).join("")}</select>
             ${x.when !== "unavail" ? `<input class="hlin sm num" data-cf="rule:${k}:v" value="${esc(x.v)}" aria-label="Vergleichswert">` : ""}
+            <select class="hlin sm" data-cf="rule:${k}:notify" aria-label="benachrichtigen"><option value="">nicht melden</option><option value="1"${x.notify ? " selected" : ""}>melden</option></select>
             <button class="hlib" data-ce="rrm" data-i="${k}" aria-label="Warnfarbe entfernen">✕</button></div>`).join("")}
           <button class="hllink" data-ce="radd">+ Warnfarbe</button>
+          ${r.rules.some(x => x.notify) ? `<small class="hlhint">„melden“ schickt eine Nachricht an die Empfänger unter HomeLines → Konfigurieren → Meldungen („Warnfarbe einer Kachel“): einmal beim Wechsel auf gelb oder rot und wenn wieder alles in Ordnung ist.</small>` : ""}
           ${(() => { const lv = hlLevel(h, r.rules, r.entities.filter(e => h.states[e])); return `<div class="hlwhy ${lv}">${lv ? `<b>Warum ${lv === "err" ? "rot" : "gelb"}?</b> ${r.rules.filter(x => hlLevel(h, [x], r.entities.filter(e => h.states[e]))).map(x => `${x.c === "err" ? "Rot" : "Gelb"}, wenn ${x.any === "all" ? "alle" : "ein/e"} ${HL_GRP_N[x.grp] || "Wert"} ${HL_WHEN_N.find(w => w[0] === x.when)[1]}${x.when !== "unavail" ? " " + x.v : ""}`).join("; ")}` : "<b>Warum neutral?</b> Keine Warnfarbe trifft gerade zu."}</div>`; })()}`;
       } else body += `<small class="hlhint">Eingebaute Kachel: Was sie anzeigt, setzt HomeLines.</small>`;
       body += win(r.id === "backup" ? (s.wans || []).find(w => w.backup)?.id || "backup" : r.id) + pos(i);
@@ -600,6 +611,22 @@ class HomeLinesCard extends HTMLElement {
     else if (a === "del") { E.layout.rows.splice(ri, 1); E.sel = null; }
     else if (a === "erm") r.entities.splice(i, 1);
     else if (a === "eup" || a === "edown") { const l = r.entities, j = a === "eup" ? i - 1 : i + 1; if (j >= 0 && j < l.length) [l[i], l[j]] = [l[j], l[i]]; }
+    else if (a === "export" || a === "showjson") {
+      const data = JSON.stringify({ homelines: HL_VERSION, layout: E.layout, windows: (this._s || {}).windows || {} }, null, 1);
+      if (a === "showjson") E.json = E.json ? "" : data;
+      else { const u = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+        const l = document.createElement("a"); l.href = u; l.download = "homelines-einstellungen.json"; document.body.appendChild(l); l.click(); l.remove();
+        setTimeout(() => URL.revokeObjectURL(u), 5000); return; }
+    }
+    else if (a === "loadno") E.load = null;
+    else if (a === "loadok") {
+      const d = E.load.data, eid = this._s && this._s.entry_id ? { entry_id: this._s.entry_id } : {};
+      try {
+        const w = await this._hass.callWS({ type: "homelines/set_windows", windows: d.windows || {}, ...eid });
+        const lay = await this._hass.callWS({ type: "homelines/set_layout", layout: d.layout || E.layout, ...eid });
+        this._s = { ...this._s, layout: lay, windows: w }; this._ed = null;
+      } catch (e) { E.err = `Laden ging nicht: ${e.message || e}`; E.load = null; }
+    }
     else if (a === "radd") r.rules.push({ c: "warn", any: "any", grp: "all", when: "unavail", v: "" });
     else if (a === "rrm") r.rules.splice(i, 1);
     else if (a === "pick") {
@@ -634,7 +661,16 @@ class HomeLinesCard extends HTMLElement {
     else if (f === "rname") r.name = t.value.trim() || "Kachel";
     else if (f === "ricon") r.icon = t.value;
     else if (f === "rcombine") r.combine = t.value;
-    else if (f.startsWith("rule:")) { const [, k, key] = f.split(":"); r.rules[Number(k)][key] = t.value; }
+    else if (f.startsWith("rule:")) { const [, k, key] = f.split(":"), x = r.rules[Number(k)];
+      if (key === "notify") { if (t.value) x.notify = true; else delete x.notify; } else x[key] = t.value; }
+    else if (f === "import") {
+      const file = t.files && t.files[0]; if (!file) return;
+      file.text().then(txt => { let d = null; try { d = JSON.parse(txt); } catch (e) { d = null; }
+        if (!d || typeof d !== "object" || (!d.layout && !d.windows)) { E.err = "Die Datei enthält keine HomeLines-Einstellungen."; E.load = null; }
+        else { E.load = { name: file.name, data: d }; E.err = ""; }
+        this._render(); });
+      return;
+    }
     this._render();
   }
   _ov(s) {

@@ -51,6 +51,7 @@ def _rules(v: Any) -> list[dict]:
             "grp": _txt(r.get("grp") or "all", 30),
             "when": r["when"],
             "v": _txt(r.get("v"), 40),
+            **({"notify": True} if r.get("notify") is True else {}),
         })
     return out[:MAX_RULES]
 
@@ -135,3 +136,59 @@ def clean_layout(v: Any) -> dict:
             break
     hide = [str(x) for x in (v.get("hide_lines") or []) if re.match(r"^WAN\d$", str(x))] if isinstance(v.get("hide_lines"), list) else []
     return {"title": _txt(v.get("title"), 40), "rows": rows, "hide_lines": hide}
+
+
+# ---------------------------------------------------------------------- Warnfarben auswerten (ab 0.9.2)
+_NA = ("unavailable", "unknown")
+WHEN_N = {"unavail": "nicht erreichbar", "below": "unter", "above": "über", "is": "gleich", "isnot": "nicht gleich"}
+
+
+def _grp(state) -> str:
+    if re.search(r"rufnummer|phone_number|_number_\d+_status", state.entity_id):
+        return "phone"
+    return state.attributes.get("device_class") or "other"
+
+
+def _num(x: Any) -> float | None:
+    try:
+        return float(str(x).replace(",", "."))
+    except (TypeError, ValueError):
+        return None
+
+
+def rule_hit(get, r: dict, eid: str) -> bool | None:
+    """Wie hlRuleHit in der Karte: None = Regel gilt für diesen Wert nicht."""
+    st = get(eid)
+    if st is None or (r.get("grp", "all") != "all" and _grp(st) != r["grp"]):
+        return None
+    na = st.state in _NA
+    if r["when"] == "unavail":
+        return na
+    if na:
+        return False
+    n, v = _num(st.state), _num(r.get("v"))
+    if r["when"] == "below":
+        return n is not None and v is not None and n < v
+    if r["when"] == "above":
+        return n is not None and v is not None and n > v
+    if r["when"] == "is":
+        return str(st.state) == str(r.get("v"))
+    return str(st.state) != str(r.get("v"))
+
+
+def tile_level(get, rules: list[dict], ents: list[str]) -> tuple[str, list[str]]:
+    """Höchste Warnfarbe („err“ vor „warn“) und die Gründe als kurze Sätze."""
+    lvl, why = "", []
+    for r in rules:
+        res = [(e, rule_hit(get, r, e)) for e in ents]
+        res = [(e, x) for e, x in res if x is not None]
+        hit = bool(res) and (all(x for _, x in res) if r.get("any") == "all" else any(x for _, x in res))
+        if not hit:
+            continue
+        names = [(get(e).name if get(e) else e) for e, x in res if x]
+        why.append(f"{', '.join(names)}: {WHEN_N.get(r['when'], r['when'])}{'' if r['when'] == 'unavail' else ' ' + str(r.get('v'))}")
+        if r.get("c") == "err":
+            lvl = "err"
+        elif not lvl:
+            lvl = "warn"
+    return lvl, why

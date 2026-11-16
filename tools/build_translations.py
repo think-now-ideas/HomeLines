@@ -138,6 +138,7 @@ MSGS = {
     "backup_down": t("Backup-Leitung ausgefallen / wieder bereit", "Backup line down / ready again"),
     "phone_silent": t("Notfall-Handy meldet sich nicht", "Backup phone not reporting"),
     "reconnect_failed": t("Neueinwahl fehlgeschlagen", "Reconnect failed"),
+    "tile_alert": t("Warnfarbe einer Kachel (gelb/rot und wieder in Ordnung)", "Tile warning colour (yellow/red and back to normal)"),
     "backup_down_minutes": t("Backup-Leitung gilt als ausgefallen nach", "Backup line counts as down after"),
 }
 RECONNECT = {

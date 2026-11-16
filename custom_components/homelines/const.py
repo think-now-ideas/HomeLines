@@ -4,7 +4,7 @@ from __future__ import annotations
 
 DOMAIN = "homelines"
 NAME = "HomeLines"
-VERSION = "0.9.1"
+VERSION = "0.9.2"
 
 PLATFORMS = ["binary_sensor", "button", "sensor", "switch", "time"]
 
@@ -127,8 +127,9 @@ MSG_RESTORED = "restored"
 MSG_RECONNECT_FAILED = "reconnect_failed"
 MSG_BACKUP_DOWN = "backup_down"
 MSG_PHONE_SILENT = "phone_silent"
+MSG_TILE_ALERT = "tile_alert"  # Warnfarbe einer Kachel (ab 0.9.2)
 MESSAGES = [MSG_EMERGENCY, MSG_FLAT_WARNING, MSG_FLAT_EXPIRED, MSG_RESTORED,
-            MSG_BACKUP_DOWN, MSG_PHONE_SILENT, MSG_RECONNECT_FAILED]
+            MSG_BACKUP_DOWN, MSG_PHONE_SILENT, MSG_RECONNECT_FAILED, MSG_TILE_ALERT]
 
 # --- Gruppen ----------------------------------------------------------------
 CONF_DEFAULT_GROUP = "default_group"

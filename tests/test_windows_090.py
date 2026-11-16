@@ -125,3 +125,38 @@ async def test_set_layout_and_line_names(hass, unifi, ping, hass_ws_client):
     hub = hass.data[DOMAIN][entry.entry_id]          # nach dem Neuladen
     assert hub.layout() == LAYOUT
     assert {w["id"]: w["name"] for w in hub.snapshot()["wans"]}["WAN2"] == "Kupfer"
+
+
+# ---------------------------------------------------------------------- 0.9.2: Warnfarben melden
+from pytest_homeassistant_custom_component.common import async_mock_service  # noqa: E402
+
+
+async def test_tile_alert_notifies_once(hass, unifi, ping):
+    calls = async_mock_service(hass, "notify", "mobile_app_mein_handy")
+    hass.states.async_set("sensor.akku_kueche", "50", {"device_class": "battery", "friendly_name": "Akku Küche"})
+    hass.states.async_set("sensor.akku_bad", "60", {"device_class": "battery", "friendly_name": "Akku Bad"})
+    _, hub = await _setup(hass)
+    await hub.async_set_layout({"rows": [{"id": "t-akku", "kind": "tile", "name": "Batterien", "icon": "mdi:battery",
+        "entities": ["sensor.akku_kueche", "sensor.akku_bad"], "combine": "min", "rules": [
+            {"c": "warn", "any": "any", "grp": "all", "when": "below", "v": "20", "notify": True},
+            {"c": "err", "any": "any", "grp": "all", "when": "below", "v": "10", "notify": True},
+            {"c": "err", "any": "any", "grp": "all", "when": "unavail", "v": ""}]}]})   # ohne Melden
+    assert hub.layout()["rows"][0]["rules"][0]["notify"] is True and "notify" not in hub.layout()["rows"][0]["rules"][2]
+    calls.clear()
+
+    hass.states.async_set("sensor.akku_kueche", "15", {"device_class": "battery", "friendly_name": "Akku Küche"})
+    await hass.async_block_till_done()
+    assert len(calls) == 1 and calls[0].data["title"] == "HomeLines: Batterien gelb"
+    assert "Akku Küche: unter 20" in calls[0].data["message"]
+    hass.states.async_set("sensor.akku_kueche", "14", {"device_class": "battery", "friendly_name": "Akku Küche"})
+    await hass.async_block_till_done()
+    assert len(calls) == 1                                         # keine Wiederholung
+    hass.states.async_set("sensor.akku_bad", "unavailable")
+    await hass.async_block_till_done()
+    assert len(calls) == 1                                         # diese Regel meldet nicht
+    hass.states.async_set("sensor.akku_kueche", "5", {"device_class": "battery", "friendly_name": "Akku Küche"})
+    await hass.async_block_till_done()
+    assert len(calls) == 2 and calls[1].data["title"] == "HomeLines: Batterien rot"
+    hass.states.async_set("sensor.akku_kueche", "90", {"device_class": "battery", "friendly_name": "Akku Küche"})
+    await hass.async_block_till_done()
+    assert len(calls) == 3 and calls[2].data["title"] == "HomeLines: Batterien wieder in Ordnung"

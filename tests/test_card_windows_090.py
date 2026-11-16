@@ -298,3 +298,48 @@ async def test_layout_tile_rules_and_no_pen_for_users(hass, unifi, ping):
         assert not errors, errors
     finally:
         await browser.close(); await p.stop()
+
+
+# ---------------------------------------------------------------------- 0.9.2: melden, sichern und laden
+async def test_notify_and_backup_restore(hass, unifi, ping, tmp_path):
+    lay = {"title": "", "hide_lines": [], "rows": [
+        {"id": "t-akku", "kind": "tile", "on": True, "name": "Akku", "icon": "mdi:battery-60",
+         "entities": ["sensor.heizung_kueche_batterie"], "combine": "min",
+         "rules": [{"c": "warn", "any": "any", "grp": "all", "when": "below", "v": "20"}], "second": "none"}]}
+    p, browser, page, errors = await _open(hass, unifi, ping, {"speed": SPEED}, layout=lay)
+    try:
+        await page.evaluate("document.body.innerHTML=''; add('homelines-card', {})")
+        await page.wait_for_function(f"{CARD_SR}.querySelector('.hlpen')")
+        await page.evaluate(f"{CARD_SR}.querySelector('.hlpen').click()")
+        # Text zum Markieren enthält Aufbau und Fenster
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-ce=showjson]').click()")
+        txt = await page.evaluate(f"{CARD_SR}.querySelector('textarea').value")
+        import json as _j
+        backup = _j.loads(txt)
+        assert backup["layout"]["rows"][0]["id"] == "t-akku" and "speed" in backup["windows"]
+        # Warnfarbe melden
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-v=\"row:t-akku\"]').click()")
+        await page.evaluate(f"""() => {{ const i = {CARD_SR}.querySelector('[data-cf="rule:0:notify"]'); i.value = '1'; i.dispatchEvent(new Event('change', {{ bubbles: true, composed: true }})); }}""")
+        assert "Konfigurieren → Meldungen" in await page.evaluate(f"{CARD_SR}.querySelector('.hlpanel').textContent")
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-ce=save]').click()")
+        await page.wait_for_function("SENT.some(m => m.type === 'homelines/set_layout')")
+        sent = await page.evaluate("SENT.find(m => m.type === 'homelines/set_layout')")
+        assert sent["layout"]["rows"][0]["rules"][0]["notify"] is True
+        # Laden: Datei mit anderem Aufbau und Fenster
+        backup["layout"]["rows"][0]["name"] = "Batterien"
+        backup["windows"] = {"outages": [{"t": "text", "text": "geladen", "tone": "info"}]}
+        f = tmp_path / "homelines-einstellungen.json"
+        f.write_text(_j.dumps(backup), encoding="utf-8")
+        await page.wait_for_function(f"!{CARD_SR}.host._ed")
+        await page.evaluate(f"{CARD_SR}.querySelector('.hlpen').click()")
+        await page.evaluate("SENT.length = 0")
+        await page.set_input_files("homelines-card >> input[data-cf=import]", str(f))
+        await page.wait_for_function(f"{CARD_SR}.querySelector('[data-ce=loadok]')")
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-ce=loadok]').click()")
+        await page.wait_for_function("SENT.length === 2")
+        s = await page.evaluate("SENT")
+        assert s[0]["type"] == "homelines/set_windows" and s[0]["windows"] == backup["windows"]
+        assert s[1]["layout"]["rows"][0]["name"] == "Batterien"
+        assert not errors, errors
+    finally:
+        await browser.close(); await p.stop()

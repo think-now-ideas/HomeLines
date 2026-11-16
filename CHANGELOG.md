@@ -1,5 +1,10 @@
 # Änderungen
 
+## 0.9.2 – Benachrichtigung bei Warnfarbe, Einstellungen sichern und laden
+- **Melden bei Warnfarbe:** Jede Warnfarbe einer eigenen Kachel lässt sich auf „melden“ stellen. HomeLines schickt dann eine Nachricht, sobald die Kachel gelb oder rot wird (mit Grund, z. B. „Akku Küche: unter 20“), und eine, wenn wieder alles in Ordnung ist – keine Wiederholungen, kein Melden beim Start.
+- Empfänger wie bei den anderen Meldungen unter *HomeLines → Konfigurieren → Meldungen*, neue Meldungsart „Warnfarbe einer Kachel“.
+- **Einstellungen sichern und laden:** Im Bearbeiten-Modus der Karte (ohne gewähltes Teil) „Sichern (Datei)“, „Als Text zeigen“ (zum Markieren, z. B. am iPad) und „Laden …“. Gesichert werden der Aufbau aller Karten und alle angepassten Fenster; beim Laden fragt HomeLines vor dem Ersetzen nach.
+
 ## 0.9.1 – Karte direkt bearbeiten
 - **✎ an der Karte** (nur für Administratoren): Danach hat jedes Teil ein eigenes ✎ – Kopf, jede Leitung, jede Zeile und Kachel der Übersicht. Darunter stehen nur die Einstellungen dieses Teils; Speichern oder Abbrechen am Ende.
 - **Kopf:** eigener Titel oder leer für das Logo mit Schriftzug. **Leitungen:** Name (gilt für alle Karten und Meldungen), ein- und ausblenden, Fenster bearbeiten.

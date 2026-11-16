@@ -326,6 +326,7 @@
           "backup_down": "Backup-Leitung ausgefallen / wieder bereit",
           "phone_silent": "Notfall-Handy meldet sich nicht",
           "reconnect_failed": "Neueinwahl fehlgeschlagen",
+          "tile_alert": "Warnfarbe einer Kachel (gelb/rot und wieder in Ordnung)",
           "backup_down_minutes": "Backup-Leitung gilt als ausgefallen nach"
         },
         "data_description": {}

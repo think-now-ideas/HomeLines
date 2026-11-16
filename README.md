@@ -154,6 +154,10 @@ Warnfarben als Sätze, löschen). **+ Kachel** startet einen Assistenten („Was
 Erreichbarkeit, Temperatur, FRITZ!Box), der passende Entitäten, Warnfarben und ein fertiges Fenster vorschlägt.
 Gespeichert wird in der Integration; der Aufbau gilt für alle HomeLines-Karten. Beim ersten Bearbeiten übernimmt
 HomeLines die bisherigen Karten-Einstellungen (`tiles:`, `overview_hide`, `title`); danach haben sie keine Wirkung mehr.
+Ab 0.9.2 lässt sich jede Warnfarbe einer eigenen Kachel auf **melden** stellen: HomeLines schickt dann eine Nachricht,
+sobald die Kachel gelb oder rot wird, und eine, wenn wieder alles in Ordnung ist (Empfänger unter *Konfigurieren →
+Meldungen*, Meldungsart „Warnfarbe einer Kachel“). Im Bearbeiten-Modus ohne gewähltes Teil kannst du alle Einstellungen
+(Aufbau und Fenster) **als Datei sichern**, **als Text zeigen** oder **laden**.
 
 **Fenster selbst zusammenstellen** (ab 0.9.0): Jedes Fenster – Leitungen, Notfall-Strecke, Geschwindigkeit,
 Ausfälle und die eigenen Kacheln – lässt sich direkt im Fenster anpassen. Oben rechts im Fenster auf
