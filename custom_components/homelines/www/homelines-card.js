@@ -1,5 +1,5 @@
 /* HomeLines-Karte – Internet Monitor & Mobile Failover */
-const HL_VERSION = "0.9.0";
+const HL_VERSION = "0.9.1";
 // Haus-Symbol aus dem HomeLines-Logo (brand/icon.png), für den Kartenkopf
 /* Logo mit Schriftzug (ab 0.9.0): Schrift in currentColor, passt zu hell und dunkel */
 const HL_WORD = `<svg class="hlword" viewBox="14 22 2400 742" role="img" aria-label="HomeLines"><path fill="#bc001b" d="M777.09,701.32l-4.58-320.59,159.85,2.4L476.11,27.59,19.86,383.13l131.46,3.42,5.88,315.74L777.09,701.32ZM469.2,409.08h-92.66v-92.66h92.66V409.08ZM469.2,302.61h-92.66v-92.64h92.66V302.61ZM575.67,409.08h-92.65v-92.66h92.65V409.08ZM575.67,302.61h-92.65v-92.64h92.65V302.61Z"/><path fill="#d60029" fill-rule="evenodd" d="M607.62,753.58c-7.32,0-13.27-5.95-13.27-13.27v-134.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v134.15C620.89,747.63,614.94,753.58,607.62,753.58Z"/><path fill="#fff" d="M607.62,598.57c4.18,0,7.6,3.42,7.61,7.6v134.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-134.14C600.02,601.99,603.43,598.57,607.62,598.57H607.62ZM607.62,587.23c-10.45,0-18.94,8.5-18.94,18.94v134.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-134.14C626.55,595.72,618.05,587.23,607.62,587.23H607.62Z"/><path fill="#7f0119" fill-rule="evenodd" d="M665.25,753.58c-7.32,0-13.27-5.95-13.27-13.27v-194.14c0-7.32,5.95-13.27,13.27-13.27s13.26,5.95,13.28,13.26v194.15C678.52,747.63,672.57,753.58,665.25,753.58Z"/><path fill="#fff" d="M665.25,538.57c4.18,0,7.6,3.42,7.61,7.6v194.14c-.01,4.18-3.43,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-194.14C657.65,541.99,661.06,538.57,665.25,538.57H665.25ZM665.25,527.23c-10.45,0-18.94,8.5-18.94,18.94v194.14c0,10.44,8.49,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-194.14C684.17,535.72,675.67,527.23,665.25,527.23H665.25Z"/><path fill="#d67c8e" fill-rule="evenodd" d="M724.16,753.58c-7.31,0-13.27-5.95-13.27-13.27v-164.14c0-7.32,5.96-13.27,13.27-13.27s13.27,5.95,13.28,13.26v164.15C737.43,747.63,731.48,753.58,724.16,753.58Z"/><path fill="#fff" d="M724.16,568.57c4.19,0,7.6,3.42,7.61,7.6v164.14c0,4.18-3.42,7.6-7.61,7.6s-7.6-3.42-7.6-7.6v-164.14C716.56,571.99,719.98,568.57,724.16,568.57H724.16ZM724.16,557.23c-10.44,0-18.94,8.5-18.94,18.94v164.14c0,10.44,8.5,18.94,18.94,18.94s18.94-8.5,18.94-18.94v-164.14C743.09,565.72,734.59,557.23,724.16,557.23H724.16Z"/><g fill="currentColor"><path d="M859.31,442.82v108.35h135.71v-108.35h17.51v245.88h-17.51v-122.94h-135.71v122.94h-17.51v-245.88H859.31Z"/><path d="M1114.31,692.71c-45.24,0-80.26-35.38-80.26-90.1,0-59.83,39.4-93.03,82.81-93.03,48.52,0,81.35,36.48,81.35,90.11,0,64.94-44.87,93.02-83.54,93.02H1114.31ZM1115.4,678.12c36.48,0,65.3-32.83,65.3-77.7,0-32.1-17.87-76.25-64.2-76.25s-64.94,39.77-64.94,77.34c0,43.78,27.73,76.61,63.48,76.61H1115.4Z"/><path d="M1218.65,555.55c0-16.05-.37-28.09-1.46-41.96h16.41l1.1,30.65h.73c11.31-20.07,28.09-34.66,56.91-34.66,24.07,0,42.68,16.05,50.34,37.94h.73c4.74-10.21,11.31-18.24,17.88-23.71,11.3-9.12,22.98-14.23,41.58-14.23,17.15,0,57.28,9.49,57.28,75.88v103.24h-17.51v-101.78c0-39.4-15.32-62.75-45.6-62.75-21.89,0-39.04,16.42-45.97,34.66-1.46,5.11-2.92,10.95-2.92,17.51v112.36h-17.51v-109.8c0-31.38-14.96-54.73-43.41-54.73-23.35,0-41.95,18.97-48.52,39.4-1.46,5.11-2.55,10.95-2.55,17.15v107.98h-17.51V555.55Z"/><path d="M1496.99,599.32c0,55.82,30.65,78.07,66.76,78.07,25.54,0,38.67-5.1,48.52-9.85l4.38,13.5c-6.57,3.65-24.44,11.31-55.09,11.31-50.34,0-81.71-36.48-81.71-87.92,0-58.37,33.56-94.85,78.8-94.85,57.27,0,68.21,53.99,68.21,79.17,0,4.74,0,7.29-.73,10.57H1496.99ZM1608.62,585.46c.37-24.44-9.85-61.29-52.16-61.29-38.67,0-55.09,34.3-58.37,61.29H1608.62Z"/><path d="M1659.51,442.82h44.87v208.31h101.06v37.57h-145.93V442.82Z"/><path d="M1850.34,485.5c-14.95,0-24.8-10.94-24.8-24.07,0-13.87,10.21-24.44,25.17-24.44s24.81,10.57,25.17,24.44c0,13.13-9.85,24.07-25.17,24.07H1850.34ZM1828.09,688.7v-177.66h44.87v177.66H1828.09Z"/><path d="M1912.69,563.94c0-20.43-.73-37.58-1.46-52.9h39.04l2.18,26.63h1.1c8.02-13.86,27.36-30.64,56.91-30.64,31.01,0,63.11,20.06,63.11,76.24v105.43h-44.87v-100.32c0-25.54-9.49-44.87-33.93-44.87-17.87,0-30.28,12.77-35.02,26.27-1.46,3.64-2.19,9.12-2.19,14.22v104.7h-44.87V563.94Z"/><path d="M2145.11,612.46c1.09,32.1,26.27,45.96,54.72,45.96,20.8,0,35.39-3.28,49.25-8.02l6.57,30.64c-15.33,6.57-36.48,11.31-62.02,11.31-57.64,0-91.57-35.39-91.57-89.74,0-49.25,29.92-95.58,86.83-95.58s76.61,47.42,76.61,86.46c0,8.39-.73,14.95-1.46,18.97H2145.11ZM2223.18,581.08c.36-16.41-6.93-43.41-36.85-43.41-27.72,0-39.4,25.17-41.22,43.41H2223.18Z"/><path d="M2291.29,647.11c9.85,6.21,29.18,13.14,45.23,13.14,19.7,0,28.46-8.39,28.46-20.07s-7.3-17.87-29.19-25.9c-34.65-11.67-48.88-30.64-48.88-51.8,0-31.37,25.9-55.45,67.12-55.45,19.7,0,36.85,4.74,47.43,10.58l-9.12,31.37c-7.3-4.38-21.89-10.21-37.58-10.21s-24.8,8.02-24.8,18.97,8.39,16.41,31.01,24.8c32.46,11.31,47.06,27.73,47.42,54,0,32.46-25.17,55.81-72.23,55.81-21.52,0-40.86-5.11-53.99-12.4L2291.29,647.11Z"/></g></svg>`;
@@ -88,6 +88,41 @@ ha-card{padding:16px;overflow:hidden;position:relative}
 .hlov.warn{border-color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 10%,transparent)}.hlov.warn .hlov-i{color:var(--hl-warn);background:color-mix(in srgb,var(--hl-warn) 18%,transparent)}.hlov.warn .hlov-s{color:var(--hl-warn)}
 .hlov.err{border-color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 8%,transparent)}.hlov.err .hlov-i{color:var(--hl-err);background:color-mix(in srgb,var(--hl-err) 16%,transparent)}.hlov.err .hlov-s{color:var(--hl-err)}
 .hlovx{min-width:0;display:block}.hlovx>*{display:block;height:100%}
+.hlpen{border:1px solid var(--divider-color);background:var(--card-background-color,#fff);color:var(--secondary-text-color);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:14px;margin-left:8px;flex:none}
+.hled .hledp{position:relative;outline:1.5px dashed var(--divider-color);outline-offset:3px;border-radius:12px;cursor:pointer}
+.hled .hledp.hlsel{outline:2px solid var(--primary-color,#03a9f4)}
+.hled .hlpn{position:absolute;top:-10px;right:-8px;z-index:3;width:26px;height:26px;border-radius:50%;border:1px solid var(--primary-color,#03a9f4);background:var(--card-background-color,#fff);color:var(--primary-color,#03a9f4);font-size:12px;cursor:pointer;padding:0}
+.hled .hlsel>.hlpn{background:var(--primary-color,#03a9f4);color:#fff}
+.hled .hd.hledp{padding:4px}
+.hloff{opacity:.45}
+.hlmiss{position:absolute;left:8px;top:-9px;z-index:3;font-size:11px;background:var(--hl-err,#db4437);color:#fff;border-radius:9px;padding:1px 7px}
+.hladd{border:1.5px dashed var(--divider-color);border-radius:12px;background:none;color:var(--primary-color,#03a9f4);font:inherit;font-weight:500;cursor:pointer;min-height:56px}
+.hlpanel{margin-top:14px;border:1px solid var(--divider-color);border-radius:14px;padding:12px;display:grid;gap:10px;background:var(--secondary-background-color,transparent)}
+.hlph{display:flex;align-items:center;gap:8px}.hlph b{flex:1;font-size:16px;font-weight:500}
+.hlhint{color:var(--secondary-text-color);font-size:13px;margin:0}
+.hlf{display:grid;gap:4px;font-size:12px;color:var(--secondary-text-color);min-width:0}
+.hlin{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--divider-color);border-radius:8px;background:var(--card-background-color,#fff);color:var(--primary-text-color);min-width:0;width:100%;box-sizing:border-box}
+.hlin.sm{width:auto;padding:4px 6px}.hlin.num{width:72px}
+.hlrow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:480px){.hlrow2{grid-template-columns:1fr}}
+.hlsub{font-size:12px;color:var(--secondary-text-color);text-transform:uppercase;letter-spacing:.05em}
+.hlfr{display:flex;align-items:center;gap:8px;font-size:14px}.hlfr>span:first-child{flex:1}.hlfr small{color:var(--secondary-text-color)}
+.hlsw{width:40px;height:22px;border-radius:11px;border:0;padding:0;position:relative;cursor:pointer;background:var(--switch-unchecked-track-color,#9e9e9e);flex:none}
+.hlsw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.hlsw.on{background:var(--primary-color,#03a9f4)}.hlsw.on::after{left:21px}
+.hlib{width:32px;height:32px;border:0;border-radius:8px;background:none;color:var(--secondary-text-color);cursor:pointer;font:inherit;font-size:15px;flex:none}
+.hlib:disabled{opacity:.3;cursor:default}
+.hlent{display:flex;align-items:center;gap:4px;border:1px solid var(--divider-color);border-radius:10px;padding:5px 6px 5px 10px;font-size:14px;background:var(--card-background-color,#fff)}
+.hlent>span{flex:1;min-width:0}.hlent small{display:block;color:var(--secondary-text-color);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hlent.miss{border-color:var(--hl-err,#db4437)}.hlent.miss b{color:var(--hl-err,#db4437);font-weight:500}
+.hllink{border:0;background:none;color:var(--primary-color,#03a9f4);font:inherit;font-weight:500;cursor:pointer;padding:6px 4px;justify-self:start}
+.hllink.danger{color:var(--hl-err,#db4437)}
+.hlrule{display:flex;flex-wrap:wrap;align-items:center;gap:6px;border:1px solid var(--divider-color);border-radius:10px;padding:6px 8px;font-size:14px;background:var(--card-background-color,#fff)}
+.hldot{width:12px;height:12px;border-radius:50%;background:var(--hl-warn,#f29d0b)}.hldot.err{background:var(--hl-err,#db4437)}
+.hlwhy{border-radius:10px;padding:8px 10px;font-size:13px;background:var(--card-background-color,#fff)}.hlwhy b{font-weight:500}
+.hlwhy.warn{background:color-mix(in srgb,var(--hl-warn,#f29d0b) 16%,var(--card-background-color,#fff))}.hlwhy.err{background:color-mix(in srgb,var(--hl-err,#db4437) 12%,var(--card-background-color,#fff))}
+.hlwide{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--divider-color);border-radius:10px;background:var(--card-background-color,#fff);color:var(--primary-text-color);font:inherit;padding:9px 12px;cursor:pointer}
+.hlfoot{display:flex;flex-wrap:wrap;align-items:center;gap:6px;border-top:1px solid var(--divider-color);padding-top:10px}.hlfoot>span{flex:1}.hlfoot small{color:var(--secondary-text-color)}
+.hlpri{border:0;border-radius:8px;background:var(--primary-color,#03a9f4);color:var(--text-primary-color,#fff);font:inherit;font-weight:500;padding:8px 16px;cursor:pointer}
 .hlov .hlov-c{color:var(--secondary-text-color);--mdc-icon-size:20px}
 .chip{font-size:12px;padding:3px 9px;border-radius:8px;border:1px solid var(--divider-color);color:var(--secondary-text-color)}
 .dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
@@ -280,6 +315,16 @@ class HomeLinesCard extends HTMLElement {
     this._root.innerHTML = `<style>${css}</style><ha-card><div id="main"></div><div class="ver">HomeLines ${HL_VERSION}</div><div id="dlg"></div></ha-card>`;
     this._main = this._root.getElementById("main");
     this._dlg = this._root.getElementById("dlg");
+    // Bearbeiten (ab 0.9.1): vor allen anderen Klicks, auch vor denen der eingebetteten Kacheln
+    this._root.addEventListener("click", e => {
+      const t = e.target.closest && e.target.closest("[data-ce]");
+      if (t) { e.stopPropagation(); e.preventDefault(); this._edClick(t); return; }
+      if (!this._ed) return;
+      const p = e.composedPath().find(x => x.classList && x.classList.contains("hledp"));
+      if (p) { e.stopPropagation(); e.preventDefault(); this._ed.sel = p.dataset.sel; this._ed.jump = true; this._render(); }
+      else if (!e.composedPath().some(x => x.classList && x.classList.contains("hlpanel"))) { e.stopPropagation(); }
+    }, true);
+    this._root.addEventListener("change", e => { const t = e.target.closest && e.target.closest("[data-cf]"); if (t) this._edChange(t); });
     this._root.addEventListener("click", e => this._onClick(e));
     this._root.addEventListener("input", e => this._onInput(e));
     this._view = { dialog: null, tab: "devices", filter: "all", q: "" };
@@ -310,11 +355,12 @@ class HomeLinesCard extends HTMLElement {
     const active = (s.wans || []).find(w => w.active);
     const sub = mode === "normal" ? `${tr.allMain}${active ? " · " + esc(active.name) : ""}`
       : `${tr.emergency} ${tr.since} ${when(s.since)} · ${tr.via} ${esc(active ? active.name : s.backup_wan)}`;
-    const title = this._config.title || s.title || "HomeLines";
+    const title = (this._lay() && this._lay().title) || this._config.title || s.title || "HomeLines";
 
     const lcfg = this._config.lines || {};
     const ph0 = s.phone || {};
-    const wans = (s.wans || []).filter(w => !(lcfg[w.id] && lcfg[w.id].hide)).map(w => {
+    const hideL = (this._lay() || {}).hide_lines;
+    const wans = (s.wans || []).filter(w => (hideL ? (!hideL.includes(w.id) || this._ed) : !(lcfg[w.id] && lcfg[w.id].hide))).map(w => {
       const cfg = lcfg[w.id] || {};
       const isAct = w.active || (w.backup && mode !== "normal" && w.state === "online");
       const cold = w.backup && s.standby === "cold" && mode === "normal" && w.state !== "online";
@@ -335,7 +381,7 @@ class HomeLinesCard extends HTMLElement {
       }
       if (!info && w.backup && ph0.configured) info = ph0.reporting ? `${tr.phoneReady}${ph0.battery != null ? " · " + Math.round(ph0.battery) + " %" : ""}` : tr.phoneSilent;
       const nav = cfg.tap || cfg.navigation_path;
-      return `<div class="line ${cls}"${nav ? ` data-nav="${esc(nav)}"` : ` data-a="detail" data-k="line" data-id="${esc(w.id)}"`} style="cursor:pointer">${isAct ? `<span class="tag">${tr.active}</span>` : ""}
+      return `<div class="line ${cls}${hideL && hideL.includes(w.id) ? " hloff" : ""}" data-wid="${esc(w.id)}"${nav ? ` data-nav="${esc(nav)}"` : ` data-a="detail" data-k="line" data-id="${esc(w.id)}"`} style="cursor:pointer">${isAct ? `<span class="tag">${tr.active}</span>` : ""}
         <span class="id">${esc(w.id)}</span><b>${esc(cfg.name || w.name)}</b><span class="st">${esc(label)}</span>${info ? `<div class="inf">${esc(info)}</div>` : ""}</div>`;
     }).join("");
 
@@ -415,41 +461,211 @@ class HomeLinesCard extends HTMLElement {
     if (compact && mode === "normal" && !(s.assistant && s.assistant.kind === "return")) {
       this._main.innerHTML = `
       <div class="hd"><div class="t">${hlHead(title, sub)}</div>
-      <span class="badge ${badgeCls}">${tr[mode]}</span></div>
+      <span class="badge ${badgeCls}">${tr[mode]}</span>${this._admin() && !this._ed ? `<button class="hlpen" data-ce="edit" aria-label="Karte bearbeiten" title="Karte bearbeiten">✎</button>` : ""}</div>
       ${wans ? `<div class="lines">${wans}</div>` : ""}${status}${chips}${this._ov(s)}
       ${s.router_type !== "none" && this._config.show_devices !== false ? `<div class="btns" style="margin:10px 0 0">${btns.join("")}</div>` : ""}`;
-      this._updateTimer(); this._mountTiles();
+      this._updateTimer(); this._mountTiles(); this._edDecorate();
       if (this._view.dialog === "devices") this._renderDeviceList();
       return;
     }
     this._main.innerHTML = `
       <div class="hd"><div class="t">${hlHead(title, sub)}</div>
-      <span class="badge ${badgeCls}">${tr[mode]}</span></div>
+      <span class="badge ${badgeCls}">${tr[mode]}</span>${this._admin() && !this._ed ? `<button class="hlpen" data-ce="edit" aria-label="Karte bearbeiten" title="Karte bearbeiten">✎</button>` : ""}</div>
       ${wans ? `<div class="lines">${wans}</div>` : `<div style="height:12px"></div>`}
       ${status}${btns.length ? `<div class="btns">${btns.join("")}</div>` : ""}
       ${be}${metrics}
       <div class="sec" style="margin:-6px 0 8px;justify-content:flex-end"><span class="link" data-a="ask-reset">${tr.reset}</span></div>
       ${chain}${compact ? chips : mon}${this._ov(s)}`;
-    this._updateTimer(); this._mountTiles();
+    this._updateTimer(); this._mountTiles(); this._edDecorate();
     if (this._view.dialog === "devices") this._renderDeviceList();
   }
 
+  /* ---------------------------------------------------------------- ab 0.9.1: Karte direkt bearbeiten (✎) */
+  _admin() { const u = this._hass && this._hass.user; return !!(u && u.is_admin); }
+  _lay() { return this._ed ? this._ed.layout : (this._s && this._s.layout) || null; }
+  _tiles() {
+    const L = this._lay();
+    if (!L) return this._config.tiles || [];
+    return L.rows.filter(r => r.kind === "tile" && (r.on || this._ed)).map(hlTileCfg);
+  }
+  _edStart() {
+    const s = this._s || {};
+    const layout = JSON.parse(JSON.stringify(s.layout || hlLayoutFrom(this._config, s)));
+    const names = {}; (s.wans || []).forEach(w => { names[w.id] = w.name || ""; });
+    this._ed = { layout, names, names0: { ...names }, sel: null, wins: {}, err: "" };
+    this._render();
+  }
+  _edRowKey(r) { return r.kind === "tile" ? r.id : r.id; }
+  _edDecorate() {
+    const m = this._main; if (!m) return;
+    m.classList.toggle("hled", !!this._ed);
+    if (!this._ed) return;
+    const E = this._ed, sel = E.sel || "";
+    const pen = (el, key) => { if (!el || el.querySelector(":scope > .hlpn")) return; el.dataset.sel = key; el.classList.add("hledp");
+      el.classList.toggle("hlsel", sel === key);
+      el.insertAdjacentHTML("afterbegin", `<button class="hlpn" data-ce="sel" data-v="${esc(key)}" aria-label="bearbeiten">✎</button>`); };
+    pen(m.querySelector(".hd"), "head");
+    m.querySelectorAll(".line[data-wid]").forEach(el => pen(el, `line:${el.dataset.wid}`));
+    const tiles = E.layout.rows.filter(r => r.kind === "tile");
+    m.querySelectorAll("[data-ok]").forEach(el => {
+      const k = el.dataset.ok, tile = k.startsWith("x") ? tiles[Number(k.slice(1))] : null;
+      pen(el, `row:${tile ? tile.id : k}`);
+      if (tile) { const miss = tile.entities.filter(e => !this._hass.states[e]).length;
+        if (miss) el.insertAdjacentHTML("afterbegin", `<span class="hlmiss">${miss} Wert fehlt</span>`); }
+    });
+    const ovw = m.querySelector(".hlovw");
+    if (ovw && !ovw.querySelector(".hladd")) ovw.insertAdjacentHTML("beforeend", `<button class="hladd" data-ce="assist">+ Kachel</button>`);
+    m.insertAdjacentHTML("beforeend", `<div class="hlpanel">${this._edPanel()}</div>`);
+    // nach der Auswahl zu den Einstellungen springen (am Handy stehen sie unter der Karte)
+    if (E.jump) { E.jump = false; const pn = m.querySelector(".hlpanel"); const r = pn.getBoundingClientRect();
+      if (r.top > window.innerHeight - 120 || r.top < 0) pn.scrollIntoView({ behavior: "smooth", block: "start" }); }
+  }
+  _edRow(id) { const rows = this._ed.layout.rows; const i = rows.findIndex(r => r.id === id); return [rows[i], i]; }
+  _edPanel() {
+    const E = this._ed, s = this._s || {}, sel = E.sel || "", h = this._hass;
+    const sw = (k, on, l) => `<button class="hlsw${on ? " on" : ""}" data-ce="flip" data-v="${esc(k)}" role="switch" aria-checked="${!!on}" aria-label="${esc(l)}"></button>`;
+    const pos = i => { const n = E.layout.rows.length; return `<div class="hlfr"><span>Position</span><button class="hlib" data-ce="up" ${i === 0 ? "disabled" : ""} aria-label="nach oben">↑</button><button class="hlib" data-ce="down" ${i === n - 1 ? "disabled" : ""} aria-label="nach unten">↓</button><small>${i + 1}. von ${n}</small></div>`; };
+    const win = (key, label) => `<button class="hlwide" data-ce="win" data-v="${esc(key)}"><span>🗔 ${label || "Fenster bearbeiten (beim Antippen)"}</span><span>›</span></button>`;
+    let title = "Bearbeiten", body = "";
+    if (!sel) body = `<p class="hlhint">Tippe auf ein ✎ in der Karte. Hier erscheinen dann nur die Einstellungen dieses Teils. Fenster stellst du über ihre Kachel oder Leitung ein.</p>`;
+    else if (sel === "head") { title = "Kopf"; body = `<label class="hlf">Titel<input class="hlin" data-cf="title" value="${esc(E.layout.title)}" placeholder="leer = Logo mit Schriftzug"></label>`; }
+    else if (sel.startsWith("line:")) {
+      const id = sel.slice(5), shown = !E.layout.hide_lines.includes(id);
+      title = `Leitung ${id}`;
+      body = `<div class="hlfr"><span>In der Karte zeigen</span>${sw("line-show", shown, "zeigen")}</div>
+        <label class="hlf">Name<input class="hlin" data-cf="name:${esc(id)}" value="${esc(E.names[id] || "")}"></label><small class="hlhint">Gilt für alle HomeLines-Karten und Meldungen.</small>${win(id, "Fenster dieser Leitung bearbeiten")}`;
+    }
+    else if (sel.startsWith("row:")) {
+      const [r, i] = this._edRow(sel.slice(4));
+      if (!r) { E.sel = null; return this._edPanel(); }
+      const builtinN = { backup: "Notfall-Strecke", speed: "Geschwindigkeit", outages: "Ausfälle und Verlauf" };
+      title = r.kind === "tile" ? `Kachel ${r.name}` : (builtinN[r.id] || `Leitung ${(s.wans || []).find(w => w.id === r.id)?.name || r.id}`);
+      body = `<div class="hlfr"><span>In der Karte zeigen</span>${sw("row-on", r.on, "zeigen")}</div>`;
+      if (r.kind === "tile") {
+        const icons = ["mdi:flash", "mdi:phone-classic", "mdi:battery-60", "mdi:thermometer", "mdi:lan-connect", "mdi:wifi", "mdi:router-wireless", "mdi:lightbulb", "mdi:home", "mdi:information-outline", "mdi:power-plug", "mdi:server"];
+        body += `<div class="hlrow2"><label class="hlf">Name<input class="hlin" data-cf="rname" value="${esc(r.name)}"></label>
+          <label class="hlf">Symbol<select class="hlin" data-cf="ricon">${[...new Set([r.icon, ...icons])].map(ic => `<option value="${esc(ic)}"${ic === r.icon ? " selected" : ""}>${esc(ic.replace("mdi:", ""))}</option>`).join("")}</select></label></div>
+          <div class="hlsub">Entitäten</div>
+          ${r.entities.map((e, k) => { const miss = !h.states[e];
+            return `<div class="hlent${miss ? " miss" : ""}"><span>${miss ? `<b>Wert fehlt – neu wählen</b><small>${esc(e)} gibt es nicht mehr</small>` : `${esc(hlEntName(h, e))}<small>${esc(hlArea(h, e) ? hlArea(h, e) + " · " : "")}${esc(hlFmt(h, e) ?? h.states[e].state)}</small>`}</span>
+              ${miss ? `<button class="hllink" data-ce="pick" data-i="${k}">neu wählen</button>` : `<button class="hlib" data-ce="eup" data-i="${k}" ${k === 0 ? "disabled" : ""} aria-label="nach oben">↑</button><button class="hlib" data-ce="edown" data-i="${k}" ${k === r.entities.length - 1 ? "disabled" : ""} aria-label="nach unten">↓</button>`}
+              <button class="hlib" data-ce="erm" data-i="${k}" aria-label="entfernen">✕</button></div>`; }).join("")}
+          <button class="hllink" data-ce="pick">+ Entität hinzufügen</button>
+          <label class="hlf">Auf der Kachel zeigen<select class="hlin" data-cf="rcombine">${[["single", "Wert der ersten Entität"], ["sum", "Summe"], ["avg", "Mittelwert"], ["max", "höchster Wert"], ["min", "niedrigster Wert"], ["list", "Werte nebeneinander"]].map(([k, n]) => `<option value="${k}"${r.combine === k ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+          <div class="hlfr"><span>Nicht erreichbare zählen</span>${sw("row-second", r.second === "bad", "nicht erreichbare zählen")}</div>
+          <div class="hlsub">Warnfarben</div>
+          ${r.rules.map((x, k) => `<div class="hlrule"><span class="hldot ${x.c}"></span>
+            <select class="hlin sm" data-cf="rule:${k}:c"><option value="warn"${x.c === "warn" ? " selected" : ""}>Gelb</option><option value="err"${x.c === "err" ? " selected" : ""}>Rot</option></select><span>wenn</span>
+            <select class="hlin sm" data-cf="rule:${k}:any"><option value="any"${x.any === "any" ? " selected" : ""}>ein/e</option><option value="all"${x.any === "all" ? " selected" : ""}>alle</option></select>
+            <select class="hlin sm" data-cf="rule:${k}:grp">${["all", ...new Set(r.entities.filter(e => h.states[e]).map(e => hlGrp(h, e)).filter(g => HL_GRP_N[g]))].map(g => `<option value="${g}"${x.grp === g ? " selected" : ""}>${HL_GRP_N[g]}</option>`).join("")}</select>
+            <select class="hlin sm" data-cf="rule:${k}:when">${HL_WHEN_N.map(([w, n]) => `<option value="${w}"${x.when === w ? " selected" : ""}>${n}</option>`).join("")}</select>
+            ${x.when !== "unavail" ? `<input class="hlin sm num" data-cf="rule:${k}:v" value="${esc(x.v)}" aria-label="Vergleichswert">` : ""}
+            <button class="hlib" data-ce="rrm" data-i="${k}" aria-label="Warnfarbe entfernen">✕</button></div>`).join("")}
+          <button class="hllink" data-ce="radd">+ Warnfarbe</button>
+          ${(() => { const lv = hlLevel(h, r.rules, r.entities.filter(e => h.states[e])); return `<div class="hlwhy ${lv}">${lv ? `<b>Warum ${lv === "err" ? "rot" : "gelb"}?</b> ${r.rules.filter(x => hlLevel(h, [x], r.entities.filter(e => h.states[e]))).map(x => `${x.c === "err" ? "Rot" : "Gelb"}, wenn ${x.any === "all" ? "alle" : "ein/e"} ${HL_GRP_N[x.grp] || "Wert"} ${HL_WHEN_N.find(w => w[0] === x.when)[1]}${x.when !== "unavail" ? " " + x.v : ""}`).join("; ")}` : "<b>Warum neutral?</b> Keine Warnfarbe trifft gerade zu."}</div>`; })()}`;
+      } else body += `<small class="hlhint">Eingebaute Kachel: Was sie anzeigt, setzt HomeLines.</small>`;
+      body += win(r.id === "backup" ? (s.wans || []).find(w => w.backup)?.id || "backup" : r.id) + pos(i);
+      if (r.kind === "tile") body += `<button class="hllink danger" data-ce="del">Kachel löschen</button>`;
+    }
+    return `<div class="hlph"><b>${esc(title)}</b>${sel ? `<button class="hllink" data-ce="sel" data-v="">Fertig mit diesem Teil</button>` : ""}</div>${body}
+      ${E.err ? `<div class="hlwhy err">${esc(E.err)}</div>` : ""}
+      <div class="hlfoot"><small>Gilt für alle HomeLines-Karten.</small><span></span><button class="hllink" data-ce="cancel">Abbrechen</button><button class="hlpri" data-ce="save">Speichern</button></div>`;
+  }
+  async _edClick(t) {
+    const E = this._ed, a = t.dataset.ce, i = t.dataset.i != null ? Number(t.dataset.i) : null;
+    if (a === "edit") return this._edStart();
+    if (!E) return;
+    const [r, ri] = (E.sel || "").startsWith("row:") ? this._edRow(E.sel.slice(4)) : [null, -1];
+    if (a === "sel") { E.sel = t.dataset.v || null; E.jump = !!E.sel; }
+    else if (a === "cancel") { this._ed = null; }
+    else if (a === "save") {
+      const msg = { type: "homelines/set_layout", layout: E.layout };
+      if (this._s && this._s.entry_id) msg.entry_id = this._s.entry_id;
+      const changed = Object.fromEntries(Object.entries(E.names).filter(([k, v]) => v !== E.names0[k]));
+      if (Object.keys(changed).length) msg.line_names = changed;
+      try {
+        for (const [key, blocks] of Object.entries(E.wins))
+          await this._hass.callWS({ type: "homelines/set_windows", key, blocks, ...(msg.entry_id ? { entry_id: msg.entry_id } : {}) });
+        const lay = await this._hass.callWS(msg);
+        this._s = { ...this._s, layout: lay }; this._ed = null;
+      } catch (e) { E.err = `Speichern ging nicht: ${e.message || e}`; }
+    }
+    else if (a === "flip") {
+      const v = t.dataset.v;
+      if (v === "line-show") { const id = E.sel.slice(5), l = E.layout.hide_lines; E.layout.hide_lines = l.includes(id) ? l.filter(x => x !== id) : [...l, id]; }
+      else if (v === "row-on") r.on = !r.on;
+      else if (v === "row-second") r.second = r.second === "bad" ? "none" : "bad";
+    }
+    else if (a === "up" || a === "down") { const rows = E.layout.rows, j = a === "up" ? ri - 1 : ri + 1; if (j >= 0 && j < rows.length) [rows[ri], rows[j]] = [rows[j], rows[ri]]; }
+    else if (a === "del") { E.layout.rows.splice(ri, 1); E.sel = null; }
+    else if (a === "erm") r.entities.splice(i, 1);
+    else if (a === "eup" || a === "edown") { const l = r.entities, j = a === "eup" ? i - 1 : i + 1; if (j >= 0 && j < l.length) [l[i], l[j]] = [l[j], l[i]]; }
+    else if (a === "radd") r.rules.push({ c: "warn", any: "any", grp: "all", when: "unavail", v: "" });
+    else if (a === "rrm") r.rules.splice(i, 1);
+    else if (a === "pick") {
+      const h = this._hass, have = r.entities.filter(e => h.states[e]), g = new Set(have.map(e => hlGrp(h, e)));
+      const e = await hlPick(h, { title: i != null ? "Fehlenden Wert ersetzen" : "Entität wählen", cur: r.entities,
+        note: i != null ? `Bisher: ${r.entities[i]} – gibt es nicht mehr.` : "", fits: x => !have.length || g.has(hlGrp(h, x)) });
+      if (!e || !this._ed) return;
+      if (i != null) r.entities[i] = e; else if (!r.entities.includes(e)) r.entities.push(e);
+    }
+    else if (a === "assist") {
+      const res = await hlAssist(this._hass); if (!res || !this._ed) return;
+      E.layout.rows.push(res.row); if (res.win) E.wins[res.row.id] = res.win; E.sel = `row:${res.row.id}`; E.jump = true;
+    }
+    else if (a === "win") {
+      const key = t.dataset.v, s = this._s || {};
+      const kind = /^WAN\d$/.test(key) ? "line" : key === "speed" || key === "outages" ? key : "entities";
+      const tile = kind === "entities" ? this._edRow(key)[0] : null;
+      const el = document.createElement("homelines-detail"); el.hass = this._hass;
+      el.open(s, kind, kind === "entities" ? { title: tile.name, key, entities: tile.entities, hours: 24 } : key);
+      if (E.wins[key]) { el._startEdit(); el._edit.draft = JSON.parse(JSON.stringify(E.wins[key])); el._paint(); } else el._startEdit();
+      hlOpenPopup(this._hass, null, null, { showCard: false, content: el, title: el._spec.title });
+      return;
+    }
+    else return;
+    this._render();
+  }
+  _edChange(t) {
+    const E = this._ed, f = t.dataset.cf; if (!E) return;
+    const [r] = (E.sel || "").startsWith("row:") ? this._edRow(E.sel.slice(4)) : [null];
+    if (f === "title") E.layout.title = t.value.trim();
+    else if (f.startsWith("name:")) E.names[f.slice(5)] = t.value.trim();
+    else if (f === "rname") r.name = t.value.trim() || "Kachel";
+    else if (f === "ricon") r.icon = t.value;
+    else if (f === "rcombine") r.combine = t.value;
+    else if (f.startsWith("rule:")) { const [, k, key] = f.split(":"); r.rules[Number(k)][key] = t.value; }
+    this._render();
+  }
   _ov(s) {
-    const n = (this._config.tiles || []).length;
-    if (this._config.overview === false) return n ? hlOverview(s, this._hass, n, null) : "";
-    return hlOverview(s, this._hass, n, this._config.overview_hide || {});
+    const L = this._lay();
+    if (!L) {
+      const n = (this._config.tiles || []).length;
+      if (this._config.overview === false) return n ? hlOverview(s, this._hass, n, null) : "";
+      return hlOverview(s, this._hass, n, this._config.overview_hide || {});
+    }
+    // Aufbau aus HomeLines (ab 0.9.1): Reihenfolge, ausgeblendete Zeilen, eigene Kacheln
+    const ed = !!this._ed, hide = {}, dim = [], order = [];
+    let ti = 0;
+    L.rows.forEach(r => {
+      if (r.kind === "tile") { if (r.on || ed) { order.push("x" + ti); if (!r.on) dim.push("x" + ti); ti++; } return; }
+      order.push(r.id === "backup" ? "backup" : r.id);
+      if (!r.on) { if (ed) dim.push(r.id); else hide[r.id] = true; }
+    });
+    return hlOverview(s, this._hass, ti, hide, order, dim);
   }
 
   /* Eigene Kacheln (ab 0.8.6): „tiles:“ – homelines-tile-Einträge im selben Raster wie die Übersicht */
   _mountTiles() {
-    const list = this._config.tiles || [];
+    const list = this._tiles();
     if (!list.length || !this._root) return;
     this._tileEls = this._tileEls || [];
     this._root.querySelectorAll(".hlovx").forEach(ph => {
       const i = Number(ph.dataset.ti), cfg = list[i]; if (!cfg) return;
       let el = this._tileEls[i];
-      if (!el) {
-        el = document.createElement("homelines-tile"); el._embedded = true;
+      const ck = JSON.stringify(cfg);
+      if (!el || el._ck !== ck) {
+        el = document.createElement("homelines-tile"); el._embedded = true; el._ck = ck;
         try { el.setConfig(cfg); } catch (err) { ph.textContent = String(err.message || err); return; }
         this._tileEls[i] = el;
       }
@@ -694,7 +910,12 @@ class HomeLinesTile extends HTMLElement {
     if (bad && c.warn_unavailable) text += ` · ${bad} nicht erreichbar`;
     const num = x => (x === undefined || x === null || x === "" ? null : Number(x));
     const out = (lo, hi) => val != null && ((num(lo) != null && val < num(lo)) || (num(hi) != null && val > num(hi)));
-    const err = out(c.error_below, c.error_above), warn = !err && ((bad > 0 && c.warn_unavailable) || out(c.warn_below, c.warn_above));
+    // Warnfarben als Sätze (ab 0.9.1) und fehlende Entitäten
+    const lvl = c.rules ? hlLevel(h, c.rules, ents.filter(e => h.states[e])) : "";
+    const miss = ents.filter(e => !h.states[e]).length;
+    if (miss) text += ` · ⚠ ${miss} Wert fehlt`;
+    const err = out(c.error_below, c.error_above) || lvl === "err";
+    const warn = !err && ((bad > 0 && c.warn_unavailable) || out(c.warn_below, c.warn_above) || lvl === "warn" || miss > 0);
     return { text, err, warn };
   }
   disconnectedCallback() { this._unsub(); }
@@ -802,7 +1023,7 @@ function hlFmt(hass, e) {
   if (e.startsWith("button.")) return null;
   return st.state;
 }
-function hlOverview(s, hass, extra = 0, hide = {}) {
+function hlOverview(s, hass, extra = 0, hide = {}, order = null, dim = []) {
   // hide === null: nur die eigenen Kacheln (Übersicht aus)
   if (hide === null) hide = new Proxy({}, { get: () => true });
   const d = s.details || {}, rows = [], mode = s.mode, ph = s.phone || {}, u = s.usage || {}, mo = s.monitor || {};
@@ -830,9 +1051,14 @@ function hlOverview(s, hass, extra = 0, hide = {}) {
   if (!hide.outages) rows.push({ k: "outages", icon: "mdi:lan-disconnect", n: "Ausfälle und Verlauf",
     t: `${mo.outages_24h ?? 0} / ${mo.outages_7d ?? 0} / ${mo.outages_30d ?? 0} · ${av}`,
     cls: mo.internet === false ? "err" : (mo.outages_24h || 0) > 0 ? "warn" : "" });
-  return `<div class="hlovw">${rows.map(r => `<div class="hlov ${r.cls || ""}" data-a="detail" data-k="${r.k}"${r.id ? ` data-id="${esc(r.id)}"` : ""}>
+  const items = rows.map(r => ({ key: r.k === "line" ? (backup && r.id === backup.id ? "backup" : r.id) : r.k,
+    html: `<div data-ok="${esc(r.k === "line" ? (backup && r.id === backup.id ? "backup" : r.id) : r.k)}" class="hlov ${r.cls || ""}" data-a="detail" data-k="${r.k}"${r.id ? ` data-id="${esc(r.id)}"` : ""}>
     <div class="hlov-i"><ha-icon icon="${r.cls ? (r.cls === "err" ? "mdi:alert-circle-outline" : "mdi:alert-outline") : r.icon}"></ha-icon></div>
-    <div class="hlov-t"><div class="hlov-n">${esc(r.n)}</div><div class="hlov-s">${esc(r.t)}</div></div><ha-icon class="hlov-c" icon="mdi:chevron-right"></ha-icon></div>`).join("")}${Array.from({ length: extra }, (_, i) => `<div class="hlovx" data-ti="${i}"></div>`).join("")}</div>`;
+    <div class="hlov-t"><div class="hlov-n">${esc(r.n)}</div><div class="hlov-s">${esc(r.t)}</div></div><ha-icon class="hlov-c" icon="mdi:chevron-right"></ha-icon></div>` }));
+  for (let i = 0; i < extra; i++) items.push({ key: "x" + i, html: `<div data-ok="x${i}" class="hlovx" data-ti="${i}"></div>` });
+  const pos = k => { const i = order ? order.indexOf(k) : -1; return i < 0 ? 999 : i; };
+  const list = order ? items.map((x, n) => [x, n]).sort((a, b) => (pos(a[0].key) - pos(b[0].key)) || (a[1] - b[1])).map(x => x[0]) : items;
+  return `<div class="hlovw">${list.map(x => dim.includes(x.key) ? x.html.replace('class="hlov', 'class="hloff hlov') : x.html).join("")}</div>`;
 }
 function hlOverviewEntities(s) {
   const d = (s && s.details) || {};
@@ -1007,6 +1233,149 @@ function hlFritzTemplate(h) {
   const temp = router.find(e => h.states[e].attributes.device_class === "temperature");
   if (temp) blocks.push({ t: "chart", title: "CPU-Temperatur", ents: [temp], kind: "line", range: "7d", mode: "together", colors: {}, limit: { on: true, v: "80", dir: "above", c: "warn" }, stats: true });
   return blocks;
+}
+
+/* ================================================================ Auswahl-Fenster für die Karte (ab 0.9.1)
+   Liegen am <body> (außerhalb der HA-Oberfläche), deshalb eigene Listen statt HA-Auswahl (Lehre 0.8.8). */
+const hlPickCss = `
+.hlpk-ov{position:fixed;inset:0;z-index:1003;background:rgba(0,0,0,.45);display:flex;align-items:flex-start;justify-content:center;padding:6vh 10px;overflow:auto;font-family:var(--paper-font-body1_-_font-family,Roboto,sans-serif)}
+.hlpk{background:var(--card-background-color,#fff);color:var(--primary-text-color,#222);border-radius:16px;width:min(560px,100%);padding:12px 14px 14px;display:grid;gap:8px;box-sizing:border-box;font-size:14px}
+.hlpk-h{display:flex;align-items:center;gap:6px}.hlpk-h b{flex:1;font-size:17px;font-weight:500}
+.hlpk button{font:inherit;color:inherit}
+.hlpk .x{width:34px;height:34px;border:0;background:none;border-radius:8px;cursor:pointer;font-size:16px;color:var(--secondary-text-color)}
+.hlpk input[type=search]{font:inherit;padding:8px 10px;border:1px solid var(--divider-color,#ddd);border-radius:8px;background:var(--card-background-color,#fff);color:var(--primary-text-color)}
+.hlpk .seg{display:inline-flex;background:var(--secondary-background-color,#eee);border-radius:10px;padding:3px;gap:2px;justify-self:start}
+.hlpk .seg button{border:0;background:none;padding:5px 10px;border-radius:8px;cursor:pointer;color:var(--secondary-text-color);font-size:13px}
+.hlpk .seg button.on{background:var(--card-background-color,#fff);color:var(--primary-text-color);font-weight:500}
+.hlpk .chips{display:flex;flex-wrap:wrap;gap:6px}.hlpk .chips button{border:1px solid var(--divider-color,#ddd);border-radius:16px;padding:3px 10px;background:none;cursor:pointer;font-size:13px}
+.hlpk .chips button.on{background:var(--primary-color,#03a9f4);border-color:var(--primary-color,#03a9f4);color:#fff}
+.hlpk .list{display:grid;gap:4px;max-height:50vh;overflow:auto}
+.hlpk .it{display:flex;gap:8px;align-items:center;text-align:left;border:1px solid var(--divider-color,#ddd);border-radius:10px;padding:7px 10px;background:none;cursor:pointer}
+.hlpk .it>span:first-child{flex:1;min-width:0}.hlpk small{display:block;color:var(--secondary-text-color);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hlpk .it .r{color:var(--secondary-text-color);white-space:nowrap}.hlpk .it.used{opacity:.5}
+.hlpk .wz{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.hlpk .wz button{display:grid;gap:2px;text-align:left;border:1px solid var(--divider-color,#ddd);border-radius:12px;background:none;padding:12px;cursor:pointer}
+.hlpk .wz ha-icon{color:var(--primary-color,#03a9f4)}.hlpk .wz b{font-weight:500}
+.hlpk .ck{display:flex;gap:10px;align-items:center;border:1px solid var(--divider-color,#ddd);border-radius:10px;padding:6px 10px;cursor:pointer}
+.hlpk .ck span{flex:1;min-width:0}
+.hlpk .note{background:var(--secondary-background-color,#eee);border-radius:10px;padding:8px 10px;font-size:13px}
+.hlpk .ft{display:flex;justify-content:flex-end;gap:8px}
+.hlpk .pri{border:0;border-radius:8px;background:var(--primary-color,#03a9f4);color:#fff;font-weight:500;padding:8px 16px;cursor:pointer}
+.hlpk .sec{border:0;background:none;color:var(--primary-color,#03a9f4);font-weight:500;padding:8px 10px;cursor:pointer}`;
+function hlArea(h, e) {
+  const r = (h.entities || {})[e]; if (!r) return "";
+  const id = r.area_id || (r.device_id && h.devices && h.devices[r.device_id] && h.devices[r.device_id].area_id);
+  return (id && h.areas && h.areas[id] && h.areas[id].name) || "";
+}
+function hlEntName(h, e) { const st = h.states[e]; return hlCleanName((st && st.attributes.friendly_name) || e); }
+function hlOverlay(html) {
+  if (!document.getElementById("hlpk-css")) { const st = document.createElement("style"); st.id = "hlpk-css"; st.textContent = hlPickCss; document.head.appendChild(st); }
+  const ov = document.createElement("div"); ov.className = "hlpk-ov"; ov.innerHTML = `<div class="hlpk" role="dialog">${html}</div>`;
+  document.body.appendChild(ov); return ov;
+}
+/** Entität wählen: Vorschläge (fits) oder alle, Suche, Filter nach Bereich. Ergebnis: entity_id oder null. */
+function hlPick(h, { title = "Entität wählen", fits = () => true, cur = [], note = "" } = {}) {
+  return new Promise(res => {
+    const all = Object.keys(h.states).sort(), sug = all.filter(fits);
+    const st = { tab: sug.length ? "sug" : "all", area: "", q: "" };
+    const ov = hlOverlay(""), box = ov.firstChild;
+    const done = v => { ov.remove(); res(v); };
+    const paint = () => {
+      let list = st.tab === "sug" ? sug : all;
+      const areas = [...new Set(list.map(e => hlArea(h, e)).filter(Boolean))].sort((a, b) => a.localeCompare(b, "de"));
+      if (st.area) list = list.filter(e => hlArea(h, e) === st.area);
+      const q = st.q.toLowerCase().trim();
+      if (q) list = list.filter(e => e.includes(q) || hlEntName(h, e).toLowerCase().includes(q) || hlArea(h, e).toLowerCase().includes(q));
+      box.querySelector(".list").innerHTML = list.slice(0, 150).map(e => `<button class="it${cur.includes(e) ? " used" : ""}" data-v="${esc(e)}"><span><span>${esc(hlEntName(h, e))}</span><small>${esc(hlArea(h, e) || "ohne Bereich")} · ${esc(e)}</small></span><span class="r">${esc(hlFmt(h, e) ?? (h.states[e] || {}).state ?? "")}</span></button>`).join("")
+        + (list.length > 150 ? `<small>Weitere ${list.length - 150} – bitte suchen.</small>` : list.length ? "" : `<small>Nichts gefunden.</small>`);
+      box.querySelector(".seg").innerHTML = `<button data-t="sug" class="${st.tab === "sug" ? "on" : ""}">Vorschläge (${sug.length})</button><button data-t="all" class="${st.tab === "all" ? "on" : ""}">Alle (${all.length})</button>`;
+      box.querySelector(".chips").innerHTML = areas.length ? `<button data-ar="" class="${!st.area ? "on" : ""}">Alle Bereiche</button>${areas.map(a => `<button data-ar="${esc(a)}" class="${st.area === a ? "on" : ""}">${esc(a)}</button>`).join("")}` : "";
+    };
+    box.innerHTML = `<div class="hlpk-h"><b>${esc(title)}</b><button class="x" data-x aria-label="Schließen">✕</button></div>${note ? `<div class="note">${esc(note)}</div>` : ""}
+      <div class="seg"></div><input type="search" placeholder="Suchen: Name, Bereich oder Teil der ID" aria-label="Suchen"><div class="chips"></div><div class="list"></div>`;
+    ov.addEventListener("click", ev => {
+      if (ev.target === ov || ev.target.closest("[data-x]")) return done(null);
+      const it = ev.target.closest(".it"); if (it) return done(it.dataset.v);
+      const t = ev.target.closest("[data-t]"); if (t) { st.tab = t.dataset.t; st.area = ""; paint(); }
+      const a = ev.target.closest("[data-ar]"); if (a) { st.area = a.dataset.ar; paint(); }
+    });
+    box.querySelector("input").addEventListener("input", ev => { st.q = ev.target.value; paint(); });
+    paint(); box.querySelector("input").focus();
+  });
+}
+/* Assistent „Was willst du sehen?“ – legt eine Kachel samt Fenster an */
+const HL_WIZ = {
+  power: ["mdi:flash", "Strom", "Leistung von Steckdosen", (h, e) => (h.states[e].attributes.device_class === "power"), "sum", [{ c: "warn", any: "any", grp: "all", when: "unavail", v: "" }], "area"],
+  battery: ["mdi:battery-60", "Batterien", "Heizung, Melder, Handy", (h, e) => h.states[e].attributes.device_class === "battery", "min", [{ c: "warn", any: "any", grp: "all", when: "below", v: "20" }, { c: "err", any: "any", grp: "all", when: "below", v: "10" }], "line"],
+  conn: ["mdi:lan-connect", "Erreichbarkeit", "Geräte im Netz (Ping)", (h, e) => e.startsWith("binary_sensor.") && h.states[e].attributes.device_class === "connectivity", "ok_of", [{ c: "err", any: "any", grp: "all", when: "is", v: "off" }], "strip"],
+  temp: ["mdi:thermometer", "Temperatur", "Fühler und Geräte", (h, e) => h.states[e].attributes.device_class === "temperature", "max", [{ c: "warn", any: "any", grp: "all", when: "above", v: "70" }], "line"],
+  fritz: ["mdi:phone-classic", "FRITZ!Box", "Telefonie, DECT, WLAN, Router", null, "list", [], null],
+  empty: ["mdi:information-outline", "Etwas anderes", "leere Kachel, selbst füllen", () => false, "single", [], null],
+};
+const HL_WIZ_TXT = { sum: "Summe", min: "niedrigster Wert", max: "höchster Wert", ok_of: "„X von Y in Ordnung“", list: "Werte nebeneinander", single: "Wert der ersten Entität" };
+function hlAssist(h) {
+  return new Promise(res => {
+    const ov = hlOverlay(""), box = ov.firstChild, st = { k: null, picks: [] };
+    const done = v => { ov.remove(); res(v); };
+    const paint = () => {
+      if (!st.k) {
+        box.innerHTML = `<div class="hlpk-h"><b>Was willst du sehen?</b><button class="x" data-x aria-label="Schließen">✕</button></div>
+          <div class="wz">${Object.entries(HL_WIZ).map(([k, w]) => `<button data-k="${k}"><ha-icon icon="${w[0]}"></ha-icon><b>${w[1]}</b><small>${w[2]}</small></button>`).join("")}</div>
+          <small>Der Assistent schlägt passende Entitäten, Warnfarben und ein fertiges Fenster vor. Alles lässt sich danach ändern.</small>`;
+        return;
+      }
+      const w = HL_WIZ[st.k], fritz = st.k === "fritz";
+      const blocks = fritz ? hlFritzTemplate(h) : [];
+      const found = fritz ? [...new Set(blocks.slice(0, 2).flatMap(b => b.ents || []))] : Object.keys(h.states).filter(e => w[3](h, e)).sort();
+      box.innerHTML = `<div class="hlpk-h"><button class="x" data-back aria-label="zurück">‹</button><b>${w[1]}</b><button class="x" data-x aria-label="Schließen">✕</button></div>
+        ${found.length ? `<small>Gefunden (${found.length}) – abwählen, was nicht auf die Kachel soll</small><div class="list">${found.map(e => `<label class="ck"><input type="checkbox" data-e="${esc(e)}"${st.picks.includes(e) ? " checked" : ""}><span>${esc(hlEntName(h, e))}<small>${esc(hlArea(h, e) || "ohne Bereich")}</small></span><small>${esc(hlFmt(h, e) ?? h.states[e].state)}</small></label>`).join("")}</div>` : st.k !== "empty" ? `<div class="note">Keine passenden Entitäten gefunden. Du kannst sie danach selbst wählen.</div>` : ""}
+        <div class="note">Kachel zeigt: ${HL_WIZ_TXT[w[4]]}${fritz ? "<br>Warnfarben: Rot bei nicht registrierter Rufnummer, Gelb bei Batterie unter 20 %<br>Fenster: FRITZ!Box-Vorlage" : w[5].length ? `<br>Warnfarben: ${w[5].map(r => `${r.c === "err" ? "Rot" : "Gelb"} ${r.when === "unavail" ? "bei nicht erreichbar" : r.when === "is" ? "bei aus" : (r.when === "below" ? "unter " : "über ") + r.v}`).join(", ")}<br>Fenster: Werte und Grafik 24 h` : ""}</div>
+        <div class="ft"><button class="sec" data-x>Abbrechen</button><button class="pri" data-make>Kachel anlegen</button></div>`;
+      st.blocks = blocks;
+    };
+    ov.addEventListener("click", ev => {
+      if (ev.target === ov || ev.target.closest("[data-x]")) return done(null);
+      if (ev.target.closest("[data-back]")) { st.k = null; paint(); return; }
+      const k = ev.target.closest("[data-k]");
+      if (k) { st.k = k.dataset.k; const w = HL_WIZ[st.k]; st.picks = st.k === "fritz" ? [...new Set(hlFritzTemplate(h).slice(0, 2).flatMap(b => b.ents || []))] : Object.keys(h.states).filter(e => w[3](h, e)).sort(); paint(); return; }
+      if (ev.target.closest("[data-make]")) {
+        const w = HL_WIZ[st.k], ents = st.picks.slice(), fritz = st.k === "fritz";
+        const row = { id: `t-${hlSlug(w[1])}-${Date.now().toString(36).slice(-4)}`, kind: "tile", on: true, name: w[1], icon: w[0], entities: ents,
+          combine: fritz ? "list" : w[4], second: st.k === "power" ? "bad" : "none",
+          rules: fritz ? [{ c: "err", any: "any", grp: "phone", when: "isnot", v: "registered" }, { c: "warn", any: "any", grp: "battery", when: "below", v: "20" }] : JSON.parse(JSON.stringify(w[5])) };
+        const win = fritz ? st.blocks : st.k === "empty" || !ents.length ? null : [
+          { t: "values", title: "Werte", ents: ents.slice(), rules: JSON.parse(JSON.stringify(w[5])), style: "tiles" },
+          { t: "chart", title: "Verlauf", ents: ents.slice(0, 8), kind: w[6], range: "24h", mode: "together", colors: {}, limit: { on: false, v: "", dir: "above", c: "warn" }, stats: w[6] !== "strip" }];
+        return done({ row, win });
+      }
+    });
+    ov.addEventListener("change", ev => { const c = ev.target.closest("[data-e]"); if (!c) return;
+      if (c.checked) { if (!st.picks.includes(c.dataset.e)) st.picks.push(c.dataset.e); } else st.picks = st.picks.filter(x => x !== c.dataset.e); });
+    paint();
+  });
+}
+/* Kachel aus dem Kartenaufbau → Konfiguration für homelines-tile */
+function hlTileCfg(r) {
+  return { name: r.name, icon: r.icon, entities: r.entities, combine: r.combine,
+    rules: r.rules, window: r.id, warn_unavailable: r.second === "bad" };
+}
+/* Bisherige Kartenkonfiguration (tiles:, overview_hide) → Kartenaufbau, beim ersten Bearbeiten */
+function hlLayoutFrom(cfg, s) {
+  const hide = cfg.overview_hide || {}, rows = [];
+  const backup = (s.wans || []).find(w => w.backup);
+  if (backup) rows.push({ id: "backup", kind: "builtin", on: !hide.backup });
+  (s.wans || []).filter(w => !w.backup && (((s.details || {}).lines || {})[w.id] || {}).entities).forEach(w => rows.push({ id: w.id, kind: "builtin", on: !hide[w.id] }));
+  rows.push({ id: "speed", kind: "builtin", on: !hide.speed }, { id: "outages", kind: "builtin", on: !hide.outages });
+  (cfg.tiles || []).forEach(t => {
+    const rules = [];
+    if (t.warn_unavailable) rules.push({ c: "warn", any: "any", grp: "all", when: "unavail", v: "" });
+    [["warn", "below", t.warn_below], ["warn", "above", t.warn_above], ["err", "below", t.error_below], ["err", "above", t.error_above]]
+      .forEach(([c, when, v]) => { if (v !== undefined && v !== null && v !== "") rules.push({ c, any: "any", grp: "all", when, v: String(v) }); });
+    rows.push({ id: t.window || `t-${hlSlug(t.name)}`, kind: "tile", on: true, name: t.name || "Kachel", icon: t.icon || "mdi:information-outline",
+      entities: t.entities || (t.entity ? [t.entity] : []), combine: t.combine || ((t.entities || []).length > 1 ? "sum" : "single"),
+      rules: t.rules || rules, second: t.warn_unavailable ? "bad" : "none" });
+  });
+  return { title: cfg.title && cfg.title !== "HomeLines" ? cfg.title : "", rows, hide_lines: Object.keys(cfg.lines || {}).filter(k => (cfg.lines[k] || {}).hide) };
 }
 
 function hlMoreInfo(entityId) {

@@ -147,6 +147,14 @@ Hauptleitung samt Neueinwahl, bei der Backup-Leitung samt Prüfliste des Notfall
 „Ausfälle und Verlauf“, die Geschwindigkeit ihren Verlauf. Eine eigene Dashboard-Seite mit Popups ist dafür nicht nötig;
 im einfachsten Fall genügen `type: custom:homelines-card` und `type: custom:homelines-mini` ohne weitere Einstellungen.
 
+**Karte direkt bearbeiten** (ab 0.9.1): Oben rechts in der Karte auf **✎** tippen (nur für Administratoren). Danach hat
+jedes Teil ein eigenes ✎: der Kopf (eigener Titel oder Logo), jede Leitung (Name, ein-/ausblenden, Fenster), jede Zeile
+der Übersicht (Reihenfolge ↑ ↓, ein-/ausblenden, Fenster) und jede eigene Kachel (Name, Symbol, Entitäten, Anzeige,
+Warnfarben als Sätze, löschen). **+ Kachel** startet einen Assistenten („Was willst du sehen?“ – Strom, Batterien,
+Erreichbarkeit, Temperatur, FRITZ!Box), der passende Entitäten, Warnfarben und ein fertiges Fenster vorschlägt.
+Gespeichert wird in der Integration; der Aufbau gilt für alle HomeLines-Karten. Beim ersten Bearbeiten übernimmt
+HomeLines die bisherigen Karten-Einstellungen (`tiles:`, `overview_hide`, `title`); danach haben sie keine Wirkung mehr.
+
 **Fenster selbst zusammenstellen** (ab 0.9.0): Jedes Fenster – Leitungen, Notfall-Strecke, Geschwindigkeit,
 Ausfälle und die eigenen Kacheln – lässt sich direkt im Fenster anpassen. Oben rechts im Fenster auf
 **✎ Fenster anpassen** tippen (nur für Administratoren sichtbar). Das Fenster besteht dann aus Bausteinen, die du mit

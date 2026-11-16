@@ -23,7 +23,7 @@ def _hub(hass, msg):
 @callback
 def async_register_websocket(hass: HomeAssistant) -> None:
     for handler in (ws_entries, ws_subscribe, ws_activate, ws_restrict, ws_set_group, ws_preview,
-                    ws_reset, ws_refresh, ws_dismiss, ws_set_windows):
+                    ws_reset, ws_refresh, ws_dismiss, ws_set_windows, ws_set_layout):
         websocket_api.async_register_command(hass, handler)
 
 
@@ -145,3 +145,19 @@ async def ws_set_windows(hass, connection, msg):
         return
     await hub.async_set_windows(msg.get("windows"), msg.get("key"), msg.get("blocks"))
     connection.send_result(msg["id"], hub.windows())
+
+
+@websocket_api.require_admin
+@websocket_api.websocket_command({vol.Required("type"): "homelines/set_layout",
+                                  vol.Optional("entry_id"): str,
+                                  vol.Optional("layout"): vol.Any(dict, None),
+                                  vol.Optional("line_names"): {str: str}})
+@websocket_api.async_response
+async def ws_set_layout(hass, connection, msg):
+    """Aufbau der Karte speichern (ab 0.9.1): Reihenfolge, eigene Kacheln, Titel, Leitungsnamen."""
+    hub = _hub(hass, msg)
+    if hub is None:
+        connection.send_error(msg["id"], "not_found", "HomeLines ist nicht eingerichtet")
+        return
+    await hub.async_set_layout(msg.get("layout"), msg.get("line_names"))
+    connection.send_result(msg["id"], hub.layout())

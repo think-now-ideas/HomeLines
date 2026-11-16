@@ -103,3 +103,35 @@ def clean_windows(w: Any) -> dict[str, list[dict]]:
         if len(out) >= MAX_WINDOWS:
             break
     return out
+
+
+# ---------------------------------------------------------------------- Aufbau der Karte (ab 0.9.1)
+BUILTIN_ROWS = ("backup", "speed", "outages")
+COMBINE = ("single", "sum", "avg", "min", "max", "list", "ok_of", "count_on")
+MAX_ROWS = 24
+
+
+def clean_layout(v: Any) -> dict:
+    """Reihenfolge, Sichtbarkeit und eigene Kacheln der Übersicht; Titel und ausgeblendete Leitungen."""
+    v = v if isinstance(v, dict) else {}
+    rows: list[dict] = []
+    seen: set[str] = set()
+    for r in v.get("rows") if isinstance(v.get("rows"), list) else []:
+        if not isinstance(r, dict) or not _KEY.match(str(r.get("id", ""))) or r["id"] in seen:
+            continue
+        rid, on = str(r["id"]), r.get("on") is not False
+        if r.get("kind") == "tile":
+            rows.append({"id": rid, "kind": "tile", "on": on, "name": _txt(r.get("name"), 40) or "Kachel",
+                         "icon": _txt(r.get("icon"), 60) if str(r.get("icon", "")).startswith("mdi:") else "mdi:information-outline",
+                         "entities": _ents(r.get("entities")),
+                         "combine": r.get("combine") if r.get("combine") in COMBINE else "single",
+                         "rules": _rules(r.get("rules")), "second": "bad" if r.get("second") == "bad" else "none"})
+        elif rid in BUILTIN_ROWS or re.match(r"^WAN\d$", rid):
+            rows.append({"id": rid, "kind": "builtin", "on": on})
+        else:
+            continue
+        seen.add(rid)
+        if len(rows) >= MAX_ROWS:
+            break
+    hide = [str(x) for x in (v.get("hide_lines") or []) if re.match(r"^WAN\d$", str(x))] if isinstance(v.get("hide_lines"), list) else []
+    return {"title": _txt(v.get("title"), 40), "rows": rows, "hide_lines": hide}

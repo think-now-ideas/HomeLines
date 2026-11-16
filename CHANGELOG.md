@@ -1,5 +1,14 @@
 # Änderungen
 
+## 0.9.1 – Karte direkt bearbeiten
+- **✎ an der Karte** (nur für Administratoren): Danach hat jedes Teil ein eigenes ✎ – Kopf, jede Leitung, jede Zeile und Kachel der Übersicht. Darunter stehen nur die Einstellungen dieses Teils; Speichern oder Abbrechen am Ende.
+- **Kopf:** eigener Titel oder leer für das Logo mit Schriftzug. **Leitungen:** Name (gilt für alle Karten und Meldungen), ein- und ausblenden, Fenster bearbeiten.
+- **Übersicht:** Reihenfolge mit ↑ ↓, Zeilen ein- und ausblenden, Fenster bearbeiten. **Eigene Kacheln:** Name, Symbol, Entitäten (Auswahl mit Vorschlägen, Suche und Bereichen), Anzeige (Summe, Mittelwert, höchster/niedrigster Wert …), Warnfarben als Sätze mit „Warum gelb/rot?“, löschen.
+- **„+ Kachel“ mit Assistent** „Was willst du sehen?“: Strom, Batterien, Erreichbarkeit, Temperatur, FRITZ!Box oder leer – mit vorgeschlagenen Entitäten, Warnfarben und fertigem Fenster.
+- **Fehlende Entitäten** werden in der Karte markiert („1 Wert fehlt“) und lassen sich mit „neu wählen“ ersetzen.
+- Gespeichert wird in der Integration (neuer Befehl `homelines/set_layout`, nur für Administratoren, Eingaben werden geprüft); der Aufbau gilt für alle HomeLines-Karten. Beim ersten Bearbeiten übernimmt HomeLines die bisherigen Einstellungen der Karte (`tiles:`, `overview_hide`, `title`, ausgeblendete Leitungen). Danach haben diese Karten-Einstellungen keine Wirkung mehr.
+- Kacheln (`custom:homelines-tile`) verstehen Warnfarben als Sätze (`rules:`) und zeigen fehlende Entitäten an.
+
 ## 0.9.0 – Fenster selbst zusammenstellen, Logo mit Schriftzug
 - **Fenster-Baukasten:** Jedes Fenster (Leitungen, Notfall-Strecke, Geschwindigkeit, Ausfälle, eigene Kacheln) lässt sich direkt im Fenster mit **✎ Fenster anpassen** zusammenstellen – ohne YAML. Bausteine: Werte, Grafik, Schalter und Aktionen, Protokoll, Hinweistext, Prüfliste Notfall-Handy; Reihenfolge mit ↑ ↓.
 - **Grafiken einstellbar:** Linie, Fläche, Balken oder An/Aus-Streifen; 24 Stunden, 7 oder 30 Tage; Werte zusammen oder je Wert eine Grafik; Farbe je Wert; Grenzlinie mit farbigem Bereich; Min, Max und Ø (zeitlich gewichtet).

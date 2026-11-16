@@ -157,7 +157,7 @@ from .const import (
     SIGNAL_UPDATE,
     STORAGE_VERSION,
 )
-from .windows import clean_windows
+from .windows import clean_layout, clean_windows
 from .monitor import CAUSE_INTERNET, CAUSE_LOCAL, CAUSE_UNKNOWN, OutageLog, Pinger, fmt_duration
 from .reconnect import SSHClient, SSHError, SSHHostKeyError, fingerprint
 from .router import BaseAdapter, Inventory, RouterError, create_adapter
@@ -712,6 +712,29 @@ class HomeLinesHub:
     def windows(self) -> dict:
         """Eigene Fenster aus Bausteinen; fehlt ein Fenster, zeigt die Karte das eingebaute."""
         return self.data.get("windows") or {}
+
+    def layout(self) -> dict | None:
+        """Aufbau der Karte (ab 0.9.1); None = noch nie gespeichert, die Karte nimmt ihre eigene Konfiguration."""
+        return self.data.get("layout")
+
+    async def async_set_layout(self, layout: dict | None, line_names: dict | None = None) -> None:
+        if layout is not None:
+            self.data["layout"] = clean_layout(layout)
+            await self._store.async_save(self._stored())
+        names = {wid: str(n).strip()[:40] for wid, n in (line_names or {}).items() if re.match(r"^WAN[1-4]$", str(wid))}
+        opts = dict(self.entry.options)
+        changed = False
+        for key, wid in LINE_NAME_KEYS.items():
+            if wid in names and (opts.get(key) or "") != names[wid]:
+                if names[wid]:
+                    opts[key] = names[wid]
+                else:
+                    opts.pop(key, None)
+                changed = True
+        if changed:   # Optionen ändern lädt HomeLines neu
+            self.hass.config_entries.async_update_entry(self.entry, options=opts)
+        else:
+            self._push()
 
     async def async_set_windows(self, windows: dict | None, key: str | None = None,
                                 blocks: list | None = None) -> None:
@@ -1470,6 +1493,7 @@ class HomeLinesHub:
             "wan_missing": self.wan_missing,
             "details": self.details(),
             "windows": self.windows(),
+            "layout": self.layout(),
             "default_group": self.opt(CONF_DEFAULT_GROUP, DEFAULT_GROUP),
             "supports_networks": self.adapter.supports_networks,
             "usage": {"reset_at": u["reset_at"], "mb": round(u["mb"], 1), "cost": round(u["cost"], 2),

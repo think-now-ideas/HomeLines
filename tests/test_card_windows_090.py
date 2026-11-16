@@ -41,10 +41,12 @@ SPEED = [
 ]
 
 
-async def _open(hass, unifi, ping, windows=None):
+async def _open(hass, unifi, ping, windows=None, layout=None):
     _, hub = await _setup(hass)
     if windows:
         await hub.async_set_windows(windows)
+    if layout:
+        await hub.async_set_layout(layout)
     pw = pytest.importorskip("playwright.async_api")
     snap = json.dumps(hub.snapshot(), cls=JSONEncoder)
     p = await pw.async_playwright().start()
@@ -62,6 +64,7 @@ async def _open(hass, unifi, ping, windows=None):
       HASS.callWS = async (m) => {
         if (m.type === "homelines/set_windows") { SENT.push(m); const w = { ...(SNAP.windows || {}) };
           if (m.blocks) w[m.key] = m.blocks; else delete w[m.key]; SNAP.windows = w; return w; }
+        if (m.type === "homelines/set_layout") { SENT.push(m); if (m.layout) SNAP.layout = m.layout; return SNAP.layout; }
         if (m.type === "history/history_during_period") { const r = {}; const t = Date.now() / 1000;
           m.entity_ids.forEach(e => { r[e] = [0, 1, 2, 3, 4, 5, 6].map(k => ({ s: String(20 + 30 * k), lu: t - (7 - k) * 86400 })); }); return r; }
         return {}; };
@@ -207,6 +210,91 @@ async def test_not_admin_has_no_pen(hass, unifi, ping):
         await page.wait_for_function("document.querySelector('homelines-card').shadowRoot.querySelector('.line')")
         await _detail(page, "outages")
         assert await page.evaluate("!!document.querySelector('homelines-detail [data-ed=start]')") is False
+        assert not errors, errors
+    finally:
+        await browser.close(); await p.stop()
+
+
+# ---------------------------------------------------------------------- 0.9.1: Karte direkt bearbeiten
+CARD_SR = "document.querySelector('homelines-card').shadowRoot"
+
+
+async def test_edit_card_layout(hass, unifi, ping):
+    p, browser, page, errors = await _open(hass, unifi, ping)
+    try:
+        await page.evaluate("""() => { document.body.innerHTML = ''; add('homelines-card', { tiles: [
+          { name: 'Strom', icon: 'mdi:flash', entities: ['sensor.speed_down', 'sensor.weg'], combine: 'sum', warn_unavailable: true, warn_above: 500 }] }); }""")
+        await page.wait_for_function(f"{CARD_SR}.querySelector('.hlpen')")
+        await page.evaluate(f"{CARD_SR}.querySelector('.hlpen').click()")
+        r = await page.evaluate(f"""() => {{ const sr = {CARD_SR};
+          return {{ pens: [...sr.querySelectorAll('.hlpn')].map(b => b.dataset.v), miss: sr.querySelector('.hlmiss') && sr.querySelector('.hlmiss').textContent,
+            rows: sr.host._ed.layout.rows.map(r => r.id), rules: sr.host._ed.layout.rows.find(r => r.kind === 'tile').rules }}; }}""")
+        assert "head" in r["pens"] and "line:WAN2" in r["pens"] and "row:t-strom" in r["pens"] and "row:outages" in r["pens"]
+        assert r["miss"] == "1 Wert fehlt"
+        assert r["rows"][-1] == "t-strom"
+        assert r["rules"] == [{"c": "warn", "any": "any", "grp": "all", "when": "unavail", "v": ""},
+                              {"c": "warn", "any": "any", "grp": "all", "when": "above", "v": "500"}]
+        # Kachel wählen, umbenennen, nach oben, fehlende Entität ersetzen
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-v=\"row:t-strom\"]').click()")
+        await page.evaluate(f"""() => {{ const i = {CARD_SR}.querySelector('[data-cf=rname]'); i.value = 'Leistung'; i.dispatchEvent(new Event('change', {{ bubbles: true, composed: true }})); }}""")
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-ce=up]').click()")
+        await page.evaluate(f"{CARD_SR}.querySelector('.hlent.miss [data-ce=pick]').click()")
+        await page.wait_for_selector(".hlpk input")
+        await page.fill(".hlpk input", "upload")
+        await page.click(".hlpk .it[data-v='sensor.speed_up']")
+        await page.wait_for_function(f"!{CARD_SR}.querySelector('.hlent.miss')")
+        # Geschwindigkeit ausblenden, Leitung umbenennen, Titel
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-v=\"row:outages\"]').click()")
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-ce=flip]').click()")
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-v=\"line:WAN2\"]').click()")
+        await page.evaluate(f"""() => {{ const i = {CARD_SR}.querySelector('[data-cf="name:WAN2"]'); i.value = 'Kupfer'; i.dispatchEvent(new Event('change', {{ bubbles: true, composed: true }})); }}""")
+        # Assistent: neue Kachel „Batterien“
+        await page.evaluate(f"{CARD_SR}.querySelector('.hladd').click()")
+        await page.click(".hlpk [data-k=battery]")
+        await page.click(".hlpk [data-make]")
+        await page.wait_for_function(f"{CARD_SR}.host._ed.layout.rows.some(r => r.name === 'Batterien')")
+        await page.evaluate(f"{CARD_SR}.querySelector('[data-ce=save]').click()")
+        await page.wait_for_function("SENT.filter(m => m.type === 'homelines/set_layout').length === 1")
+        sent = await page.evaluate("SENT")
+        lay = [m for m in sent if m["type"] == "homelines/set_layout"][0]
+        win = [m for m in sent if m["type"] == "homelines/set_windows"]
+        rows = lay["layout"]["rows"]
+        tile = [r for r in rows if r["id"] == "t-strom"][0]
+        assert tile["name"] == "Leistung" and tile["entities"] == ["sensor.speed_down", "sensor.speed_up"]
+        assert [r["id"] for r in rows].index("t-strom") < [r["id"] for r in rows].index("outages")
+        assert [r for r in rows if r["id"] == "outages"][0]["on"] is False
+        bat = [r for r in rows if r.get("name") == "Batterien"][0]
+        assert bat["entities"] == ["sensor.heizung_kueche_batterie"] and bat["combine"] == "min"
+        assert lay["line_names"] == {"WAN2": "Kupfer"}
+        assert win and win[0]["key"] == bat["id"] and win[0]["blocks"][0]["t"] == "values"
+        # nach dem Speichern: Aufbau aus HomeLines, Geschwindigkeit weg, Kachel mit neuem Namen
+        await page.wait_for_function(f"!{CARD_SR}.host._ed")
+        r = await page.evaluate(f"""() => {{ const sr = {CARD_SR};
+          return {{ speed: !!sr.querySelector('[data-ok=outages]'), tiles: [...sr.querySelectorAll('homelines-tile')].map(t => t._c.name), pen: !!sr.querySelector('.hlpen') }}; }}""")
+        assert r == {"speed": False, "tiles": ["Leistung", "Batterien"], "pen": True}
+        assert not errors, errors
+    finally:
+        await browser.close(); await p.stop()
+
+
+async def test_layout_tile_rules_and_no_pen_for_users(hass, unifi, ping):
+    lay = {"title": "Netz", "hide_lines": ["WAN3"], "rows": [
+        {"id": "t-akku", "kind": "tile", "on": True, "name": "Akku", "icon": "mdi:battery-60",
+         "entities": ["sensor.heizung_kueche_batterie"], "combine": "min",
+         "rules": [{"c": "err", "any": "any", "grp": "all", "when": "below", "v": "20"}], "second": "none"},
+        {"id": "outages", "kind": "builtin", "on": True}]}
+    p, browser, page, errors = await _open(hass, unifi, ping, layout=lay)
+    try:
+        await page.evaluate("document.body.innerHTML=''; HASS.user = { is_admin: false }; add('homelines-card', {})")
+        await page.wait_for_function(f"{CARD_SR}.querySelector('homelines-tile')")
+        await page.wait_for_timeout(100)
+        r = await page.evaluate(f"""() => {{ const sr = {CARD_SR}, t = sr.querySelector('homelines-tile');
+          return {{ title: sr.querySelector('.ttl') && sr.querySelector('.ttl').textContent, wan3: !!sr.querySelector('[data-wid=WAN3]'),
+            err: t.shadowRoot.querySelector('ha-card').className, pen: !!sr.querySelector('.hlpen'),
+            order: [...sr.querySelectorAll('[data-ok]')].map(x => x.dataset.ok) }}; }}""")
+        assert r["title"] == "Netz" and r["wan3"] is False and r["pen"] is False
+        assert "err" in r["err"]
+        assert r["order"][0] == "x0" and "outages" in r["order"]
         assert not errors, errors
     finally:
         await browser.close(); await p.stop()
